@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/SpringCloudServiceProxy.iml" filepath="$PROJECT_DIR$/SpringCloudServiceProxy.iml" />
+      <module fileurl="file://$PROJECT_DIR$/cloud_service_proxy_core/cloud_service_proxy_core.iml" filepath="$PROJECT_DIR$/cloud_service_proxy_core/cloud_service_proxy_core.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo_consumers/demo_consumers.iml" filepath="$PROJECT_DIR$/demo_consumers/demo_consumers.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo_discovery/demo_discovery.iml" filepath="$PROJECT_DIR$/demo_discovery/demo_discovery.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo_service/demo_service.iml" filepath="$PROJECT_DIR$/demo_service/demo_service.iml" />
+      <module fileurl="file://$PROJECT_DIR$/demo_service_interface/demo_service_interface.iml" filepath="$PROJECT_DIR$/demo_service_interface/demo_service_interface.iml" />
+    </modules>
+  </component>
+</project>

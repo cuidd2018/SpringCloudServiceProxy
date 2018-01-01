@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="Encoding">
+    <file url="file://$PROJECT_DIR$/cloud_service_proxy_core" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo_consumers" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo_discovery" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo_service" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/demo_service_interface" charset="UTF-8" />
+  </component>
+</project>
