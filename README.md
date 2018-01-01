@@ -1,0 +1,2 @@
+# SpringCloudServiceProxy
+SpringCloudServiceProxy-一个实现代理服务调用层，基于spring cloud，相比原生spring cloud代码服务层无侵入，像dubbo一样方便的在各个服务之间调用
