@@ -75,15 +75,4 @@ public class SerializeStringUtil {
         T t= (T) deserializeByteStringToObject(byteString);
         return t;
     }
-
-
-
-//    public static void main(String[] args){
-//        Pageable pageable=new PageRequest(1,20);
-//        UserVO userVO=new UserVO();
-//        userVO.setId(123454);
-//      String bytes=serializeToByteString(userVO);
-//      UserVO userVO1=(UserVO)deserializeByteStringToObject(bytes);
-//      System.out.println(userVO1.getId());
-//    }
 }
