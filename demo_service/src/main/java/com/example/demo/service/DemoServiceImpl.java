@@ -1,12 +1,20 @@
 package com.example.demo.service;
 
+import com.example.demo.util.FileUtil;
+import com.example.demo_service_interface.page.Page;
+import com.example.demo_service_interface.page.PageImpl;
+import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
+import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
+
 @Service("demoService")
-public class DemoServiceImpl  implements DemoService{
+public class DemoServiceImpl  implements DemoService,Serializable{
 
     @Override
     public String sayHello() {
@@ -14,14 +22,20 @@ public class DemoServiceImpl  implements DemoService{
     }
 
     @Override
-    public DemoVO invokeObject(DemoVO arg ,boolean isThrowException) throws ServiceException {
+    public Page<DemoVO> invokeObject(DemoVO arg , boolean isThrowException) throws ServiceException {
         arg.setName("demo");
+
+        List<DemoVO> demoVOS=new ArrayList<>();
+        demoVOS.add(arg);
+        Page<DemoVO> pageable=new PageImpl<>(demoVOS,new PageRequest(1,20),demoVOS.size());
         if(isThrowException)throw new ServiceException("错误");
-        return arg;
+        return pageable;
     }
 
     @Override
-    public String uploadFile(byte[] file) {
-        return file!=null?"upload file succeed":"upload file fail";
+    public String uploadFile(byte[] file,String name) {
+
+        FileUtil.byte2File(file,"/mnt/file/",name);
+        return "上传成功，保存："+"/mnt/file/"+name;
     }
 }

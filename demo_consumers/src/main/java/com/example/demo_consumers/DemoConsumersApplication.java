@@ -1,6 +1,7 @@
 package com.example.demo_consumers;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo_service_interface.page.Page;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
@@ -41,14 +42,16 @@ public class DemoConsumersApplication {
 
 	/**
 	 * 测试远程调用使用 复杂参数对象
+	 * @param exception 1 抛出异常测试，0 不抛出
 	 * @return
+	 * @throws ServiceException
 	 */
 	@ResponseBody
 	@RequestMapping("/invokeObject")
 	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception) throws ServiceException {
 		DemoVO demoVO=new DemoVO();
-		DemoVO newDemoVO= demoService.invokeObject(demoVO,exception==1?true:false);
-		return JSON.toJSONString(newDemoVO);
+		Page<DemoVO> demoVOPage= demoService.invokeObject(demoVO,exception==1?true:false);
+		return JSON.toJSONString(demoVOPage);
 	}
 
 	/**
@@ -58,7 +61,7 @@ public class DemoConsumersApplication {
 	@ResponseBody
 	@RequestMapping("/upload")
 	public String upload(@RequestParam(value = "file")MultipartFile file) throws ServiceException, IOException {
-		String result= demoService.uploadFile(file.getBytes());
+		String result= demoService.uploadFile(file.getBytes(),file.getOriginalFilename());
 		return result;
 	}
 }

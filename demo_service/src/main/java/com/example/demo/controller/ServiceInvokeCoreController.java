@@ -36,9 +36,11 @@ public class ServiceInvokeCoreController {
 
     @ResponseBody
     @RequestMapping("/" + InvokeRemoteServiceURL.SERVICE_EVEYY_THING)
-    public byte[] everything(ServletRequest request, ServletResponse response,@RequestParam("dto") byte[] dto) throws Throwable {
-        if (dto == null) throw new ServiceRuntimeException("dto 参数异常！dto=" + dto);
-        ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(dto);
+    public byte[] everything(ServletRequest request, ServletResponse response) throws Throwable {
+        //if (dto == null) throw new ServiceRuntimeException("dto 参数异常！dto=" + dto);
+        byte[] bytes=SerializeStringUtil.input2byte(request.getInputStream());
+        logger.info("bytesLength:"+bytes.length);
+        ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
 
         List<Object> paramsList = serviceDTO.getParams();
         Class[] paramTypes = serviceDTO.getParamsTypes();
