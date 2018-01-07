@@ -1,9 +1,5 @@
 package com.example.demo.controller;
 
-
-import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
-import com.zxj.cloud_service_proxy_core.exception.ServiceException;
-import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
 import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeStringUtil;
@@ -13,14 +9,10 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
-import java.util.List;
 
 /**
  * 调用服务层核心控制器，请勿修改此处代码！！！
