@@ -19,4 +19,9 @@ public class DemoServiceImpl  implements DemoService{
         if(isThrowException)throw new ServiceException("错误");
         return arg;
     }
+
+    @Override
+    public String uploadFile(byte[] file) {
+        return file!=null?"upload file succeed":"upload file fail";
+    }
 }

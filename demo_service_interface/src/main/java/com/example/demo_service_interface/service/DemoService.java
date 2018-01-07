@@ -7,4 +7,6 @@ public interface DemoService {
     String sayHello();
 
     DemoVO invokeObject(DemoVO arg,boolean isThrowException) throws ServiceException;
+
+    String uploadFile(byte[] bytes);
 }

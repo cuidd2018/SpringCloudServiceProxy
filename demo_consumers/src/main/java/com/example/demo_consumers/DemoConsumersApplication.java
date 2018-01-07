@@ -11,8 +11,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.annotation.Resource;
+import java.io.IOException;
 
 @SpringBootApplication
 @EnableEurekaClient
@@ -47,5 +49,16 @@ public class DemoConsumersApplication {
 		DemoVO demoVO=new DemoVO();
 		DemoVO newDemoVO= demoService.invokeObject(demoVO,exception==1?true:false);
 		return JSON.toJSONString(newDemoVO);
+	}
+
+	/**
+	 * 测试远程上传文件
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/upload")
+	public String upload(@RequestParam(value = "file")MultipartFile file) throws ServiceException, IOException {
+		String result= demoService.uploadFile(file.getBytes());
+		return result;
 	}
 }
