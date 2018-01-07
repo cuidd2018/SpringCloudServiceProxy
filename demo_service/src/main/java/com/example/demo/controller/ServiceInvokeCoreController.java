@@ -42,7 +42,7 @@ public class ServiceInvokeCoreController {
         logger.info("bytesLength:"+bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
 
-        List<Object> paramsList = serviceDTO.getParams();
+        Object[] params = serviceDTO.getParams();
         Class[] paramTypes = serviceDTO.getParamsTypes();
         String method = serviceDTO.getMethod();
         String service = serviceDTO.getService();
@@ -51,7 +51,7 @@ public class ServiceInvokeCoreController {
         logger.info("method:" + method);
         logger.info("service:" + service);
 
-        Object serviceResult = LocalServiceProxyUtil.invoke(paramsList, method, service, paramTypes, applicationContext);
+        Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
         byte[] result = SerializeStringUtil.serialize(serviceResult);
         long endTime = System.currentTimeMillis();
 

@@ -12,16 +12,16 @@ public class ServiceDTO implements Serializable {
 
     private static final long serialVersionUID = 3650809103104022467L;
 
-    private List<Object> params;
+    private Object[] params;
     private String method;
     private String service;
     private Class[] paramsTypes;
 
-    public List<Object> getParams() {
+    public Object[] getParams() {
         return params;
     }
 
-    public void setParams(List<Object> params) {
+    public void setParams(Object[] params) {
         this.params = params;
     }
 

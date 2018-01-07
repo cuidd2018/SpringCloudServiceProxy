@@ -13,9 +13,7 @@ import org.springframework.web.client.RestTemplate;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -42,20 +40,14 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
     @Override
     public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
         String methodName = method.getName();
-        List<Object> list = new ArrayList<>();
         Class[] paramsTypes = method.getParameterTypes();
-        if (paramsTypes != null && paramsTypes.length != 0 && args != null) {
-            for (Object o : args) {
-                list.add(o);
-            }
-        }
         String _service = (String) BeanUtils.getProperty(BeanUtils.getProperty(method, "clazz"), "name");
-        ServiceDTO feignDTO = new ServiceDTO();
-        feignDTO.setMethod(methodName);
-        feignDTO.setService(_service);
-        feignDTO.setParams(list);
-        feignDTO.setParamsTypes(paramsTypes);
-        byte[] bytes = SerializeStringUtil.serialize(feignDTO);
+        ServiceDTO serviceDTO = new ServiceDTO();
+        serviceDTO.setMethod(methodName);
+        serviceDTO.setService(_service);
+        serviceDTO.setParams(args);
+        serviceDTO.setParamsTypes(paramsTypes);
+        byte[] bytes = SerializeStringUtil.serialize(serviceDTO);
 
         if(restTempleteProvider==null)throw new ServiceException("restTempleteProvider can not be null!");
         if(restTempleteProvider.getRestTemplete()==null)throw new ServiceException("can not restTempleteProvider.getRestTemplete()="+_service);

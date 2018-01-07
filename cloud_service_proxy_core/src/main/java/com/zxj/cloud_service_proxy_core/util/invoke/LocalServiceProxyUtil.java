@@ -18,13 +18,13 @@ public class LocalServiceProxyUtil {
 
     private static Logger logger= LoggerFactory.getLogger(LocalServiceProxyUtil.class);
 
-    public static Object invoke(List<Object> paramsList,String method,String service,Class[] parsmTypes,ApplicationContext applicationContext) throws Throwable {
+    public static Object invoke(Object[] params,String method,String service,Class[] parsmTypes,ApplicationContext applicationContext) throws Throwable {
         Class serviceClass = Class.forName(service);
         Object serviceBean = getServiceBean(serviceClass,applicationContext);
         Method targetMethod = getMethod(serviceClass, method, parsmTypes);
         Class[] paramTypes = targetMethod.getParameterTypes();
         try {
-            Object serviceResult = BeanUtils.innvoke(serviceBean, method, paramTypes, paramsList.toArray());
+            Object serviceResult = BeanUtils.innvoke(serviceBean, method, paramTypes, params);
             return serviceResult;
         }catch (InvocationTargetException ex){
             logger.error("本地代理服务调用失败",ex.getCause());
