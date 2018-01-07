@@ -37,7 +37,6 @@ public class ServiceInvokeCoreController {
     @ResponseBody
     @RequestMapping("/" + InvokeRemoteServiceURL.SERVICE_EVEYY_THING)
     public byte[] everything(ServletRequest request, ServletResponse response,@RequestParam("dto") byte[] dto) throws Throwable {
-        //String dto = request.getParameter("dto");
         if (dto == null) throw new ServiceRuntimeException("dto 参数异常！dto=" + dto);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(dto);
 
