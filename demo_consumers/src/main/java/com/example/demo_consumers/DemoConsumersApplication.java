@@ -3,10 +3,12 @@ package com.example.demo_consumers;
 import com.alibaba.fastjson.JSON;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -41,9 +43,9 @@ public class DemoConsumersApplication {
 	 */
 	@ResponseBody
 	@RequestMapping("/invokeObject")
-	public String hello(){
+	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception) throws ServiceException {
 		DemoVO demoVO=new DemoVO();
-		DemoVO newDemoVO= demoService.invokeObject(demoVO);
+		DemoVO newDemoVO= demoService.invokeObject(demoVO,exception==1?true:false);
 		return JSON.toJSONString(newDemoVO);
 	}
 }

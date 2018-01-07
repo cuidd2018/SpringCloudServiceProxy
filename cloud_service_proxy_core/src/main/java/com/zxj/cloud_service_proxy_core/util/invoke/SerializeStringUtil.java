@@ -6,10 +6,13 @@ import com.caucho.hessian.io.HessianOutput;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
 
+/**
+ * 序列化工具
+ */
 public class SerializeStringUtil {
 
-    public static final String CHARTSET_FILE="ISO-8859-1";
 
     public static byte[] serialize(Object obj) throws IOException {
         if(obj==null) throw new NullPointerException();
@@ -18,12 +21,18 @@ public class SerializeStringUtil {
         hessianOutput.writeObject(obj);
         byte[] byteArray= os.toByteArray();
         try{
-            if(hessianOutput!=null)hessianOutput.close();
+            if(hessianOutput!=null){
+                hessianOutput.close();
+                hessianOutput=null;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
         try{
-            if(os!=null)os.close();
+            if(os!=null){
+                os.close();
+                os=null;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -36,12 +45,18 @@ public class SerializeStringUtil {
         HessianInput hi = new HessianInput(is);
         Object object= hi.readObject();
         try {
-            if(hi!=null)hi.close();
+            if(hi!=null){
+                hi.close();
+                hi=null;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
         try{
-            if(is!=null)is.close();
+            if(is!=null){
+                is.close();
+                is=null;
+            }
         }catch (Exception e){
             e.printStackTrace();
         }
@@ -49,30 +64,5 @@ public class SerializeStringUtil {
     }
 
 
-    public static String serializeToByteString(Object obj)  {
-        if(obj==null) return null;
-        try {
-            byte[] bytes= serialize(obj);
-            String  result = new String(bytes,CHARTSET_FILE);
-            return result;
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
 
-    public static Object deserializeByteStringToObject(String byteString) {
-        if(byteString==null) return null;
-        try {
-            byte[] bytes=byteString.getBytes(CHARTSET_FILE);
-            Object object=deserialize(bytes);
-            return object;
-        }catch (Exception e){
-            throw new RuntimeException(e);
-        }
-    }
-
-    public static <T> T deserializeByteStringToClass(String byteString) {
-        T t= (T) deserializeByteStringToObject(byteString);
-        return t;
-    }
 }

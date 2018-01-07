@@ -7,6 +7,7 @@ import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.http.ResponseEntity;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestTemplate;
@@ -56,15 +57,16 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         feignDTO.setService(_service);
         feignDTO.setParams(list);
         feignDTO.setParamsTypes(paramsTypes);
-        String dtoByteString = SerializeStringUtil.serializeToByteString(feignDTO);
+        byte[] bytes = SerializeStringUtil.serialize(feignDTO);
 
         if(restTempleteProvider==null)throw new ServiceException("restTempleteProvider can not be null!");
         if(restTempleteProvider.getRestTemplete()==null)throw new ServiceException("can not restTempleteProvider.getRestTemplete()="+_service);
         try {
             MultiValueMap<String, Object> requestEntity = new LinkedMultiValueMap<>();
-            requestEntity.add("dto",dtoByteString);
-            String object=((RestTemplate)restTempleteProvider.getRestTemplete()).postForObject("http://"+restTempleteProvider.service()+"/"+ getRemoteServiceMethod(_service),requestEntity,String.class);
-            Object result = SerializeStringUtil.deserializeByteStringToClass(object);
+            requestEntity.add("dto",bytes);
+            Class<? extends byte[]> classType=bytes.getClass();
+            byte[] object=((RestTemplate)restTempleteProvider.getRestTemplete()).postForObject("http://"+restTempleteProvider.service()+"/"+ getRemoteServiceMethod(_service),requestEntity,classType);
+            Object result = SerializeStringUtil.deserialize(object);
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
                 if (result instanceof ServiceException) {

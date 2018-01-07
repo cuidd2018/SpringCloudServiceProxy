@@ -11,6 +11,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.ServletOutputStream;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -43,28 +44,32 @@ public class GlobalExceptionMappingResolver implements HandlerExceptionResolver 
                                          Exception ex) {
 		response.setHeader("Content-type", "text/html;charset=UTF-8");
 		response.setCharacterEncoding("UTF-8");
-		PrintWriter writer = null;
 		logger.error("全局错误",ex);
+		ServletOutputStream out=null;
 		try {
-			writer = response.getWriter();
+			 out = response.getOutputStream();
 			jsonStrBuffer = new StringBuffer();
 			if (ex instanceof BaseExceptionInterface) {
 				Integer errCode = ((BaseExceptionInterface) ex).getErrCode();
 				String errMsg = ((BaseExceptionInterface) ex).getErrMsg();
 				jsonStrBuffer.append("errCode="+errCode+",errMsg="+errMsg);
-				writer.write(SerializeStringUtil.serializeToByteString(ex));
+			   byte[] by=SerializeStringUtil.serialize(ex);
+			   out.write(by);
 			} else {
 				jsonStrBuffer.append(ex.toString());
 				BaseExceptionInterface baseExceptionInterface=ex instanceof RuntimeException? new ServiceException(ex):new ServiceRuntimeException(ex);
-				writer.write(SerializeStringUtil.serializeToByteString(baseExceptionInterface));
+				out.write(SerializeStringUtil.serialize(baseExceptionInterface));
 			}
-			writer.flush();
-			jsonStrBuffer=null;
+			out.flush();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
-		} finally {
-			if (writer != null) {
-				writer.close();
+		}finally {
+			if (out != null) {
+				try {
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
 			}
 		}
 		return new ModelAndView();
