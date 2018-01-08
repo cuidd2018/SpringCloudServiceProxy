@@ -44,6 +44,7 @@ public class ServiceInvokeCoreController {
         logger.info("service:" + service);
 
         Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
+        if(serviceResult==null)return null;
         byte[] result = SerializeStringUtil.serialize(serviceResult);
         long endTime = System.currentTimeMillis();
 

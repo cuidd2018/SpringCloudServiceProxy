@@ -59,6 +59,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, headers);
             ResponseEntity<? extends byte[]> response = ((RestTemplate)restTempleteProvider.getRestTemplete()).exchange("http://"+restTempleteProvider.service()+"/"+ getRemoteServiceMethod(_service), HttpMethod.PUT, httpEntity, classType);
             byte[] bytesResult= response.getBody();
+            if(bytesResult==null)return null;
             Object result = SerializeStringUtil.deserialize(bytesResult);
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
