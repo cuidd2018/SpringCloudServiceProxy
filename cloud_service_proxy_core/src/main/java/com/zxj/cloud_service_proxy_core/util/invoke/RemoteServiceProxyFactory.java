@@ -65,9 +65,9 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         try {
             logger.info("bytesLength:" + bytes.length);
             HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, httpHeaders);
+            String remoteUrl="http://" + restTempleteProvider.service() + "/" + getRemoteServiceMethod(_service);
             ResponseEntity<? extends byte[]> response = ((RestTemplate) restTempleteProvider.getRestTemplete())
-                    .exchange("http://" + restTempleteProvider.service() + "/" + getRemoteServiceMethod(_service),
-                            HttpMethod.PUT, httpEntity, byteArrayClassType);
+                    .exchange(remoteUrl, HttpMethod.PUT, httpEntity, byteArrayClassType);
             byte[] bytesResult = response.getBody();
             if (bytesResult == null)
                 return null;
