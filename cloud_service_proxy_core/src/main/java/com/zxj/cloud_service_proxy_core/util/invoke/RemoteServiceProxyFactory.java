@@ -72,6 +72,8 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             if (bytesResult == null)
                 return null;
             Object result = SerializeStringUtil.deserialize(bytesResult);
+            if(result==null)
+                return result;
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
                 if (result instanceof ServiceException) {
@@ -80,6 +82,9 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
                 } else if (result instanceof ServiceRuntimeException) {
                     throw (ServiceRuntimeException) result;
                 }
+            }else if(result instanceof Throwable){
+                Throwable throwable= (Throwable)result;
+                throw new ServiceRuntimeException(throwable.toString());
             }
             return result;
         } catch (Exception e) {
