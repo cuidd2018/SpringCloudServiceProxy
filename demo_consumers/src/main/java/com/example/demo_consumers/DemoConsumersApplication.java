@@ -49,6 +49,7 @@ public class DemoConsumersApplication {
 	@ResponseBody
 	@RequestMapping("/invokeObject")
 	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception) throws ServiceException {
+		//DemoVO 复杂Bean
 		DemoVO demoVO=new DemoVO();
 		Page<DemoVO> demoVOPage= demoService.invokeObject(demoVO,exception==1?true:false);
 		return JSON.toJSONString(demoVOPage);
