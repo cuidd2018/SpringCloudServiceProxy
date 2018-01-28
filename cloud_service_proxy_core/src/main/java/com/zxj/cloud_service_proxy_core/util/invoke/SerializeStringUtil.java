@@ -13,62 +13,60 @@ import java.io.InputStream;
  */
 public class SerializeStringUtil {
 
-
     public static byte[] serialize(Object obj) throws IOException {
-        if (obj == null) throw new NullPointerException();
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        HessianOutput hessianOutput = new HessianOutput(os);
-        hessianOutput.writeObject(obj);
-        byte[] byteArray = os.toByteArray();
+        if (obj == null) return null;
+        ByteArrayOutputStream byteArrayOutputStream = null;
+        HessianOutput hessianOutput = null;
+        byte[] byteArray = null;
+
         try {
-            if (hessianOutput != null) {
+            byteArrayOutputStream = new ByteArrayOutputStream();
+            hessianOutput = new HessianOutput(byteArrayOutputStream);
+            hessianOutput.writeObject(obj);
+            byteArray = byteArrayOutputStream.toByteArray();
+        } finally {
+            try {
+                byteArrayOutputStream.close();
+            } catch (Exception e) {
+            }
+            try {
                 hessianOutput.close();
-                hessianOutput = null;
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
-        try {
-            if (os != null) {
-                os.close();
-                os = null;
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
+
         return byteArray;
     }
 
     public static Object deserialize(byte[] by) throws IOException {
-        if (by == null) throw new NullPointerException();
-        ByteArrayInputStream is = new ByteArrayInputStream(by);
-        HessianInput hi = new HessianInput(is);
-        Object object = hi.readObject();
+        if (by == null) return null;
+        Object object = null;
+        ByteArrayInputStream byteArrayInputStream=null;
+        HessianInput hessianInput=null;
         try {
-            if (hi != null) {
-                hi.close();
-                hi = null;
+            byteArrayInputStream = new ByteArrayInputStream(by);
+            hessianInput = new HessianInput(byteArrayInputStream);
+            object = hessianInput.readObject();
+        }finally {
+            try {
+                byteArrayInputStream.close();
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        try {
-            if (is != null) {
-                is.close();
-                is = null;
+            try {
+                hessianInput.close();
+            } catch (Exception e) {
             }
-        } catch (Exception e) {
-            e.printStackTrace();
         }
         return object;
     }
 
     public static final InputStream byte2Input(byte[] buf) {
+        if(buf==null)return null;
         return new ByteArrayInputStream(buf);
     }
 
-    public static final byte[] input2byte(InputStream inStream)
-            throws IOException {
+    public static final byte[] input2byte(InputStream inStream) throws IOException {
+        if(inStream==null)return null;
         ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
         try {
             byte[] buff = new byte[100];
@@ -78,11 +76,8 @@ public class SerializeStringUtil {
             }
             byte[] in2b = swapStream.toByteArray();
             return in2b;
-        } catch (Exception e) {
-            return null;
         } finally {
             swapStream.close();
         }
     }
-
 }

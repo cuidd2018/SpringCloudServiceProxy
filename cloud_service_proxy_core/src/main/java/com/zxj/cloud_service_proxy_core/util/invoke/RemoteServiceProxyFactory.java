@@ -23,18 +23,28 @@ import java.util.Map;
  */
 public class RemoteServiceProxyFactory implements InvocationHandler {
 
-    private static Logger logger= LoggerFactory.getLogger(RemoteServiceProxyFactory.class);
+    public static final Map<String, String>			feignMethodMap		= new HashMap<>();
+    private static final Class<? extends byte[]>	byteArrayClassType	= getByteArrayClassType();
+    private static Logger							logger				= LoggerFactory.getLogger(RemoteServiceProxyFactory.class);
+    private static HttpHeaders						httpHeaders			= getHeaders();
+    private RestTempleteProvider					restTempleteProvider;
 
-    private RestTempleteProvider restTempleteProvider;
+    private static Class<? extends byte[]> getByteArrayClassType() {
+        byte[] bytes = "".getBytes();
+        return bytes.getClass();
+    }
 
-    public static final Map<String, String> feignMethodMap = new HashMap<>();
-
+    private static HttpHeaders getHeaders() {
+        HttpHeaders httpHeaders = new HttpHeaders();
+        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
+        return httpHeaders;
+    }
 
     public static <T> T newInstance(RestTempleteProvider provider, String remoteServiceMethod, Class<T> tClass) {
-        Class[] interfaces = new Class[]{tClass};
+        Class[] interfaces = new Class[] { tClass };
         feignMethodMap.put(tClass.getName(), remoteServiceMethod);
-        return (T) Proxy.newProxyInstance(RemoteServiceProxyFactory.class.getClassLoader(),
-                interfaces, new RemoteServiceProxyFactory().setRestTempleteProvider(provider));
+        return (T) Proxy.newProxyInstance(RemoteServiceProxyFactory.class.getClassLoader(), interfaces,
+                new RemoteServiceProxyFactory().setRestTempleteProvider(provider));
     }
 
     @Override
@@ -48,18 +58,19 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         serviceDTO.setParams(args);
         serviceDTO.setParamsTypes(paramsTypes);
         byte[] bytes = SerializeStringUtil.serialize(serviceDTO);
-
-        if(restTempleteProvider==null)throw new ServiceException("restTempleteProvider can not be null!");
-        if(restTempleteProvider.getRestTemplete()==null)throw new ServiceException("can not restTempleteProvider.getRestTemplete()="+_service);
+        if (restTempleteProvider == null)
+            throw new ServiceException("restTempleteProvider can not be null!");
+        if (restTempleteProvider.getRestTemplete() == null)
+            throw new ServiceException("can not restTempleteProvider.getRestTemplete()=" + _service);
         try {
-            logger.info("bytesLength:"+bytes.length);
-            Class<? extends byte[]> classType=bytes.getClass();
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-            HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, headers);
-            ResponseEntity<? extends byte[]> response = ((RestTemplate)restTempleteProvider.getRestTemplete()).exchange("http://"+restTempleteProvider.service()+"/"+ getRemoteServiceMethod(_service), HttpMethod.PUT, httpEntity, classType);
-            byte[] bytesResult= response.getBody();
-            if(bytesResult==null)return null;
+            logger.info("bytesLength:" + bytes.length);
+            HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, httpHeaders);
+            ResponseEntity<? extends byte[]> response = ((RestTemplate) restTempleteProvider.getRestTemplete())
+                    .exchange("http://" + restTempleteProvider.service() + "/" + getRemoteServiceMethod(_service),
+                            HttpMethod.PUT, httpEntity, byteArrayClassType);
+            byte[] bytesResult = response.getBody();
+            if (bytesResult == null)
+                return null;
             Object result = SerializeStringUtil.deserialize(bytesResult);
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
@@ -72,8 +83,8 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             }
             return result;
         } catch (Exception e) {
-            logger.error("远程代理服务"+_service+"调用失败",e);
-           throw e;
+            logger.error("远程代理服务" + _service + "调用失败", e);
+            throw e;
         }
     }
 
