@@ -28,20 +28,21 @@ public class DefaultRestTempleteProvider {
 
     /**
      * 默认使用Okhttp3实现RestTemplete
+     *
      * @param restTempletConfig
      * @return
      */
     public static RestTemplate restTemplate(RestTempletConfig restTempletConfig) {
 
-        ConnectionPool connectionPool=new ConnectionPool();
-        OkHttpClient.Builder builder=new OkHttpClient.Builder();
+        ConnectionPool connectionPool = new ConnectionPool();
+        OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.retryOnConnectionFailure(restTempletConfig.isRetryOnConnectionFailure());
         builder.readTimeout(restTempletConfig.getReadTimeout(), restTempletConfig.getTimeUnit());
-        builder.connectTimeout(restTempletConfig.getConnectTimeout(),restTempletConfig.getTimeUnit());
+        builder.connectTimeout(restTempletConfig.getConnectTimeout(), restTempletConfig.getTimeUnit());
         builder.connectionPool(connectionPool);
-        OkHttpClient okHttpClient=builder.build();
+        OkHttpClient okHttpClient = builder.build();
         // httpClient连接配置，底层是配置RequestConfig
-        OkHttp3ClientHttpRequestFactory okHttp3ClientHttpRequestFactory =new  OkHttp3ClientHttpRequestFactory(okHttpClient);
+        OkHttp3ClientHttpRequestFactory okHttp3ClientHttpRequestFactory = new OkHttp3ClientHttpRequestFactory(okHttpClient);
         okHttp3ClientHttpRequestFactory.setConnectTimeout((int) restTempletConfig.getTimeUnit().toMillis(restTempletConfig.getConnectTimeout()));
         okHttp3ClientHttpRequestFactory.setReadTimeout((int) restTempletConfig.getTimeUnit().toMillis(restTempletConfig.getReadTimeout()));
         okHttp3ClientHttpRequestFactory.setWriteTimeout((int) restTempletConfig.getTimeUnit().toMillis(restTempletConfig.getWriteTimeout()));
@@ -49,8 +50,8 @@ public class DefaultRestTempleteProvider {
         List<HttpMessageConverter<?>> messageConverters = new ArrayList<>();
         messageConverters.add(new StringHttpMessageConverter(Charset.forName("UTF-8")));
         messageConverters.add(new FormHttpMessageConverter());
-        messageConverters.add(new MappingJackson2XmlHttpMessageConverter());
-        messageConverters.add(new MappingJackson2HttpMessageConverter());
+        //messageConverters.add(new MappingJackson2XmlHttpMessageConverter());
+        //messageConverters.add(new MappingJackson2HttpMessageConverter());
         messageConverters.add(new ByteArrayHttpMessageConverter());//byte[] 必须添加
         RestTemplate restTemplate = new RestTemplate(messageConverters);
         restTemplate.setRequestFactory(okHttp3ClientHttpRequestFactory);
