@@ -1,5 +1,6 @@
 package com.zxj.cloud_service_proxy_core.util;
 
+import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeStringUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
@@ -25,7 +26,8 @@ public class LocalServiceAccessUtil {
             } catch (Exception e) {
             }
         }
-        if (bytes != null) logger.info("bytesLength:" + bytes.length);
+        if (bytes == null){throw new ServiceRuntimeException("input2byte fail! bytes=null!");}
+        logger.info("bytesLength:" + bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
 
         Object[] params = serviceDTO.getParams();
