@@ -12,9 +12,9 @@ import java.io.InputStream;
  * @since 2018/2/19
  */
 
-public class ControllerAccess {
+public class LocalServiceAccessUtil {
 
-    public static byte[] access(ApplicationContext applicationContext,InputStream inputStream, Logger logger) throws Throwable {
+    public static byte[] access(ApplicationContext applicationContext, InputStream inputStream, Logger logger) throws Throwable {
         byte[] bytes = null;
         try {
             bytes = SerializeStringUtil.input2byte(inputStream);
@@ -38,7 +38,7 @@ public class ControllerAccess {
         logger.info("service:" + service);
 
         Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
-        byte[] result=null;
+        byte[] result = null;
         if (serviceResult != null) result = SerializeStringUtil.serialize(serviceResult);
         long endTime = System.currentTimeMillis();
         String invokeInfo = createInvokeInfo(paramTypes, service, method, startTime, endTime);
@@ -57,7 +57,7 @@ public class ControllerAccess {
         return stringBuilder.toString();
     }
 
-    public static interface Logger{
+    public static interface Logger {
         public void info(String info);
     }
 }

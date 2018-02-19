@@ -1,7 +1,7 @@
 package com.example.demo.controller;
 
 
-import com.zxj.cloud_service_proxy_core.util.ControllerAccess;
+import com.zxj.cloud_service_proxy_core.util.LocalServiceAccessUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -27,34 +27,39 @@ public class ServiceInvokeCoreController {
     private ApplicationContext applicationContext;
 
 
-    private static ControllerAccess.Logger controllerLogger= info -> logger.info(info);
+    private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
 
     @RequestMapping("/" + InvokeRemoteServiceURL.SERVICE_EVEYY_THING)
     public void everything(ServletRequest request, ServletResponse response) throws Throwable {
-        InputStream inputStream=null;
-        byte[] result=null;
+        InputStream inputStream = null;
+        byte[] result = null;
         try {
-            inputStream=request.getInputStream();
-             result = ControllerAccess.access(applicationContext,inputStream , controllerLogger);
-        }finally {
+            inputStream = request.getInputStream();
+            result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
+        } finally {
             //TODO clear stream
             try {
                 inputStream.close();
-                inputStream=null;
+                inputStream = null;
             } catch (Exception e) {
             }
         }
         OutputStream outputStream = null;
         try {
             outputStream = response.getOutputStream();
-            if(result!=null)outputStream.write(result);
-        }finally {
-            try{outputStream.flush();}catch (Exception e){}
-            try{outputStream.close();}catch (Exception e){}
-            outputStream=null;
+            if (result != null) outputStream.write(result);
+        } finally {
+            try {
+                outputStream.flush();
+            } catch (Exception e) {
+            }
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+            }
+            outputStream = null;
         }
     }
-
 
 
 }
