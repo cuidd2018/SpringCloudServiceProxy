@@ -1,7 +1,10 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
-import com.caucho.hessian.io.HessianInput;
-import com.caucho.hessian.io.HessianOutput;
+import com.esotericsoftware.kryo.Kryo;
+import com.esotericsoftware.kryo.io.Input;
+import com.esotericsoftware.kryo.io.Output;
+import com.esotericsoftware.kryo.serializers.JavaSerializer;
+import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -12,17 +15,20 @@ import java.io.InputStream;
  * 序列化工具
  */
 public class SerializeStringUtil {
-	
+
+	private  static Kryo kryo = new Kryo();
+
 	public static byte[] serialize(Object obj) throws IOException {
 		if (obj == null) return null;
 		ByteArrayOutputStream byteArrayOutputStream = null;
-		HessianOutput hessianOutput = null;
+		Output output = null;
 		byte[] byteArray = null;
 		
 		try {
+			kryo.register(obj.getClass(), new JavaSerializer());
 			byteArrayOutputStream = new ByteArrayOutputStream();
-			hessianOutput = new HessianOutput(byteArrayOutputStream);
-			hessianOutput.writeObject(obj);
+			output = new Output(byteArrayOutputStream);
+			kryo.writeObject(output, obj);
 			byteArray = byteArrayOutputStream.toByteArray();
 		} finally {
 			try {
@@ -34,11 +40,11 @@ public class SerializeStringUtil {
 			} catch (Exception e) {
 			}
 			try {
-				hessianOutput.flush();
+				output.flush();
 			} catch (Exception e) {
 			}
 			try {
-				hessianOutput.close();
+				output.close();
 			} catch (Exception e) {
 			}
 		}
@@ -50,18 +56,19 @@ public class SerializeStringUtil {
 		if (by == null) return null;
         Object object = null;
         ByteArrayInputStream byteArrayInputStream=null;
-        HessianInput hessianInput=null;
+		Input input=null;
         try {
+			kryo.register(Object.class, new JavaSerializer());
             byteArrayInputStream = new ByteArrayInputStream(by);
-            hessianInput = new HessianInput(byteArrayInputStream);
-            object = hessianInput.readObject();
+			input=new Input(byteArrayInputStream);
+			object=kryo.readObject(input,Object.class);
         }finally {
             try {
                 byteArrayInputStream.close();
             } catch (Exception e) {
             }
             try {
-                hessianInput.close();
+                input.close();
             } catch (Exception e) {
             }
         }
@@ -89,4 +96,12 @@ public class SerializeStringUtil {
 			try{byteArrayOutputStream.close();}catch (Exception e){}
 		}
 	}
+	public static void main(String[] arg) throws IOException {
+		ServiceDTO serviceDTO=new ServiceDTO();
+		serviceDTO.setMethod("test");
+		byte[] bytes=SerializeStringUtil.serialize(serviceDTO);
+		ServiceDTO newDto= (ServiceDTO) SerializeStringUtil.deserialize(bytes);
+		System.out.println(newDto);
+	}
+
 }
