@@ -46,8 +46,12 @@ public class DefaultRestTempleteProvider {
 
         HttpClientBuilder httpClientBuilder = HttpClients.custom();
         httpClientBuilder.setConnectionManager(pollingConnectionManager);
-        // 重试次数，默认是3次，没有开启
-        httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(restTempletConfig.getRetryCount(), restTempletConfig.isRequestSentRetryEnabled()));
+        // 是否设置重试次数(默认3次没有开启)
+        if(restTempletConfig.isRequestSentRetryEnabled()) {
+            httpClientBuilder.setRetryHandler(new DefaultHttpRequestRetryHandler(restTempletConfig.getRetryCount(), restTempletConfig.isRequestSentRetryEnabled()));
+        }else {
+            httpClientBuilder.disableAutomaticRetries();
+        }
         // 保持长连接配置，需要在头添加Keep-Alive
         httpClientBuilder.setKeepAliveStrategy(new DefaultConnectionKeepAliveStrategy());
 
