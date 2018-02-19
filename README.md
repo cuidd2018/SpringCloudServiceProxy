@@ -10,12 +10,25 @@ SpringCloud全家桶提供了诸多功能，如果你跃跃欲试，又发现服
 
 #如何引入项目？
 Maven项目，首先加入pom
+
 ```xml
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
+```
+
+```xml
+<dependencies>
+...
 <dependency>
 	 <groupId>com.github.zhuxiujia</groupId>
 	 <artifactId>SpringCloudServiceProxy</artifactId>
 	 <version>v1.2</version>
 </dependency>
+</dependencies>
 ```
 
 demo 运行步骤</br>
