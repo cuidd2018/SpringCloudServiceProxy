@@ -8,7 +8,15 @@ SpringCloud全家桶提供了诸多功能，如果你跃跃欲试，又发现服
 相比原生spring cloud 不仅做到代码服务层无侵入，</br>
 而且服务的参数和返回值 支持 几乎所有复杂对象包括文件（依赖 kryo 序列化,http协议流传输（Stream流）），调用远程服务像调用本地服务一样方便</br>
 
-
+#如何引入项目？
+Maven项目，首先加入pom
+```xml
+<dependency>
+	 <groupId>com.github.zhuxiujia</groupId>
+	 <artifactId>SpringCloudServiceProxy</artifactId>
+	 <version>v1.2</version>
+</dependency>
+```
 
 demo 运行步骤</br>
 
