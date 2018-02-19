@@ -2,6 +2,7 @@ package com.zxj.cloud_service_proxy_core.exception;
 
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
+import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
 
 /**
  * 普通业务异常
@@ -12,15 +13,16 @@ import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 public class ServiceException extends Exception implements BaseExceptionInterface{
 
 	private static final long serialVersionUID = -6166718557157998012L;
+
 	private Integer				errCode;
 
 	private String				errMsg;
 
 
-	public ServiceException(ServiceProxyErrorCode serviceErrorCode){
-		this(serviceErrorCode.getValue(),serviceErrorCode.getName());
+	public ServiceException(IntEnumVariable intEnumVariable){
+		this(intEnumVariable.getValue(),intEnumVariable.getName());
 	}
-	public ServiceException(ServiceProxyErrorCode serviceErrorCode, String errMsg){
+	public ServiceException(IntEnumVariable serviceErrorCode, String errMsg){
 		this(serviceErrorCode.getValue(),serviceErrorCode.getName()+errMsg);
 	}
 
@@ -31,8 +33,9 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
 	public ServiceException(Object... info) {
 		this(ServiceProxyErrorCode.ERROR.getValue(), getInfos(info));
 	}
-	public ServiceException(ServiceProxyErrorCode serviceErrorCode, Object... info) {
-		this(serviceErrorCode, getInfos(info));
+
+	public ServiceException(IntEnumVariable intEnumVariable, Object... info) {
+		this(intEnumVariable, getInfos(info));
 	}
 
 	private static String getInfos(Object[] info) {
