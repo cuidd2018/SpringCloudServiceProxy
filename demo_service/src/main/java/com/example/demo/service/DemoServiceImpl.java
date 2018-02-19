@@ -24,7 +24,7 @@ public class DemoServiceImpl  implements DemoService,Serializable{
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-        return "<<<<<<<<<<<<<<<<<<<<<<<<<<<<<<   hello word!";
+        return "<<<<<<<<<<<<<< now access micro service success,  hello word!<<<<<<<<<<<<<<";
     }
 
     @Override

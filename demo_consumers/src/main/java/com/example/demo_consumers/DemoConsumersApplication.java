@@ -35,6 +35,16 @@ public class DemoConsumersApplication {
 	 * @return
 	 */
 	@ResponseBody
+	@RequestMapping("/")
+	public String index(){
+		return demoService.sayHello();
+	}
+
+	/**
+	 * 测试远程调用
+	 * @return
+	 */
+	@ResponseBody
 	@RequestMapping("/hello")
 	public String helloTest(){
 		return demoService.sayHello();
