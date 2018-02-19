@@ -2,13 +2,14 @@ package com.example.demo_consumers.config;
 
 
 import com.example.demo_service_interface.service.DemoService;
+import com.zxj.cloud_service_proxy_core.util.invoke.DefaultRestTempleteProvider;
 import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
 import com.zxj.cloud_service_proxy_core.util.invoke.RemoteServiceProxyFactory;
 import com.zxj.cloud_service_proxy_core.util.invoke.RestTempleteProvider;
+import com.zxj.cloud_service_proxy_core.util.invoke.config.RestTempletConfig;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
@@ -21,18 +22,13 @@ import javax.annotation.Resource;
 @Configuration
 public class ProviderConfig {
 
-    private static final int TIME_OUT=30*1000;
-
     @Resource
     private RestTempleteProvider restTempleteProvider;
 
     @Bean
     @LoadBalanced
     RestTemplate restTemplate() {
-        SimpleClientHttpRequestFactory clientHttpRequestFactory=new SimpleClientHttpRequestFactory();
-        clientHttpRequestFactory.setReadTimeout(TIME_OUT);
-        clientHttpRequestFactory.setConnectTimeout(TIME_OUT);
-        return new RestTemplate(clientHttpRequestFactory);
+        return DefaultRestTempleteProvider.restTemplate(new RestTempletConfig());
     }
 
     @Bean
