@@ -11,12 +11,6 @@
 	<name>cloud_service_proxy_core</name>
 	<description>Demo project for Spring Boot</description>
 
-	<parent>
-		<groupId>org.springframework.boot</groupId>
-		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>1.5.9.RELEASE</version>
-		<relativePath/> <!-- lookup parent from repository -->
-	</parent>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -25,9 +19,12 @@
 	</properties>
 
 	<dependencies>
+
+
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter</artifactId>
+			<version>1.5.9.RELEASE</version>
 		</dependency>
 
 		<dependency>
@@ -54,7 +51,14 @@
 			<plugin>
 				<groupId>org.springframework.boot</groupId>
 				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
+			</plugin><plugin>
+			<groupId>org.apache.maven.plugins</groupId>
+			<artifactId>maven-compiler-plugin</artifactId>
+			<configuration>
+				<source>1.7</source>
+				<target>1.7</target>
+			</configuration>
+		</plugin>
 		</plugins>
 	</build>
 
