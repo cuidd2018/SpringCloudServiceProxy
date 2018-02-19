@@ -29,7 +29,7 @@ public class LocalServiceAccessUtil {
         if (bytes == null){throw new ServiceRuntimeException("input2byte fail! bytes=null!");}
         logger.info("bytesLength:" + bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
-
+        if (serviceDTO == null){throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");}
         Object[] params = serviceDTO.getParams();
         Class[] paramTypes = serviceDTO.getParamsTypes();
         String method = serviceDTO.getMethod();
