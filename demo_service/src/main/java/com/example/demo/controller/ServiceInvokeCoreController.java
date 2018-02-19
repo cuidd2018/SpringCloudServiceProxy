@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 
 import com.zxj.cloud_service_proxy_core.util.LocalServiceAccessUtil;
-import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
+import com.zxj.cloud_service_proxy_core.util.invoke.RemoteMicroServiceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -29,7 +29,7 @@ public class ServiceInvokeCoreController {
 
     private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
 
-    @RequestMapping("/" + InvokeRemoteServiceURL.SERVICE_EVEYY_THING)
+    @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
     public void everything(ServletRequest request, ServletResponse response) throws Throwable {
         InputStream inputStream = null;
         byte[] result = null;

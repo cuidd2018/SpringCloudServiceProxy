@@ -3,7 +3,7 @@ package com.example.demo_consumers.config;
 
 import com.example.demo_service_interface.service.DemoService;
 import com.zxj.cloud_service_proxy_core.util.invoke.DefaultRestTempleteProvider;
-import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
+import com.zxj.cloud_service_proxy_core.util.invoke.RemoteMicroServiceName;
 import com.zxj.cloud_service_proxy_core.util.invoke.RemoteServiceProxyFactory;
 import com.zxj.cloud_service_proxy_core.util.invoke.RestTempleteProvider;
 import com.zxj.cloud_service_proxy_core.util.invoke.config.RestTempletConfig;
@@ -42,11 +42,6 @@ public class ProviderConfig {
                 public Object getRestTemplete() {
                     return restTemplate;
                 }
-
-                @Override
-                public String service() {
-                    return InvokeRemoteServiceURL.SERVICE_EVEYY_THING;
-                }
             };
         }
         return restTempleteProvider;
@@ -55,7 +50,7 @@ public class ProviderConfig {
 
     @Bean
     public DemoService demoService() {
-        DemoService demoService = RemoteServiceProxyFactory.newInstance(restTempleteProvider, InvokeRemoteServiceURL.SERVICE_EVEYY_THING, DemoService.class);
+        DemoService demoService = RemoteServiceProxyFactory.newInstance(restTempleteProvider, RemoteMicroServiceName.SERVICE_EVEYY_THING, DemoService.class);
         return demoService;
     }
 }

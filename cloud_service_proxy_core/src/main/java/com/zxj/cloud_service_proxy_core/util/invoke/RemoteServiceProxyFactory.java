@@ -66,7 +66,8 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
 			logger.info("request service:"+serviceName+"."+methodName);
 			logger.info("bytesLength:" + bytes.length);
 			HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, httpHeaders);
-			String remoteUrl="http://" + restTempleteProvider.service() + "/" + getRemoteServiceMethod(serviceName);
+			String remoteServiceName=getRemoteServiceName(serviceName);
+			String remoteUrl="http://" + remoteServiceName + "/" + remoteServiceName;
 			ResponseEntity<? extends byte[]> response = ((RestTemplate) restTempleteProvider.getRestTemplete())
 					.exchange(remoteUrl, HttpMethod.PUT, httpEntity, byteArrayClassType);
 			byte[] bytesResult = response.getBody();
@@ -89,7 +90,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
 		}
 	}
 	
-	private String getRemoteServiceMethod(String service) {
+	private String getRemoteServiceName(String service) {
 		String method = feignMethodMap.get(service);
 		return method;
 	}
