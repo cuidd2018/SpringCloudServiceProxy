@@ -4,6 +4,7 @@ package com.example.demo.config;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
+import com.zxj.cloud_service_proxy_core.util.invoke.ExceptionCheckOutUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeStringUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -47,25 +48,17 @@ public class GlobalExceptionMappingResolver implements HandlerExceptionResolver 
 		logger.error("全局错误",ex);
 		ServletOutputStream out=null;
 		try {
-			 out = response.getOutputStream();
+			out = response.getOutputStream();
 			jsonStrBuffer = new StringBuffer();
-			if (ex instanceof BaseExceptionInterface) {
-				Integer errCode = ((BaseExceptionInterface) ex).getErrCode();
-				String errMsg = ((BaseExceptionInterface) ex).getErrMsg();
-				jsonStrBuffer.append("errCode="+errCode+",errMsg="+errMsg);
-			   byte[] by=SerializeStringUtil.serialize(ex);
-			   out.write(by);
-			} else {
-				jsonStrBuffer.append(ex.toString());
-				BaseExceptionInterface baseExceptionInterface=ex instanceof RuntimeException? new ServiceException(ex):new ServiceRuntimeException(ex);
-				out.write(SerializeStringUtil.serialize(baseExceptionInterface));
-			}
+			byte[] bytes=ExceptionCheckOutUtil.checkOut(ex,jsonStrBuffer);
+			out.write(bytes);
 			out.flush();
 		} catch (IOException e) {
 			logger.error(e.getMessage(), e);
 		}finally {
 			if (out != null) {
 				try {
+					out.flush();
 					out.close();
 				} catch (IOException e) {
 					e.printStackTrace();
