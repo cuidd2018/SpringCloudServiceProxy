@@ -1,10 +1,8 @@
 package com.example.demo.controller;
 
 
+import com.zxj.cloud_service_proxy_core.util.ControllerAccess;
 import com.zxj.cloud_service_proxy_core.util.invoke.InvokeRemoteServiceURL;
-import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
-import com.zxj.cloud_service_proxy_core.util.invoke.SerializeStringUtil;
-import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -29,37 +27,23 @@ public class ServiceInvokeCoreController {
     private ApplicationContext applicationContext;
 
 
+    private static ControllerAccess.Logger controllerLogger= info -> logger.info(info);
+
     @RequestMapping("/" + InvokeRemoteServiceURL.SERVICE_EVEYY_THING)
     public void everything(ServletRequest request, ServletResponse response) throws Throwable {
-        InputStream inputStream = null;
-        byte[] bytes = null;
+        InputStream inputStream=null;
+        byte[] result=null;
         try {
-            inputStream = request.getInputStream();
-            bytes = SerializeStringUtil.input2byte(inputStream);
-        } finally {
+            inputStream=request.getInputStream();
+             result = ControllerAccess.access(applicationContext,inputStream , controllerLogger);
+        }finally {
             //TODO clear stream
             try {
                 inputStream.close();
+                inputStream=null;
             } catch (Exception e) {
             }
         }
-        if (bytes != null) logger.info("bytesLength:" + bytes.length);
-        ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
-
-        Object[] params = serviceDTO.getParams();
-        Class[] paramTypes = serviceDTO.getParamsTypes();
-        String method = serviceDTO.getMethod();
-        String service = serviceDTO.getService();
-
-        long startTime = System.currentTimeMillis();
-        logger.info("method:" + method);
-        logger.info("service:" + service);
-
-        Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
-        byte[] result=null;
-        if (serviceResult != null) result = SerializeStringUtil.serialize(serviceResult);
-        long endTime = System.currentTimeMillis();
-        String invokeInfo = createInvokeInfo(paramTypes, service, method, startTime, endTime);
         OutputStream outputStream = null;
         try {
             outputStream = response.getOutputStream();
@@ -67,20 +51,10 @@ public class ServiceInvokeCoreController {
         }finally {
             try{outputStream.flush();}catch (Exception e){}
             try{outputStream.close();}catch (Exception e){}
+            outputStream=null;
         }
-        logger.info(invokeInfo);
     }
 
-    private String createInvokeInfo(Class[] paramTypes, String service, String method, long startTime, long endTime) {
-        StringBuilder stringBuilder = null;
-        try {
-            stringBuilder = new StringBuilder("End invoke=");
-            stringBuilder.append(service).append(".").append(method).append("()=").append(endTime - startTime).append("ms");
-        } catch (Exception e) {
-            return "";
-        }
-        return stringBuilder.toString();
-    }
 
 
 }
