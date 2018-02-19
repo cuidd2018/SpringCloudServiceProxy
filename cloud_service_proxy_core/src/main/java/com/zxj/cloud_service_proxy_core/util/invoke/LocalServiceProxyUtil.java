@@ -32,12 +32,12 @@ public class LocalServiceProxyUtil {
     }
 
     private static Method getMethod(Class cla, String methodName, Class[] parsmTypes) throws NoSuchMethodException {
-        Method method = cla.getMethod(methodName,parsmTypes);
-        return method;
+       Method method = cla.getMethod(methodName,parsmTypes);
+       return method;
     }
 
     private static Object getServiceBean(Class serviceClass, ApplicationContext applicationContext) {
-        return applicationContext.getBean(serviceClass);
+       return applicationContext.getBean(serviceClass);
     }
 
 }

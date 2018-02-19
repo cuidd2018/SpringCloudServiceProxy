@@ -12,34 +12,42 @@ import java.io.InputStream;
  * 序列化工具
  */
 public class SerializeStringUtil {
-
-    public static byte[] serialize(Object obj) throws IOException {
-        if (obj == null) return null;
-        ByteArrayOutputStream byteArrayOutputStream = null;
-        HessianOutput hessianOutput = null;
-        byte[] byteArray = null;
-
-        try {
-            byteArrayOutputStream = new ByteArrayOutputStream();
-            hessianOutput = new HessianOutput(byteArrayOutputStream);
-            hessianOutput.writeObject(obj);
-            byteArray = byteArrayOutputStream.toByteArray();
-        } finally {
-            try {
-                byteArrayOutputStream.close();
-            } catch (Exception e) {
-            }
-            try {
-                hessianOutput.close();
-            } catch (Exception e) {
-            }
-        }
-
-        return byteArray;
-    }
-
-    public static Object deserialize(byte[] by) throws IOException {
-        if (by == null) return null;
+	
+	public static byte[] serialize(Object obj) throws IOException {
+		if (obj == null) return null;
+		ByteArrayOutputStream byteArrayOutputStream = null;
+		HessianOutput hessianOutput = null;
+		byte[] byteArray = null;
+		
+		try {
+			byteArrayOutputStream = new ByteArrayOutputStream();
+			hessianOutput = new HessianOutput(byteArrayOutputStream);
+			hessianOutput.writeObject(obj);
+			byteArray = byteArrayOutputStream.toByteArray();
+		} finally {
+			try {
+				byteArrayOutputStream.flush();
+			} catch (Exception e) {
+			}
+			try {
+				byteArrayOutputStream.close();
+			} catch (Exception e) {
+			}
+			try {
+				hessianOutput.flush();
+			} catch (Exception e) {
+			}
+			try {
+				hessianOutput.close();
+			} catch (Exception e) {
+			}
+		}
+		
+		return byteArray;
+	}
+	
+	public static Object deserialize(byte[] by) throws IOException {
+		if (by == null) return null;
         Object object = null;
         ByteArrayInputStream byteArrayInputStream=null;
         HessianInput hessianInput=null;
@@ -57,27 +65,28 @@ public class SerializeStringUtil {
             } catch (Exception e) {
             }
         }
-        return object;
-    }
-
-    public static final InputStream byte2Input(byte[] buf) {
-        if(buf==null)return null;
-        return new ByteArrayInputStream(buf);
-    }
-
-    public static final byte[] input2byte(InputStream inStream) throws IOException {
-        if(inStream==null)return null;
-        ByteArrayOutputStream swapStream = new ByteArrayOutputStream();
-        try {
-            byte[] buff = new byte[100];
-            int rc = 0;
-            while ((rc = inStream.read(buff, 0, 100)) > 0) {
-                swapStream.write(buff, 0, rc);
-            }
-            byte[] in2b = swapStream.toByteArray();
-            return in2b;
-        } finally {
-            swapStream.close();
-        }
-    }
+		return object;
+	}
+	
+	public static final InputStream byte2Input(byte[] buf) {
+	    if(buf==null)return null;
+		return new ByteArrayInputStream(buf);
+	}
+	
+	public static final byte[] input2byte(InputStream inStream) throws IOException {
+	    if(inStream==null)return null;
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		try {
+			byte[] buff = new byte[100];
+			int rc = 0;
+			while ((rc = inStream.read(buff, 0, 100)) > 0) {
+				byteArrayOutputStream.write(buff, 0, rc);
+			}
+			byte[] in2b = byteArrayOutputStream.toByteArray();
+			return in2b;
+		} finally {
+			try{byteArrayOutputStream.flush();}catch (Exception e){}
+			try{byteArrayOutputStream.close();}catch (Exception e){}
+		}
+	}
 }

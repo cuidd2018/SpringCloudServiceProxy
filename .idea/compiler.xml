@@ -7,6 +7,7 @@
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
         <module name="cloud_service_proxy_core" />
+        <module name="demo" />
         <module name="demo_consumers" />
         <module name="demo_discovery" />
         <module name="demo_service" />
@@ -15,6 +16,7 @@
     </annotationProcessing>
     <bytecodeTargetLevel>
       <module name="cloud_service_proxy_core" target="1.8" />
+      <module name="demo" target="1.8" />
       <module name="demo_consumers" target="1.8" />
       <module name="demo_discovery" target="1.8" />
       <module name="demo_service" target="1.8" />
