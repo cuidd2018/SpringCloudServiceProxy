@@ -4,7 +4,6 @@ import com.esotericsoftware.kryo.Kryo;
 import com.esotericsoftware.kryo.io.Input;
 import com.esotericsoftware.kryo.io.Output;
 import com.esotericsoftware.kryo.serializers.JavaSerializer;
-import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -95,13 +94,6 @@ public class SerializeStringUtil {
 			try{byteArrayOutputStream.flush();}catch (Exception e){}
 			try{byteArrayOutputStream.close();}catch (Exception e){}
 		}
-	}
-	public static void main(String[] arg) throws IOException {
-		ServiceDTO serviceDTO=new ServiceDTO();
-		serviceDTO.setMethod("test");
-		byte[] bytes=SerializeStringUtil.serialize(serviceDTO);
-		ServiceDTO newDto= (ServiceDTO) SerializeStringUtil.deserialize(bytes);
-		System.out.println(newDto);
 	}
 
 }
