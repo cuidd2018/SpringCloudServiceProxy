@@ -46,11 +46,6 @@
             <artifactId>cloud_service_proxy_core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
-		<dependency>
-			<groupId>com.caucho</groupId>
-			<artifactId>hessian</artifactId>
-			<version>4.0.38</version>
-		</dependency>
     </dependencies>
 
 	<dependencyManagement>
