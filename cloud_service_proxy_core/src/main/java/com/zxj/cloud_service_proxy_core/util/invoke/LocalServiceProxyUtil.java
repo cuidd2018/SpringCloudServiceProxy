@@ -10,34 +10,41 @@ import java.lang.reflect.Method;
 
 /**
  * 本地服务代理调用工具
+ *
  * @author zhuxiujie
  * @since 2017/12/17
  */
 public class LocalServiceProxyUtil {
 
-    private static Logger logger= LoggerFactory.getLogger(LocalServiceProxyUtil.class);
+    private static Logger logger = LoggerFactory.getLogger(LocalServiceProxyUtil.class);
 
-    public static Object invoke(Object[] params,String method,String service,Class[] parsmTypes,ApplicationContext applicationContext) throws Throwable {
+    public static Object invoke(Object[] params, String method, String service, Class[] parsmTypes, ApplicationContext applicationContext) throws Throwable {
         Class serviceClass = Class.forName(service);
-        Object serviceBean = getServiceBean(serviceClass,applicationContext);
+        Object serviceBean = getServiceBean(serviceClass, applicationContext);
+        return invoke(params, method, service, parsmTypes, serviceBean);
+    }
+
+
+    public static Object invoke(Object[] params, String method, String service, Class[] parsmTypes, Object serviceBean) throws Throwable {
+        Class serviceClass = Class.forName(service);
         Method targetMethod = getMethod(serviceClass, method, parsmTypes);
         Class[] paramTypes = targetMethod.getParameterTypes();
         try {
-            Object serviceResult = BeanUtils.innvoke(serviceBean, method, paramTypes, params);
+            Object serviceResult = BeanUtils.invoke(serviceBean, method, paramTypes, params);
             return serviceResult;
-        }catch (InvocationTargetException ex){
-            logger.error("本地代理服务调用失败",ex.getCause());
-            throw  ex.getTargetException();
+        } catch (InvocationTargetException ex) {
+            logger.error("本地代理服务调用失败", ex.getCause());
+            throw ex.getTargetException();
         }
     }
 
     private static Method getMethod(Class cla, String methodName, Class[] parsmTypes) throws NoSuchMethodException {
-       Method method = cla.getMethod(methodName,parsmTypes);
-       return method;
+        Method method = cla.getMethod(methodName, parsmTypes);
+        return method;
     }
 
     private static Object getServiceBean(Class serviceClass, ApplicationContext applicationContext) {
-       return applicationContext.getBean(serviceClass);
+        return applicationContext.getBean(serviceClass);
     }
 
 }

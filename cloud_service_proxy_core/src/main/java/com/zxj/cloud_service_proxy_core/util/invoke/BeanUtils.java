@@ -48,7 +48,7 @@ public final class BeanUtils {
         return method.invoke(null, args);
     }
 
-    public static Object innvoke(Object fromObject, String mothed, Class<?>[] parameterTypes, Object[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
+    public static Object invoke(Object fromObject, String mothed, Class<?>[] parameterTypes, Object[] args) throws NoSuchMethodException, InvocationTargetException, IllegalAccessException {
         if (fromObject == null) return null;
         Method method = fromObject.getClass().getMethod(mothed, parameterTypes);
         return method.invoke(fromObject, args);
