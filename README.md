@@ -6,6 +6,7 @@ SpringCloudServiceProxy-一个实现动态代理服务调用层工具，基于sp
 
 ===此框架优势===</br>
 ### 基于更成熟更全面的Spring Cloud全家桶 微服务解决方案
+忠于原厂的改装，提升便捷和性能的同时 享受Spring Cloud全家桶带来的各种便利 config zuul Sleuth Bus等等...
 ### 提供相比Feign性能更好的服务调用
 Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂JavaBean完美（不代表最终性能，此处只是案例，具体看客户电脑配置性能）命令 ab.exe -n 50000 -c 2000 http://localhost:18080/invokeObject</br>
 ### 单体迁移到分布式系统 免重构 代码0无侵入
