@@ -13,7 +13,7 @@ Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂Ja
 ### 相比Dubbo完美支持服务-服务-消费者-之间的 大文件传输
 而且服务的参数和返回值 支持 几乎所有复杂对象包括文件（依赖 FST 快速高效序列化,http协议流传输（Stream流）），调用远程服务像调用本地服务一样方便</br>
 # 如何引入项目？
-Maven项目，首先加入pom
+Maven项目依赖，首先加入pom
 
 ```xml
 <repositories>
@@ -33,7 +33,79 @@ Maven项目，首先加入pom
 </dependency>
 </dependencies>
 ```
+消费者端（或者说Controller端）加入配置文件
+<pre>
+@Configuration
+public class ProviderConfig {
 
+    @Bean
+    @LoadBalanced
+    RestTemplate restTemplate() {
+        return DefaultRestTempleteProvider.restTemplate(new RestTempletConfig());
+    }
+
+
+    @Resource
+    private RestTemplate restTemplate;
+
+
+    @Bean
+    public *Service demoService() {
+        *Service *Service = RemoteServiceProxyFactory.newInstance(restTemplate, "*Service", *Service.class);
+        return demoService;
+    }
+}
+</pre>
+微服务端（或者说Service端）加入Controller控制器(单个微服务项目中，只需存在一个控制器即可访问单个微服务项目中的所有Service)
+<pre>
+@Controller
+public class ServiceInvokeCoreController {
+
+    private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
+
+    @Resource
+    private ApplicationContext applicationContext;
+
+
+    private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
+
+    //@RequestMapping 内填写你的application.properties中的spring.application.name=* 的值
+    @RequestMapping()
+    public void everything(ServletRequest request, ServletResponse response) throws Throwable {
+        InputStream inputStream = null;
+        byte[] result = null;
+        try {
+            inputStream = request.getInputStream();
+            result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
+        } finally {
+            //TODO clear stream
+            try {
+                inputStream.close();
+                inputStream = null;
+            } catch (Exception e) {
+            }
+        }
+        OutputStream outputStream = null;
+        try {
+            outputStream = response.getOutputStream();
+            if (result != null) outputStream.write(result);
+        } finally {
+            try {
+                outputStream.flush();
+            } catch (Exception e) {
+            }
+            try {
+                outputStream.close();
+            } catch (Exception e) {
+            }
+            outputStream = null;
+        }
+    }
+
+
+}
+
+</pre>
 # demo 运行步骤
 
 step1: 运行 DemoDiscoveryApplication，DemoConsumersApplication，DemoServiceApplication</br>
