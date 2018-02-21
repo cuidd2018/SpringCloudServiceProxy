@@ -10,7 +10,7 @@ import java.io.InputStream;
 /**
  * 序列化工具
  */
-public class SerializeStringUtil {
+public class SerializeUtil {
 
 	private  static FSTConfiguration fstConfiguration = FSTConfiguration.createDefaultConfiguration();
 
