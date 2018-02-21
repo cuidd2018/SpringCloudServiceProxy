@@ -15,6 +15,8 @@ import java.io.InputStream;
 
 public class LocalServiceAccessUtil {
 
+
+
     public static byte[] access(ApplicationContext applicationContext, InputStream inputStream, Logger logger) throws Throwable {
         byte[] bytes = null;
         try {
@@ -27,6 +29,12 @@ public class LocalServiceAccessUtil {
             }
         }
         if (bytes == null){throw new ServiceRuntimeException("input2byte fail! bytes=null!");}
+        return access(applicationContext,bytes,logger);
+    }
+
+
+    public static byte[] access(ApplicationContext applicationContext, byte[] bytes, Logger logger) throws Throwable {
+        if (bytes == null){throw new ServiceRuntimeException("bytes can not be null!");}
         logger.info("bytesLength:" + bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeStringUtil.deserialize(bytes);
         if (serviceDTO == null){throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");}
