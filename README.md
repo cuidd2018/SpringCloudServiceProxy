@@ -16,21 +16,20 @@ Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂Ja
 Maven项目，首先加入pom
 
 ```xml
-	<repositories>
-		<repository>
-			<id>jitpack.io</id>
-			<url>https://jitpack.io</url>
-		</repository>
-	</repositories>
+<repositories>
+   <repository>
+	 <id>jitpack.io</id>
+	 <url>https://jitpack.io</url>
+   </repository>
+</repositories>
 ```
 
 ```xml
 <dependencies>
-...
 <dependency>
-	 <groupId>com.github.zhuxiujia</groupId>
-	 <artifactId>SpringCloudServiceProxy</artifactId>
-	 <version>v1.4</version>
+   <groupId>com.github.zhuxiujia</groupId>
+   <artifactId>SpringCloudServiceProxy</artifactId>
+   <version>v1.4</version>
 </dependency>
 </dependencies>
 ```
