@@ -106,6 +106,56 @@ public class ServiceInvokeCoreController {
 }
 
 </pre>
+
+微服务端（或者说Service端）加入异常拦截器
+<pre>
+@Configuration
+public class GlobalExceptionMappingResolver implements HandlerExceptionResolver {
+
+	protected final Logger logger = LoggerFactory.getLogger(getClass());
+	private StringBuffer jsonStrBuffer;
+	/**
+	 * 判断ajax
+	 *
+	 * @param request
+	 * @return
+	 */
+	protected boolean isAjaxRequest(HttpServletRequest request) {
+		return (request.getHeader("accept").indexOf("application/json") > -1
+				|| (request.getHeader("X-Requested-With") != null
+						&& request.getHeader("X-Requested-With").indexOf("XMLHttpRequest") > -1));
+	}
+
+	@Override
+	public ModelAndView resolveException(HttpServletRequest request, HttpServletResponse response, Object handler,
+                                         Exception ex) {
+		response.setHeader("Content-type", "text/html;charset=UTF-8");
+		response.setCharacterEncoding("UTF-8");
+		logger.error("全局错误",ex);
+		ServletOutputStream out=null;
+		try {
+			out = response.getOutputStream();
+			jsonStrBuffer = new StringBuffer();
+			byte[] bytes=ExceptionCheckOutUtil.checkOut(ex,jsonStrBuffer);
+			out.write(bytes);
+			out.flush();
+		} catch (IOException e) {
+			logger.error(e.getMessage(), e);
+		}finally {
+			if (out != null) {
+				try {
+					out.flush();
+					out.close();
+				} catch (IOException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		return new ModelAndView();
+	}
+
+}
+</pre>
 # demo 运行步骤
 
 step1: 运行 DemoDiscoveryApplication，DemoConsumersApplication，DemoServiceApplication</br>
