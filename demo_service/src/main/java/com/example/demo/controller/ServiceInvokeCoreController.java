@@ -2,7 +2,7 @@ package com.example.demo.controller;
 
 
 import com.zxj.cloud_service_proxy_core.util.LocalServiceAccessUtil;
-import com.zxj.cloud_service_proxy_core.util.invoke.RemoteMicroServiceName;
+import com.example.demo_service_interface.config.RemoteMicroServiceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;

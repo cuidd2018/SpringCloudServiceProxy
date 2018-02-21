@@ -3,7 +3,7 @@ package com.example.demo_consumers.config;
 
 import com.example.demo_service_interface.service.DemoService;
 import com.zxj.cloud_service_proxy_core.util.invoke.DefaultRestTempleteProvider;
-import com.zxj.cloud_service_proxy_core.util.invoke.RemoteMicroServiceName;
+import com.example.demo_service_interface.config.RemoteMicroServiceName;
 import com.zxj.cloud_service_proxy_core.util.invoke.RemoteServiceProxyFactory;
 import com.zxj.cloud_service_proxy_core.util.invoke.config.RestTempletConfig;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;

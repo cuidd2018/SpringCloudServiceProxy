@@ -1,4 +1,4 @@
-package com.zxj.cloud_service_proxy_core.util.invoke;
+package com.example.demo_service_interface.config;
 
 /**
  * 远程服务名称，必须和远程Application名称对应
