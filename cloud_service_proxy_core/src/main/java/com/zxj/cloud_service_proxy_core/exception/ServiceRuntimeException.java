@@ -83,7 +83,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Exception) {
+                if (object instanceof Throwable) {
                     stringBuilder.append(getExceptionInfo((Exception) object));
                 } else {
                     stringBuilder.append(object);
