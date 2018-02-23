@@ -47,19 +47,19 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         this(ServiceProxyErrorCode.ERROR.getValue(), getInfos(info));
     }
 
-    public ServiceRuntimeException(Exception e) {
+    public ServiceRuntimeException(Throwable e) {
         this(getErrorCode(e), getExceptionInfo(e));
     }
 
-    public ServiceRuntimeException(Exception e, String extraInfo) {
+    public ServiceRuntimeException(Throwable e, String extraInfo) {
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
-    public ServiceRuntimeException(String extraInfo, Exception e) {
+    public ServiceRuntimeException(String extraInfo, Throwable e) {
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
-    private static String getExceptionInfo(Exception e) {
+    private static String getExceptionInfo(Throwable e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
         } else {
@@ -67,7 +67,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         }
     }
 
-    private static Integer getErrorCode(Exception e) {
+    private static Integer getErrorCode(Throwable e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
         } else {
@@ -84,7 +84,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
                 if (object instanceof Throwable) {
-                    stringBuilder.append(getExceptionInfo((Exception) object));
+                    stringBuilder.append(getExceptionInfo((Throwable) object));
                 } else {
                     stringBuilder.append(object);
                 }

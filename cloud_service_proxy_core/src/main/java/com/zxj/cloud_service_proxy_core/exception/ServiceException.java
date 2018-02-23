@@ -42,19 +42,19 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     }
 
 
-    public ServiceException(Exception e) {
+    public ServiceException(Throwable e) {
         this(getErrorCode(e), getExceptionInfo(e));
     }
 
-    public ServiceException(Exception e, String extraInfo) {
+    public ServiceException(Throwable e, String extraInfo) {
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
-    public ServiceException(String extraInfo, Exception e) {
+    public ServiceException(String extraInfo, Throwable e) {
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
-    private static String getExceptionInfo(Exception e) {
+    private static String getExceptionInfo(Throwable e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
         } else {
@@ -62,7 +62,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         }
     }
 
-    private static Integer getErrorCode(Exception e) {
+    private static Integer getErrorCode(Throwable e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
         } else {
@@ -76,7 +76,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
                 if (object instanceof Throwable) {
-                    stringBuilder.append(getExceptionInfo((Exception) object));
+                    stringBuilder.append(getExceptionInfo((Throwable) object));
                 } else {
                     stringBuilder.append(object);
                 }
