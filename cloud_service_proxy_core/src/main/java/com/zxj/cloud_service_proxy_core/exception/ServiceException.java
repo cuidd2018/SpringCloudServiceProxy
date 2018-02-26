@@ -50,6 +50,15 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
+    public ServiceException(Exception e) {
+        this(getErrorCode(e), getExceptionInfo(e));
+    }
+
+    public ServiceException(Exception e, String extraInfo) {
+        this(getErrorCode(e), extraInfo + getExceptionInfo(e));
+    }
+
+
     public ServiceException(String extraInfo, Throwable e) {
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
@@ -75,8 +84,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Throwable) {
-                    stringBuilder.append(getExceptionInfo((Throwable) object));
+                if (object instanceof Throwable || object instanceof Exception) {
+                    stringBuilder.append(getExceptionInfo(object));
                 } else {
                     stringBuilder.append(object);
                 }

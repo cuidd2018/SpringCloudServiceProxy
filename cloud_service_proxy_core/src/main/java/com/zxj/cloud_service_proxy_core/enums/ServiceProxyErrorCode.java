@@ -8,7 +8,7 @@ import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
  * Created by zhuxiujie
  */
 public enum ServiceProxyErrorCode implements IntEnumVariable {
-    ERROR(-1, "错误: ");
+    ERROR(-1, "错误:");
 
     Integer code = null;
     String info = null;
