@@ -1,5 +1,6 @@
 package com.zxj.cloud_service_proxy_core.exception;
 
+import com.zxj.cloud_service_proxy_core.constant.Constant;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 
@@ -70,6 +71,8 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
     private static String getExceptionInfo(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
+        } else if (e != null && e instanceof Constant) {
+            return ((Constant) e).getName();
         } else {
             return e.toString();
         }
@@ -78,6 +81,8 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
     private static Integer getErrorCode(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
+        } else if (e != null && e instanceof IntEnumConstant) {
+            return ((IntEnumConstant) e).getValue();
         } else {
             return ServiceProxyErrorCode.ERROR.getValue();
         }
@@ -91,10 +96,8 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Throwable || object instanceof Exception) {
+                if(object !=null) {
                     stringBuilder.append(getExceptionInfo(object));
-                } else {
-                    stringBuilder.append(object);
                 }
             }
             return stringBuilder.toString();

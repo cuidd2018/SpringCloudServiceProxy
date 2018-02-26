@@ -89,10 +89,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Throwable || object instanceof Exception || object instanceof Constant) {
+                if(object !=null) {
                     stringBuilder.append(getExceptionInfo(object));
-                } else {
-                    stringBuilder.append(object);
                 }
             }
             return stringBuilder.toString();
