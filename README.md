@@ -30,7 +30,7 @@ Maven项目依赖，首先加入pom
 <dependency>
    <groupId>com.github.zhuxiujia</groupId>
    <artifactId>SpringCloudServiceProxy</artifactId>
-   <version>v1.6</version>
+   <version>v1.7</version>
 </dependency>
 </dependencies>
 ```
