@@ -2,6 +2,7 @@ package com.zxj.cloud_service_proxy_core.exception;
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
+import com.zxj.cloud_service_proxy_core.variable.Variable;
 
 /**
  * 普通业务异常
@@ -66,6 +67,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     private static String getExceptionInfo(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
+        } else if (e != null && e instanceof Variable) {
+            return ((Variable) e).getName();
         } else {
             return e.toString();
         }
@@ -74,6 +77,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     private static Integer getErrorCode(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
+        } else if (e != null && e instanceof IntEnumVariable) {
+            return ((IntEnumVariable) e).getValue();
         } else {
             return ServiceProxyErrorCode.ERROR.getValue();
         }
@@ -84,7 +89,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Throwable || object instanceof Exception) {
+                if (object instanceof Throwable || object instanceof Exception || object instanceof Variable) {
                     stringBuilder.append(getExceptionInfo(object));
                 } else {
                     stringBuilder.append(object);
