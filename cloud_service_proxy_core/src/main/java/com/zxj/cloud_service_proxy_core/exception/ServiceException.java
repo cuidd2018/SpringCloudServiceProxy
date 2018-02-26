@@ -34,7 +34,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     }
 
     public ServiceException(Object... infos) {
-        this(ServiceProxyErrorCode.ERROR, getInfos(infos));
+        this(getErrorCode(infos[0]), getInfos(infos));
     }
 
     public ServiceException(IntEnumVariable serviceErrorCode, Object... info) {
@@ -54,7 +54,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         this(getErrorCode(e), extraInfo + getExceptionInfo(e));
     }
 
-    private static String getExceptionInfo(Throwable e) {
+    private static String getExceptionInfo(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
         } else {
@@ -62,7 +62,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         }
     }
 
-    private static Integer getErrorCode(Throwable e) {
+    private static Integer getErrorCode(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
         } else {
