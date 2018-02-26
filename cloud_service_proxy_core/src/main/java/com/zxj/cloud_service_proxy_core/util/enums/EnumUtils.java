@@ -4,7 +4,7 @@
 package com.zxj.cloud_service_proxy_core.util.enums;
 import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
-import com.zxj.cloud_service_proxy_core.variable.Constant;
+import com.zxj.cloud_service_proxy_core.constant.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;

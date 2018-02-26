@@ -1,7 +1,7 @@
 package com.zxj.cloud_service_proxy_core.enums;
 
 
-import com.zxj.cloud_service_proxy_core.variable.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 
 /**
  * 汇集所有的服务异常，可增加，不要修改！

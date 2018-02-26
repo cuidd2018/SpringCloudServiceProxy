@@ -1,8 +1,8 @@
 package com.zxj.cloud_service_proxy_core.exception;
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
-import com.zxj.cloud_service_proxy_core.variable.IntEnumConstant;
-import com.zxj.cloud_service_proxy_core.variable.Constant;
+import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.constant.Constant;
 
 /**
  * 普通业务异常

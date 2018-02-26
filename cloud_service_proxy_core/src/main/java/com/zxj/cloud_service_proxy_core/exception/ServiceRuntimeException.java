@@ -1,7 +1,7 @@
 package com.zxj.cloud_service_proxy_core.exception;
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
-import com.zxj.cloud_service_proxy_core.variable.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 
 /**
  * 运行时异常，请注意抛出位置，会触发事务回滚！！！！！！！！！

@@ -1,4 +1,4 @@
-package com.zxj.cloud_service_proxy_core.variable;
+package com.zxj.cloud_service_proxy_core.constant;
 
 /**
  * Int枚举常量
