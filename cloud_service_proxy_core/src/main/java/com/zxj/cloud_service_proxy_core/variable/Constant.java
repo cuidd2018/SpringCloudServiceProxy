@@ -3,18 +3,19 @@ package com.zxj.cloud_service_proxy_core.variable;
 import java.io.Serializable;
 
 /**
+ * 常量接口
  * Created by zhuxiujie on 2017/5/9.
  */
-public interface Variable<T> extends Serializable{
+public interface Constant<T> extends Serializable{
     /**
-     * 枚举常量名称
+     * 名称
      *
      * @return
      */
     String getName();
 
     /**
-     * 枚举常量值
+     * 常量值
      *
      * @return
      */

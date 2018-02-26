@@ -1,7 +1,7 @@
 package com.zxj.cloud_service_proxy_core.exception;
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
-import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
+import com.zxj.cloud_service_proxy_core.variable.IntEnumConstant;
 
 /**
  * 运行时异常，请注意抛出位置，会触发事务回滚！！！！！！！！！
@@ -16,11 +16,11 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
 
     private String errMsg;
 
-    public ServiceRuntimeException(IntEnumVariable serviceErrorCode) {
+    public ServiceRuntimeException(IntEnumConstant serviceErrorCode) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName());
     }
 
-    public ServiceRuntimeException(IntEnumVariable serviceErrorCode, String errMsg) {
+    public ServiceRuntimeException(IntEnumConstant serviceErrorCode, String errMsg) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName() + errMsg);
     }
 
@@ -83,7 +83,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         }
     }
 
-    public ServiceRuntimeException(IntEnumVariable serviceErrorCode, Object... info) {
+    public ServiceRuntimeException(IntEnumConstant serviceErrorCode, Object... info) {
         this(serviceErrorCode, getInfos(info));
     }
 

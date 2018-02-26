@@ -1,10 +1,10 @@
 package com.zxj.cloud_service_proxy_core.variable;
 
 /**
- * 枚举常量 遍历接口
+ * Int枚举常量
  * 
  * @author zhuxiujie
  * @since 2016年8月4日 下午1:23:31
  */
-public interface IntEnumVariable extends Variable<Integer> {
+public interface IntEnumConstant extends Constant<Integer> {
 }

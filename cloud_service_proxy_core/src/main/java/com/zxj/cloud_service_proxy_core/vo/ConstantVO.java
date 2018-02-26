@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * Created by zhuxiujie on 2017/5/11.
  */
-public class VariableVO implements Serializable{
+public class ConstantVO implements Serializable{
     String name;
     Object value;
 

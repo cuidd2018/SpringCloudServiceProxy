@@ -2,9 +2,9 @@
  *
  */
 package com.zxj.cloud_service_proxy_core.util.enums;
-import com.zxj.cloud_service_proxy_core.vo.VariableVO;
+import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
-import com.zxj.cloud_service_proxy_core.variable.Variable;
+import com.zxj.cloud_service_proxy_core.variable.Constant;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -24,7 +24,7 @@ public class EnumUtils {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <E extends Enum<? extends Variable>> E[] arrayOf(Class<E> clazz) {
+	public static <E extends Enum<? extends Constant>> E[] arrayOf(Class<E> clazz) {
 		E[] enums = clazz.getEnumConstants();
 		return enums;
 	}
@@ -37,10 +37,10 @@ public class EnumUtils {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <E extends Enum<? extends Variable>> boolean exists(Class<E> clazz, String value) {
+	public static <E extends Enum<? extends Constant>> boolean exists(Class<E> clazz, String value) {
 		E[] enums = clazz.getEnumConstants();
 		for (Enum e : enums) {
-			Object v = ((Variable) e).getValue();
+			Object v = ((Constant) e).getValue();
 			if (v.equals(value)) {
 				return true;
 			}
@@ -56,11 +56,11 @@ public class EnumUtils {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <E extends Enum<? extends Variable>> Map<String, Object> valueOf(Class<E> clazz) {
+	public static <E extends Enum<? extends Constant>> Map<String, Object> valueOf(Class<E> clazz) {
 		E[] enums = clazz.getEnumConstants();
 		Map<String, Object> map = new HashMap<String, Object>();
 		for (Enum e : enums) {
-			map.put(((Variable) e).getName(), ((Variable) e).getValue());
+			map.put(((Constant) e).getName(), ((Constant) e).getValue());
 		}
 		return map;
 	}
@@ -72,11 +72,11 @@ public class EnumUtils {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <E extends Enum<? extends Variable>> Map<Object, String> valueOfObject(Class<E> clazz) {
+	public static <E extends Enum<? extends Constant>> Map<Object, String> valueOfObject(Class<E> clazz) {
 		E[] enums = clazz.getEnumConstants();
 		Map<Object, String> map = new HashMap<Object, String>();
 		for (Enum e : enums) {
-			map.put(((Variable) e).getValue(),((Variable) e).getName());
+			map.put(((Constant) e).getValue(),((Constant) e).getName());
 		}
 		return map;
 	}
@@ -89,11 +89,11 @@ public class EnumUtils {
 	 * @return
 	 */
 	@SuppressWarnings("rawtypes")
-	public static <T,E extends Enum<? extends Variable<T>>> Map<T, E> valueOfEnum(Class<E> clazz) {
+	public static <T,E extends Enum<? extends Constant<T>>> Map<T, E> valueOfEnum(Class<E> clazz) {
 		E[] enums = clazz.getEnumConstants();
 		Map<T, E> map = new HashMap<>();
 		for (E e : enums) {
-			map.put(((Variable<T>) e).getValue(),e);
+			map.put(((Constant<T>) e).getValue(),e);
 		}
 		return map;
 	}
@@ -104,13 +104,13 @@ public class EnumUtils {
 	 * @param clazz
 	 * @return
 	 */
-	public static <E extends Enum<? extends Variable>> List<VariableVO> listOf(Class<E> clazz) {
+	public static <E extends Enum<? extends Constant>> List<ConstantVO> listOf(Class<E> clazz) {
 		E[] enums = clazz.getEnumConstants();
-		List<VariableVO> list = new ArrayList<>();
+		List<ConstantVO> list = new ArrayList<>();
 		for (Enum e : enums) {
-			VariableVO variableVO= new VariableVO();
-			variableVO.setName(((Variable) e).getName());
-			variableVO.setValue(((Variable) e).getValue());
+			ConstantVO variableVO= new ConstantVO();
+			variableVO.setName(((Constant) e).getName());
+			variableVO.setValue(((Constant) e).getValue());
 			list.add(variableVO);
 		}
 		return list;
@@ -121,10 +121,10 @@ public class EnumUtils {
 	 *
 	 * @return
 	 */
-	public static <E extends Enum<? extends Variable>> VariableVO variableOf(E e) {
-			VariableVO variableVO= new VariableVO();
-			variableVO.setName(((Variable) e).getName());
-			variableVO.setValue(((Variable) e).getValue());
+	public static <E extends Enum<? extends Constant>> ConstantVO variableOf(E e) {
+			ConstantVO variableVO= new ConstantVO();
+			variableVO.setName(((Constant) e).getName());
+			variableVO.setValue(((Constant) e).getValue());
 		return variableVO;
 	}
 
@@ -137,7 +137,7 @@ public class EnumUtils {
 	 * @return
 	 * @throws ServiceException
 	 */
-	public static  <T,E extends Enum<? extends Variable<T>>> E enumValueOf(T value, Class<E> eClass) throws ServiceException {
+	public static  <T,E extends Enum<? extends Constant<T>>> E enumValueOf(T value, Class<E> eClass) throws ServiceException {
 		if(value==null)throw new ServiceException("value can not be null!");
 		Map<T, E> map= valueOfEnum(eClass);
 		E e=map.get(value);

@@ -1,8 +1,8 @@
 package com.zxj.cloud_service_proxy_core.exception;
 
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
-import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
-import com.zxj.cloud_service_proxy_core.variable.Variable;
+import com.zxj.cloud_service_proxy_core.variable.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.variable.Constant;
 
 /**
  * 普通业务异常
@@ -18,11 +18,11 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
 
     private String errMsg;
 
-    public ServiceException(IntEnumVariable serviceErrorCode) {
+    public ServiceException(IntEnumConstant serviceErrorCode) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName());
     }
 
-    public ServiceException(IntEnumVariable serviceErrorCode, String errMsg) {
+    public ServiceException(IntEnumConstant serviceErrorCode, String errMsg) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName() + errMsg);
     }
 
@@ -38,7 +38,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         this(getErrorCode(infos[0]), getInfos(infos));
     }
 
-    public ServiceException(IntEnumVariable serviceErrorCode, Object... info) {
+    public ServiceException(IntEnumConstant serviceErrorCode, Object... info) {
         this(serviceErrorCode, getInfos(info));
     }
 
@@ -67,8 +67,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     private static String getExceptionInfo(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrMsg();
-        } else if (e != null && e instanceof Variable) {
-            return ((Variable) e).getName();
+        } else if (e != null && e instanceof Constant) {
+            return ((Constant) e).getName();
         } else {
             return e.toString();
         }
@@ -77,8 +77,8 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     private static Integer getErrorCode(Object e) {
         if (e != null && e instanceof BaseExceptionInterface) {
             return ((BaseExceptionInterface) e).getErrCode();
-        } else if (e != null && e instanceof IntEnumVariable) {
-            return ((IntEnumVariable) e).getValue();
+        } else if (e != null && e instanceof IntEnumConstant) {
+            return ((IntEnumConstant) e).getValue();
         } else {
             return ServiceProxyErrorCode.ERROR.getValue();
         }
@@ -89,7 +89,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         if (info != null && info.length != 0) {
             StringBuilder stringBuilder = new StringBuilder();
             for (Object object : info) {
-                if (object instanceof Throwable || object instanceof Exception || object instanceof Variable) {
+                if (object instanceof Throwable || object instanceof Exception || object instanceof Constant) {
                     stringBuilder.append(getExceptionInfo(object));
                 } else {
                     stringBuilder.append(object);
