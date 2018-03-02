@@ -25,11 +25,11 @@ public class ExceptionCheckOutUtil {
             Integer errCode = ((BaseExceptionInterface) ex).getErrCode();
             String errMsg = ((BaseExceptionInterface) ex).getErrMsg();
             if(stringBuffer!=null)stringBuffer.append("errCode="+errCode+",errMsg="+errMsg);
-            bytes=SerializeStringUtil.serialize(ex);
+            bytes= SerializeUtil.serialize(ex);
         } else {
             if(stringBuffer!=null)stringBuffer.append(ex.toString());
             BaseExceptionInterface baseExceptionInterface=ex instanceof RuntimeException? new ServiceException(ex):new ServiceRuntimeException(ex);
-            bytes=SerializeStringUtil.serialize(baseExceptionInterface);
+            bytes= SerializeUtil.serialize(baseExceptionInterface);
         }
         return bytes;
     }

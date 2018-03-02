@@ -57,7 +57,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         serviceDTO.setService(serviceName);
         serviceDTO.setParams(args);
         serviceDTO.setParamsTypes(paramsTypes);
-        byte[] bytes = SerializeStringUtil.serialize(serviceDTO);
+        byte[] bytes = SerializeUtil.serialize(serviceDTO);
         if (restTemplate == null)
             throw new ServiceException("restTemplate can not be null!");
         try {
@@ -70,7 +70,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             byte[] bytesResult = response.getBody();
             if (bytesResult == null)
                 return null;
-            Object result = SerializeStringUtil.deserialize(bytesResult);
+            Object result = SerializeUtil.deserialize(bytesResult);
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
                 if (result instanceof ServiceException) {
