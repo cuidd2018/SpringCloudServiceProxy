@@ -23,48 +23,55 @@ public class RestTempletConfig implements Serializable {
         return timeUnit;
     }
 
-    public void setTimeUnit(TimeUnit timeUnit) {
+    public RestTempletConfig setTimeUnit(TimeUnit timeUnit) {
         this.timeUnit = timeUnit;
+        return this;
     }
 
     public int getConnectTimeout() {
         return connectTimeout;
     }
 
-    public void setConnectTimeout(int connectTimeout) {
+    public RestTempletConfig setConnectTimeout(int connectTimeout) {
         this.connectTimeout = connectTimeout;
+        return this;
     }
 
     public int getReadTimeout() {
         return readTimeout;
     }
 
-    public void setReadTimeout(int readTimeout) {
+    public RestTempletConfig setReadTimeout(int readTimeout) {
         this.readTimeout = readTimeout;
+        return this;
     }
 
     public int getWriteTimeout() {
         return writeTimeout;
     }
 
-    public void setWriteTimeout(int writeTimeout) {
+    public RestTempletConfig setWriteTimeout(int writeTimeout) {
         this.writeTimeout = writeTimeout;
+        return this;
     }
 
     public boolean isRetryOnConnectionFailure() {
         return retryOnConnectionFailure;
     }
 
-    public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
+    public RestTempletConfig setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
         this.retryOnConnectionFailure = retryOnConnectionFailure;
+        return this;
     }
 
-    public void setKeepAliveDuration(long keepAliveDuration) {
+    public RestTempletConfig setKeepAliveDuration(long keepAliveDuration) {
         this.keepAliveDuration = keepAliveDuration;
+        return this;
     }
 
-    public void setMaxIdleConnections(int maxIdleConnections) {
+    public RestTempletConfig setMaxIdleConnections(int maxIdleConnections) {
         this.maxIdleConnections = maxIdleConnections;
+        return this;
     }
 
     public int getMaxIdleConnections() {
