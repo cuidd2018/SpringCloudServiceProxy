@@ -1,14 +1,15 @@
 package com.zxj.cloud_service_proxy_core.enums;
 
 
-import com.zxj.cloud_service_proxy_core.variable.IntEnumVariable;
+import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 
 /**
  * 汇集所有的服务异常，可增加，不要修改！
  * Created by zhuxiujie
  */
-public enum ServiceProxyErrorCode implements IntEnumVariable {
-    ERROR(-1, "错误: ");
+public enum ServiceProxyErrorCode implements IntEnumConstant {
+    ERROR(-1, "错误:"),
+    ERROR2(2, "手机不存在");
 
     Integer code = null;
     String info = null;
