@@ -15,6 +15,8 @@ public class RestTempletConfig implements Serializable {
     private int readTimeout=35;//s
     private int writeTimeout=35;//s
     private boolean retryOnConnectionFailure=false;//启用失败重试
+    private int maxIdleConnections=5;
+    private long keepAliveDuration=5;
 
 
     public TimeUnit getTimeUnit() {
@@ -55,5 +57,21 @@ public class RestTempletConfig implements Serializable {
 
     public void setRetryOnConnectionFailure(boolean retryOnConnectionFailure) {
         this.retryOnConnectionFailure = retryOnConnectionFailure;
+    }
+
+    public void setKeepAliveDuration(long keepAliveDuration) {
+        this.keepAliveDuration = keepAliveDuration;
+    }
+
+    public void setMaxIdleConnections(int maxIdleConnections) {
+        this.maxIdleConnections = maxIdleConnections;
+    }
+
+    public int getMaxIdleConnections() {
+        return maxIdleConnections;
+    }
+
+    public long getKeepAliveDuration() {
+        return keepAliveDuration;
     }
 }

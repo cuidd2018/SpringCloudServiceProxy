@@ -34,7 +34,7 @@ public class DefaultRestTempleteProvider {
      */
     public static RestTemplate restTemplate(RestTempletConfig restTempletConfig) {
 
-        ConnectionPool connectionPool = new ConnectionPool();
+        ConnectionPool connectionPool = new ConnectionPool(restTempletConfig.getMaxIdleConnections(),restTempletConfig.getKeepAliveDuration(),restTempletConfig.getTimeUnit());
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.retryOnConnectionFailure(restTempletConfig.isRetryOnConnectionFailure());
         builder.readTimeout(restTempletConfig.getReadTimeout(), restTempletConfig.getTimeUnit());
