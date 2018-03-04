@@ -44,7 +44,10 @@ public class LocalServiceProxyUtil {
 
     private static Class getClassFromService(String service) throws ClassNotFoundException {
         Class serviceClass=classMap.get(service);
-        if (serviceClass==null)serviceClass=Class.forName(service);
+        if (serviceClass==null){
+            serviceClass=Class.forName(service);
+            classMap.put(service,serviceClass);
+        }
         return serviceClass;
     }
 
