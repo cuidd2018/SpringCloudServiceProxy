@@ -14,11 +14,12 @@ public class PageRequest implements Pageable, Serializable {
 
     private Integer page;
     private Integer size;
+    private Integer offset;
 
     public PageRequest(Integer page, Integer size) {
-        if(size!=null&&size==-1){
-            page=null;
-            size=null;
+        if (size != null && size == -1) {
+            page = null;
+            size = null;
         }
         if (page != null && page <= 0) {
             throw new IllegalArgumentException("Page index must not be less than zero!");
@@ -30,6 +31,13 @@ public class PageRequest implements Pageable, Serializable {
 
         this.page = page;
         this.size = size;
+
+        offset = countOffset(page, size);
+    }
+
+    private static Integer countOffset(Integer page, Integer size) {
+        if (page == null || size == null) return null;
+        return (page - 1) * size;
     }
 
     /**
@@ -44,8 +52,7 @@ public class PageRequest implements Pageable, Serializable {
 
     @JsonIgnore
     public Integer getOffset() {
-        if (page == null || size == null) return null;
-        return (page - 1) * size;
+        return offset;
     }
 
     /**

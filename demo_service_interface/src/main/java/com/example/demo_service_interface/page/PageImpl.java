@@ -3,60 +3,76 @@ package com.example.demo_service_interface.page;
 import java.util.List;
 
 /**
- * 
+ * @param <T>
  * @author zhuxiujie
  * @since 2016年8月12日 下午2:43:27
- * @param <T>
  */
 public class PageImpl<T> implements Page<T>, Pageable {
 
-	private final int		total;
+    private Integer total;
 
-	private final Pageable	pageable;
+    private Pageable pageable;
 
-	private final List<T>	content;
+    private List<T> content;
 
-	public PageImpl(List<T> content, Pageable pageable, Integer total) {
-		if(total==null)total=0;
-		this.content = content;
-		this.pageable = pageable;
-		this.total = total;
-	}
+    private Integer totalPages;
 
-	@Override
-	public Integer getPageNum() {
-		return this.pageable.getPageNum();
-	}
+    private Integer pageSize;
 
-	@Override
-	public Integer getPageSize() {
-		return this.pageable.getPageSize();
-	}
+    private Integer offset;
 
-	@Override
-	public Integer getOffset() {
-		return this.pageable.getOffset();
-	}
+    private Integer pageNum;
 
-	public Pageable getPageable() {
-		return pageable;
-	}
+    public PageImpl(List<T> content, Pageable pageable, Integer total) {
+        this.content = content;
+        this.pageable = pageable;
+        this.total = total;
 
-	@Override
-	public int getTotalPages() {
-		if (getPageSize() == 0) {
-			return 1;
-		}
-		return (int) Math.ceil((double) this.total / (double) getPageSize());
-	}
+        if (total == null) this.total = 0;
+        this.pageSize=pageable.getPageSize();
+        this.offset=pageable.getOffset();
+        this.pageNum=pageable.getPageNum();
+        totalPages = countTotalPages(getPageSize(), getTotal());
+    }
 
-	@Override
-	public Integer getTotal() {
-		return this.total;
-	}
+    private static int countTotalPages(int pageSize, int total) {
+        if (pageSize == 0) {
+            return 1;
+        }
+        return (int) Math.ceil((double) total / (double) pageSize);
+    }
 
-	@Override
-	public List<T> getContent() {
-		return this.content;
-	}
+    @Override
+    public Integer getPageNum() {
+        return this.pageNum;
+    }
+
+    @Override
+    public Integer getPageSize() {
+        return pageSize;
+    }
+
+    @Override
+    public Integer getOffset() {
+        return offset;
+    }
+
+    public Pageable getPageable() {
+        return pageable;
+    }
+
+    @Override
+    public Integer getTotalPages() {
+        return this.totalPages;
+    }
+
+    @Override
+    public Integer getTotal() {
+        return this.total;
+    }
+
+    @Override
+    public List<T> getContent() {
+        return this.content;
+    }
 }
