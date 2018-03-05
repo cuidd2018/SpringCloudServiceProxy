@@ -2,6 +2,7 @@ package com.example.demo_consumers;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo_service_interface.page.Page;
+import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
@@ -58,10 +59,12 @@ public class DemoConsumersApplication {
 	 */
 	@ResponseBody
 	@RequestMapping("/invokeObject")
-	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception) throws ServiceException {
-		//DemoVO 复杂Bean
-		DemoVO demoVO=new DemoVO();
-		Page<DemoVO> demoVOPage= demoService.invokeObject(demoVO,exception==1?true:false);
+	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception,
+						@RequestParam(value = "page",defaultValue = "1")Integer page,
+						@RequestParam(value = "size",defaultValue = "20")Integer size
+						) throws ServiceException {
+		PageRequest pageRequest=PageRequest.create(page,size);
+		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,exception==1?true:false);
 		return JSON.toJSONString(demoVOPage);
 	}
 
