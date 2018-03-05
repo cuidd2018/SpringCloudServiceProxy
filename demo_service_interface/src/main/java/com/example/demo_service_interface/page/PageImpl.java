@@ -11,13 +11,23 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
 
     private static final long serialVersionUID = 642544266229652024L;
 
-    public PageImpl(List<T> content, Pageable pageable, Integer total) {
-        setContent(content);
-        setTotal(total==null?0:total);
-        setPageSize(pageable.getPageSize());
-        setOffset(pageable.getOffset());
-        setPageNum(pageable.getPageNum());
-        setTotalPages(countTotalPages(getPageSize(), getTotal()));
+    /**
+     * 构造
+     * @param content
+     * @param pageable
+     * @param total
+     * @param <T>
+     * @return
+     */
+    public static <T> PageImpl<T> create(List<T> content, Pageable pageable, Integer total) {
+        PageImpl<T> pageImpl=new PageImpl<>();
+        pageImpl.setContent(content);
+        pageImpl.setTotal(total==null?0:total);
+        pageImpl.setPageSize(pageable.getPageSize());
+        pageImpl.setOffset(pageable.getOffset());
+        pageImpl.setPageNum(pageable.getPageNum());
+        pageImpl.setTotalPages(countTotalPages(pageable.getPageSize(), pageImpl.getTotal()));
+        return pageImpl;
     }
 
     private static int countTotalPages(int pageSize, int total) {

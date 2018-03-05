@@ -33,7 +33,7 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
         List<DemoVO> demoVOS=new ArrayList<>();
         demoVOS.add(arg);
-        Page<DemoVO> pageable=new PageImpl<>(demoVOS,new PageRequest(1,20),demoVOS.size());
+        Page<DemoVO> pageable=PageImpl.create(demoVOS,PageRequest.create(1,20),demoVOS.size());
         if(isThrowException)throw new ServiceException("错误");
         return pageable;
     }

@@ -8,7 +8,7 @@ public class PageRequest extends PageBean<Object> {
 
     private static final long serialVersionUID = 1232825578694716871L;
 
-    public PageRequest(Integer page, Integer size) {
+    public static PageRequest create(Integer page, Integer size) {
         if (size != null && size == -1) {
             page = null;
             size = null;
@@ -16,14 +16,14 @@ public class PageRequest extends PageBean<Object> {
         if (page != null && page <= 0) {
             throw new IllegalArgumentException("Page index must not be less than zero!");
         }
-
         if (size != null && size < 1) {
             throw new IllegalArgumentException("Page size must not be less than one!");
         }
-
-        setPageNum(page);
-        setPageSize(size);
-        setOffset(countOffset(page, size));
+        PageRequest pageRequest=new PageRequest();
+        pageRequest.setPageNum(page);
+        pageRequest.setPageSize(size);
+        pageRequest.setOffset(countOffset(page, size));
+        return pageRequest;
     }
 
     private static Integer countOffset(Integer page, Integer size) {
