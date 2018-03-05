@@ -30,6 +30,15 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
         return pageImpl;
     }
 
+    /**
+     * 构造
+     * @param content
+     * @param page
+     * @param size
+     * @param total
+     * @param <T>
+     * @return
+     */
     public static <T> PageImpl<T> create(List<T> content, Integer page,Integer size, Integer total) {
         Pageable pageable=PageRequest.create(page,size);
         return create(content,pageable,total);
