@@ -7,32 +7,22 @@ import java.util.List;
  * @author zhuxiujie
  * @since 2016年8月12日 下午2:43:27
  */
-public class PageImpl<T> implements Page<T>, Pageable {
+public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
 
-    private Integer total;
+    private static final long serialVersionUID = 642544266229652024L;
 
     private Pageable pageable;
 
-    private List<T> content;
-
-    private Integer totalPages;
-
-    private Integer pageSize;
-
-    private Integer offset;
-
-    private Integer pageNum;
-
     public PageImpl(List<T> content, Pageable pageable, Integer total) {
-        this.content = content;
+        setContent(content);
         this.pageable = pageable;
-        this.total = total;
+        setTotal(total);
 
-        if (total == null) this.total = 0;
-        this.pageSize=pageable.getPageSize();
-        this.offset=pageable.getOffset();
-        this.pageNum=pageable.getPageNum();
-        totalPages = countTotalPages(getPageSize(), getTotal());
+        if (total == null) setTotal(0);
+        setPageSize(pageable.getPageSize());
+        setOffset(pageable.getOffset());
+        setPageNum(pageable.getPageNum());
+        setTotalPages(countTotalPages(getPageSize(), getTotal()));
     }
 
     private static int countTotalPages(int pageSize, int total) {
@@ -42,37 +32,7 @@ public class PageImpl<T> implements Page<T>, Pageable {
         return (int) Math.ceil((double) total / (double) pageSize);
     }
 
-    @Override
-    public Integer getPageNum() {
-        return this.pageNum;
-    }
-
-    @Override
-    public Integer getPageSize() {
-        return pageSize;
-    }
-
-    @Override
-    public Integer getOffset() {
-        return offset;
-    }
-
     public Pageable getPageable() {
         return pageable;
-    }
-
-    @Override
-    public Integer getTotalPages() {
-        return this.totalPages;
-    }
-
-    @Override
-    public Integer getTotal() {
-        return this.total;
-    }
-
-    @Override
-    public List<T> getContent() {
-        return this.content;
     }
 }
