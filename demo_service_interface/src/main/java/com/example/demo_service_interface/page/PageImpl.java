@@ -1,5 +1,7 @@
 package com.example.demo_service_interface.page;
 
+import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+
 import java.util.List;
 
 /**
@@ -39,7 +41,7 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
      * @param <T>
      * @return
      */
-    public static <T> PageImpl<T> create(List<T> content, Integer page,Integer size, Integer total) {
+    public static <T> PageImpl<T> create(List<T> content, Integer page,Integer size, Integer total) throws ServiceException {
         Pageable pageable=PageRequest.create(page,size);
         return create(content,pageable,total);
     }
