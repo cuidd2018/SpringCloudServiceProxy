@@ -27,6 +27,10 @@ public interface Page<T> extends Pageable{
 	 */
 	Integer getPageNum();
 
+	/**
+	 * 实体数据
+	 * @return
+	 */
 	List<T> getContent();
 
 }

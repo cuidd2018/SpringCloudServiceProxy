@@ -11,14 +11,9 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
 
     private static final long serialVersionUID = 642544266229652024L;
 
-    private Pageable pageable;
-
     public PageImpl(List<T> content, Pageable pageable, Integer total) {
         setContent(content);
-        this.pageable = pageable;
-        setTotal(total);
-
-        if (total == null) setTotal(0);
+        setTotal(total==null?0:total);
         setPageSize(pageable.getPageSize());
         setOffset(pageable.getOffset());
         setPageNum(pageable.getPageNum());
@@ -30,9 +25,5 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
             return 1;
         }
         return (int) Math.ceil((double) total / (double) pageSize);
-    }
-
-    public Pageable getPageable() {
-        return pageable;
     }
 }
