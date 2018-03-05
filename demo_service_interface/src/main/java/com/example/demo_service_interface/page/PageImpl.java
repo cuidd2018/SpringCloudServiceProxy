@@ -30,6 +30,11 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
         return pageImpl;
     }
 
+    public static <T> PageImpl<T> create(List<T> content, Integer page,Integer size, Integer total) {
+        Pageable pageable=PageRequest.create(page,size);
+        return create(content,pageable,total);
+    }
+
     private static int countTotalPages(int pageSize, int total) {
         if (pageSize == 0) {
             return 1;
