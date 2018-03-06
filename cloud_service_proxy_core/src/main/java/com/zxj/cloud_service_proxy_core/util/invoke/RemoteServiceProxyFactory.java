@@ -24,17 +24,12 @@ import java.util.Map;
 public class RemoteServiceProxyFactory implements InvocationHandler {
 
     public static final Map<String, String> feignMethodMap = new HashMap<>();
-    private static final Class<? extends byte[]> byteArrayClassType = getByteArrayClassType();
+    private static final Class<? extends byte[]> byteArrayClassType = byte[].class;
     private static Logger logger = LoggerFactory.getLogger(RemoteServiceProxyFactory.class);
-    private static HttpHeaders httpHeaders = getHeaders();
+    private static final HttpHeaders httpHeaders = getHeaders();
     private RestTemplate restTemplate = null;
 
-    private static Class<? extends byte[]> getByteArrayClassType() {
-        byte[] bytes = "".getBytes();
-        return bytes.getClass();
-    }
-
-    private static HttpHeaders getHeaders() {
+    private static final HttpHeaders getHeaders() {
         HttpHeaders httpHeaders = new HttpHeaders();
         httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
         return httpHeaders;

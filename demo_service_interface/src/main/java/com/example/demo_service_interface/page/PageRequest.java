@@ -1,60 +1,36 @@
 package com.example.demo_service_interface.page;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import java.io.Serializable;
+import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 
 /**
  * @author zhuxiujie
  * @since 2016年8月12日 下午1:36:28
  */
-public class PageRequest implements Pageable, Serializable {
+public class PageRequest extends PageBean<Object> {
 
     private static final long serialVersionUID = 1232825578694716871L;
 
-    private Integer page;
-    private Integer size;
-
-    public PageRequest(Integer page, Integer size) {
-        if(size!=null&&size==-1){
-            page=null;
-            size=null;
+    public static PageRequest create(Integer page, Integer size) throws ServiceException {
+        if (size != null && size == -1) {
+            page = null;
+            size = null;
         }
         if (page != null && page <= 0) {
-            throw new IllegalArgumentException("Page index must not be less than zero!");
+            throw new ServiceException("Page index must not be <= 0!");
         }
-
         if (size != null && size < 1) {
-            throw new IllegalArgumentException("Page size must not be less than one!");
+            throw new ServiceException("Page size must not be < 1!");
         }
-
-        this.page = page;
-        this.size = size;
+        PageRequest pageRequest=new PageRequest();
+        pageRequest.setPageNum(page);
+        pageRequest.setPageSize(size);
+        pageRequest.setOffset(countOffset(page, size));
+        return pageRequest;
     }
 
-    /**
-     * 总数
-     *
-     * @return
-     */
-    @Override
-    public Integer getPageSize() {
-        return size;
-    }
-
-    @JsonIgnore
-    public Integer getOffset() {
+    private static Integer countOffset(Integer page, Integer size) {
         if (page == null || size == null) return null;
         return (page - 1) * size;
     }
 
-    /**
-     * 页码
-     *
-     * @return
-     */
-    @Override
-    public Integer getPageNum() {
-        return page;
-    }
 }

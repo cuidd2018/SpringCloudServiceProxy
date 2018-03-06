@@ -1,62 +1,55 @@
 package com.example.demo_service_interface.page;
 
+import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+
 import java.util.List;
 
 /**
- * 
+ * @param <T>
  * @author zhuxiujie
  * @since 2016年8月12日 下午2:43:27
- * @param <T>
  */
-public class PageImpl<T> implements Page<T>, Pageable {
+public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
 
-	private final int		total;
+    private static final long serialVersionUID = 642544266229652024L;
 
-	private final Pageable	pageable;
+    /**
+     * 构造
+     * @param content
+     * @param pageable
+     * @param total
+     * @param <T>
+     * @return
+     */
+    public static <T> PageImpl<T> create(List<T> content, Pageable pageable, Integer total) {
+        PageImpl<T> pageImpl=new PageImpl<>();
+        pageImpl.setContent(content);
+        pageImpl.setTotal(total==null?0:total);
+        pageImpl.setPageSize(pageable.getPageSize());
+        pageImpl.setOffset(pageable.getOffset());
+        pageImpl.setPageNum(pageable.getPageNum());
+        pageImpl.setTotalPages(countTotalPages(pageable.getPageSize(), pageImpl.getTotal()));
+        return pageImpl;
+    }
 
-	private final List<T>	content;
+    /**
+     * 构造
+     * @param content
+     * @param page
+     * @param size
+     * @param total
+     * @param <T>
+     * @return
+     */
+    public static <T> PageImpl<T> create(List<T> content, Integer page,Integer size, Integer total) throws ServiceException {
+        Pageable pageable=PageRequest.create(page,size);
+        return create(content,pageable,total);
+    }
 
-	public PageImpl(List<T> content, Pageable pageable, Integer total) {
-		if(total==null)total=0;
-		this.content = content;
-		this.pageable = pageable;
-		this.total = total;
-	}
-
-	@Override
-	public Integer getPageNum() {
-		return this.pageable.getPageNum();
-	}
-
-	@Override
-	public Integer getPageSize() {
-		return this.pageable.getPageSize();
-	}
-
-	@Override
-	public Integer getOffset() {
-		return this.pageable.getOffset();
-	}
-
-	public Pageable getPageable() {
-		return pageable;
-	}
-
-	@Override
-	public int getTotalPages() {
-		if (getPageSize() == 0) {
-			return 1;
-		}
-		return (int) Math.ceil((double) this.total / (double) getPageSize());
-	}
-
-	@Override
-	public Integer getTotal() {
-		return this.total;
-	}
-
-	@Override
-	public List<T> getContent() {
-		return this.content;
-	}
+    private static int countTotalPages(int pageSize, int total) {
+        if (pageSize == 0) {
+            return 1;
+        }
+        return (int) Math.ceil((double) total / (double) pageSize);
+    }
 }

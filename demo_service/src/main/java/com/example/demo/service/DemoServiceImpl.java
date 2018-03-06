@@ -28,12 +28,12 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     }
 
     @Override
-    public Page<DemoVO> invokeObject(DemoVO arg , boolean isThrowException) throws ServiceException {
+    public Page<DemoVO> invokeObject(PageRequest pageRequest, boolean isThrowException) throws ServiceException {
+        DemoVO arg= new DemoVO();
         arg.setName("demo");
-
         List<DemoVO> demoVOS=new ArrayList<>();
         demoVOS.add(arg);
-        Page<DemoVO> pageable=new PageImpl<>(demoVOS,new PageRequest(1,20),demoVOS.size());
+        Page<DemoVO> pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
         if(isThrowException)throw new ServiceException("错误");
         return pageable;
     }

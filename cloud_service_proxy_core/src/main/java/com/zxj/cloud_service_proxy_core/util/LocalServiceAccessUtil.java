@@ -16,7 +16,6 @@ import java.io.InputStream;
 public class LocalServiceAccessUtil {
 
 
-
     public static byte[] access(ApplicationContext applicationContext, InputStream inputStream, Logger logger) throws Throwable {
         byte[] bytes = null;
         try {
@@ -28,16 +27,22 @@ public class LocalServiceAccessUtil {
             } catch (Exception e) {
             }
         }
-        if (bytes == null){throw new ServiceRuntimeException("input2byte fail! bytes=null!");}
-        return access(applicationContext,bytes,logger);
+        if (bytes == null) {
+            throw new ServiceRuntimeException("input2byte fail! bytes=null!");
+        }
+        return access(applicationContext, bytes, logger);
     }
 
 
     public static byte[] access(ApplicationContext applicationContext, byte[] bytes, Logger logger) throws Throwable {
-        if (bytes == null){throw new ServiceRuntimeException("bytes can not be null!");}
+        if (bytes == null) {
+            throw new ServiceRuntimeException("bytes can not be null!");
+        }
         logger.info("bytesLength:" + bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeUtil.deserialize(bytes);
-        if (serviceDTO == null){throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");}
+        if (serviceDTO == null) {
+            throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
+        }
         Object[] params = serviceDTO.getParams();
         Class[] paramTypes = serviceDTO.getParamsTypes();
         String method = serviceDTO.getMethod();
@@ -51,12 +56,12 @@ public class LocalServiceAccessUtil {
         byte[] result = null;
         if (serviceResult != null) result = SerializeUtil.serialize(serviceResult);
         long endTime = System.currentTimeMillis();
-        String invokeInfo = createInvokeInfo(paramTypes, service, method, startTime, endTime);
+        String invokeInfo = createInvokeInfo(service, method, startTime, endTime);
         logger.info(invokeInfo);
         return result;
     }
 
-    private static String createInvokeInfo(Class[] paramTypes, String service, String method, long startTime, long endTime) {
+    private static String createInvokeInfo(String service, String method, long startTime, long endTime) {
         StringBuilder stringBuilder = null;
         try {
             stringBuilder = new StringBuilder("End invoke=");
@@ -67,7 +72,7 @@ public class LocalServiceAccessUtil {
         return stringBuilder.toString();
     }
 
-    public static interface Logger {
-        public void info(String info);
+    public interface Logger {
+        void info(String info);
     }
 }

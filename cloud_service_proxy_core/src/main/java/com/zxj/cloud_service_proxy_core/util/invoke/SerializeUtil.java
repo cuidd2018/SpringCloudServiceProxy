@@ -33,13 +33,13 @@ public class SerializeUtil {
 	    if(inStream==null)return null;
 		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
 		try {
-			byte[] buff = new byte[100];
-			int rc = 0;
-			while ((rc = inStream.read(buff, 0, 100)) > 0) {
-				byteArrayOutputStream.write(buff, 0, rc);
+			byte[] buffer = new byte[1024];
+			int len = 0;
+			while ((len = inStream.read(buffer)) != -1) {
+				byteArrayOutputStream.write(buffer, 0, len);
 			}
-			byte[] in2b = byteArrayOutputStream.toByteArray();
-			return in2b;
+			inStream.close();
+			return byteArrayOutputStream.toByteArray();
 		} finally {
 			try{byteArrayOutputStream.flush();}catch (Exception e){}
 			try{byteArrayOutputStream.close();}catch (Exception e){}

@@ -13,7 +13,7 @@ public interface Page<T> extends Pageable{
 	 * 页数
 	 * @return
 	 */
-	int getTotalPages();
+	Integer getTotalPages();
 
 	/**
 	 * 总记录数
@@ -27,6 +27,10 @@ public interface Page<T> extends Pageable{
 	 */
 	Integer getPageNum();
 
+	/**
+	 * 实体数据
+	 * @return
+	 */
 	List<T> getContent();
 
 }
