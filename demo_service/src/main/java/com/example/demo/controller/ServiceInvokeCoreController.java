@@ -11,8 +11,6 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rx.Single;
-import rx.schedulers.Schedulers;
-
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
 import java.io.IOException;
@@ -34,7 +32,7 @@ public class ServiceInvokeCoreController {
 
     private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
 
-    private static ExecutorService executor = Executors.newFixedThreadPool(4);
+    private static ExecutorService executor = Executors.newFixedThreadPool(200);
 
 
     /**
@@ -43,7 +41,7 @@ public class ServiceInvokeCoreController {
      * @return
      */
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    public Single<byte[]> responseWithObservable(ServletRequest request) {
+    public Single<byte[]> responseWithObservable(ServletRequest request) throws Throwable {
 
         byte[] bytes = null;
         InputStream inputStream=null;
@@ -62,19 +60,6 @@ public class ServiceInvokeCoreController {
         if (bytes == null) {
             throw new ServiceRuntimeException("input2byte fail! bytes=null!");
         }
-
-        byte[] finalBytes = bytes;
-        Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
-            byte[] result = null;
-            try {
-                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, controllerLogger);
-                singleSubscriber.onSuccess(result);
-            }catch (Exception e){
-                logger.error("invokeError",e);
-            } catch (Throwable throwable) {
-                logger.error("invokeError",throwable);
-            }
-        }).subscribeOn(Schedulers.from(executor));
-        return observable;
+        return LocalServiceAccessUtil.access(executor,applicationContext, bytes, controllerLogger);
     }
 }

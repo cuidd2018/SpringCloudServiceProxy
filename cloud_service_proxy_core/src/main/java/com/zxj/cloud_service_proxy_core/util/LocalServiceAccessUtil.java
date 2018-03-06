@@ -5,8 +5,10 @@ import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import org.springframework.context.ApplicationContext;
+import rx.Single;
+import rx.schedulers.Schedulers;
 
-import java.io.InputStream;
+import java.util.concurrent.ExecutorService;
 
 /**
  * @author zhuxiujie
@@ -16,21 +18,20 @@ import java.io.InputStream;
 public class LocalServiceAccessUtil {
 
 
-    public static byte[] access(ApplicationContext applicationContext, InputStream inputStream, Logger logger) throws Throwable {
-        byte[] bytes = null;
-        try {
-            bytes = SerializeUtil.input2byte(inputStream);
-        } finally {
-            //TODO clear stream
+
+    public static Single<byte[]> access(ExecutorService executor, ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
+        Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
+            byte[] result = null;
             try {
-                inputStream.close();
-            } catch (Exception e) {
+                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, logger);
+                singleSubscriber.onSuccess(result);
+            }catch (Exception e){
+                logger.info("invokeError"+e.toString());
+            } catch (Throwable throwable) {
+                logger.info("invokeError"+throwable.toString());
             }
-        }
-        if (bytes == null) {
-            throw new ServiceRuntimeException("input2byte fail! bytes=null!");
-        }
-        return access(applicationContext, bytes, logger);
+        }).subscribeOn(Schedulers.from(executor));
+        return observable;
     }
 
 

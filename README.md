@@ -62,47 +62,43 @@ public class ProviderConfig {
 @Controller
 public class ServiceInvokeCoreController {
 
-    private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
-
-    @Resource
-    private ApplicationContext applicationContext;
-
-
-    private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
-
-    //@RequestMapping 内填写你的application.properties中的spring.application.name=* 的值
-    @RequestMapping()
-    public void everything(ServletRequest request, ServletResponse response) throws Throwable {
-        InputStream inputStream = null;
-        byte[] result = null;
-        try {
-            inputStream = request.getInputStream();
-            result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
-        } finally {
-            //TODO clear stream
-            try {
-                inputStream.close();
-                inputStream = null;
-            } catch (Exception e) {
-            }
-        }
-        OutputStream outputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-            if (result != null) outputStream.write(result);
-        } finally {
-            try {
-                outputStream.flush();
-            } catch (Exception e) {
-            }
-            try {
-                outputStream.close();
-            } catch (Exception e) {
-            }
-            outputStream = null;
-        }
-    }
-
+     private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
+   
+       @Resource
+       private ApplicationContext applicationContext;
+   
+       private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
+   
+       private static ExecutorService executor = Executors.newFixedThreadPool(200);
+   
+   
+       /**
+        * 使用RXJava的类似观察者模式的机制处理异步任务
+        * @param request
+        * @return
+        */
+       @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
+       public Single<byte[]> responseWithObservable(ServletRequest request) throws Throwable {
+   
+           byte[] bytes = null;
+           InputStream inputStream=null;
+           try {
+               inputStream=request.getInputStream();
+               bytes = SerializeUtil.input2byte(inputStream);
+           } catch (IOException e) {
+               e.printStackTrace();
+           } finally {
+               //TODO clear stream
+               try {
+                   inputStream.close();
+               } catch (Exception e) {
+               }
+           }
+           if (bytes == null) {
+               throw new ServiceRuntimeException("input2byte fail! bytes=null!");
+           }
+           return LocalServiceAccessUtil.access(executor,applicationContext, bytes, controllerLogger);
+       }
 
 }
 
