@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 
+import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.LocalServiceAccessUtil;
 import com.example.demo_service_interface.config.RemoteMicroServiceName;
+import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
@@ -13,6 +15,7 @@ import rx.schedulers.Schedulers;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -41,23 +44,35 @@ public class ServiceInvokeCoreController {
      */
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
     public Single<byte[]> responseWithObservable(ServletRequest request) {
+
+        byte[] bytes = null;
+        InputStream inputStream=null;
+        try {
+            inputStream=request.getInputStream();
+            bytes = SerializeUtil.input2byte(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //TODO clear stream
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+            }
+        }
+        if (bytes == null) {
+            throw new ServiceRuntimeException("input2byte fail! bytes=null!");
+        }
+
+        byte[] finalBytes = bytes;
         Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
-            InputStream inputStream = null;
             byte[] result = null;
             try {
-                inputStream = request.getInputStream();
-                result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
+                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, controllerLogger);
                 singleSubscriber.onSuccess(result);
             }catch (Exception e){
                 logger.error("invokeError",e);
             } catch (Throwable throwable) {
                 logger.error("invokeError",throwable);
-            } finally {
-                //TODO clear stream
-                try {
-                    inputStream.close();
-                } catch (Exception e) {
-                }
             }
         }).subscribeOn(Schedulers.from(executor));
         return observable;
