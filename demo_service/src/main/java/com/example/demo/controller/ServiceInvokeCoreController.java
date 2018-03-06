@@ -8,12 +8,15 @@ import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import rx.Single;
+import rx.schedulers.Schedulers;
 
 import javax.annotation.Resource;
 import javax.servlet.ServletRequest;
-import javax.servlet.ServletResponse;
 import java.io.InputStream;
-import java.io.OutputStream;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 
 /**
  * 调用服务层核心控制器，请勿修改此处代码！！！
@@ -26,40 +29,37 @@ public class ServiceInvokeCoreController {
     @Resource
     private ApplicationContext applicationContext;
 
-
     private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
 
+    private static ExecutorService executor = Executors.newFixedThreadPool(4);
+
+
+    /**
+     * 使用RXJava的类似观察者模式的机制处理异步任务
+     * @param request
+     * @return
+     */
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    public void everything(ServletRequest request, ServletResponse response) throws Throwable {
-        InputStream inputStream = null;
-        byte[] result = null;
-        try {
-            inputStream = request.getInputStream();
-            result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
-        } finally {
-            //TODO clear stream
+    public Single<byte[]> responseWithObservable(ServletRequest request) {
+        Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
+            InputStream inputStream = null;
+            byte[] result = null;
             try {
-                inputStream.close();
-                inputStream = null;
-            } catch (Exception e) {
+                inputStream = request.getInputStream();
+                result = LocalServiceAccessUtil.access(applicationContext, inputStream, controllerLogger);
+                singleSubscriber.onSuccess(result);
+            }catch (Exception e){
+                logger.error("invokeError",e);
+            } catch (Throwable throwable) {
+                logger.error("invokeError",throwable);
+            } finally {
+                //TODO clear stream
+                try {
+                    inputStream.close();
+                } catch (Exception e) {
+                }
             }
-        }
-        OutputStream outputStream = null;
-        try {
-            outputStream = response.getOutputStream();
-            if (result != null) outputStream.write(result);
-        } finally {
-            try {
-                outputStream.flush();
-            } catch (Exception e) {
-            }
-            try {
-                outputStream.close();
-            } catch (Exception e) {
-            }
-            outputStream = null;
-        }
+        }).subscribeOn(Schedulers.from(executor));
+        return observable;
     }
-
-
 }
