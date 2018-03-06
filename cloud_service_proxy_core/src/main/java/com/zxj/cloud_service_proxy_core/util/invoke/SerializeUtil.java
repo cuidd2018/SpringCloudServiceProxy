@@ -39,7 +39,10 @@ public class SerializeUtil {
 				byteArrayOutputStream.write(buffer, 0, len);
 			}
 			inStream.close();
-			return byteArrayOutputStream.toByteArray();
+			byte[] bytes= byteArrayOutputStream.toByteArray();
+			try{byteArrayOutputStream.flush();}catch (Exception e){}
+			try{byteArrayOutputStream.close();}catch (Exception e){}
+			return bytes;
 		} finally {
 			try{byteArrayOutputStream.flush();}catch (Exception e){}
 			try{byteArrayOutputStream.close();}catch (Exception e){}
