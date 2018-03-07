@@ -62,28 +62,38 @@ public class ProviderConfig {
 @Controller
 public class ServiceInvokeCoreController {
 
-     private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
+   private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
    
        @Resource
        private ApplicationContext applicationContext;
    
-       private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
+       private static LocalServiceAccessUtil.Logger controllerLogger = new LocalServiceAccessUtil.Logger() {
+           @Override
+           public void info(String info) {
+               logger.info(info);
+           }
+   
+           @Override
+           public void error(String error) {
+              logger.error(error);
+           }
+   
+           @Override
+           public void error(String info, Exception e) {
+               logger.error(info,e);
+           }
+       };
    
        private static ExecutorService executor = Executors.newFixedThreadPool(200);
    
-   
        /**
         * 使用RXJava的类似观察者模式的机制处理异步任务
-        * @param request
         * @return
         */
        @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-       public Single<byte[]> responseWithObservable(ServletRequest request) throws Throwable {
-   
+       public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
            byte[] bytes = null;
-           InputStream inputStream=null;
            try {
-               inputStream=request.getInputStream();
                bytes = SerializeUtil.input2byte(inputStream);
            } catch (IOException e) {
                e.printStackTrace();

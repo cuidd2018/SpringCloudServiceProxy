@@ -12,7 +12,6 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import rx.Single;
 import javax.annotation.Resource;
-import javax.servlet.ServletRequest;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.concurrent.ExecutorService;
@@ -49,19 +48,14 @@ public class ServiceInvokeCoreController {
 
     private static ExecutorService executor = Executors.newFixedThreadPool(200);
 
-
     /**
      * 使用RXJava的类似观察者模式的机制处理异步任务
-     * @param request
      * @return
      */
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    public Single<byte[]> responseWithObservable(ServletRequest request) throws Throwable {
-
+    public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
         byte[] bytes = null;
-        InputStream inputStream=null;
         try {
-            inputStream=request.getInputStream();
             bytes = SerializeUtil.input2byte(inputStream);
         } catch (IOException e) {
             e.printStackTrace();
