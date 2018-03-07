@@ -30,7 +30,22 @@ public class ServiceInvokeCoreController {
     @Resource
     private ApplicationContext applicationContext;
 
-    private static LocalServiceAccessUtil.Logger controllerLogger = info -> logger.info(info);
+    private static LocalServiceAccessUtil.Logger controllerLogger = new LocalServiceAccessUtil.Logger() {
+        @Override
+        public void info(String info) {
+            logger.info(info);
+        }
+
+        @Override
+        public void error(String error) {
+           logger.error(error);
+        }
+
+        @Override
+        public void error(String info, Exception e) {
+            logger.error(info,e);
+        }
+    };
 
     private static ExecutorService executor = Executors.newFixedThreadPool(200);
 
