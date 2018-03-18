@@ -22,12 +22,12 @@ public class SerializeUtil {
         return ProxyCoreConfig.getProxyCoreConfig().getDecoder().decoder(by);
     }
 
-    public static final InputStream byte2Input(byte[] buf) {
+    public static InputStream byte2Input(byte[] buf) {
         if (buf == null) return null;
         return new ByteArrayInputStream(buf);
     }
 
-    public static final byte[] input2byte(InputStream inStream) throws IOException {
+    public static byte[] input2byte(InputStream inStream) throws IOException {
         if (inStream == null) return null;
         ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
         try {
