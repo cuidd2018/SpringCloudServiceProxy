@@ -1,17 +1,14 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
-import com.zxj.cloud_service_proxy_core.util.invoke.config.RestTempletConfig;
+import com.zxj.cloud_service_proxy_core.config.RestTempletConfig;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
-import okhttp3.internal.Util;
 import org.springframework.http.client.OkHttp3ClientHttpRequestFactory;
 import org.springframework.http.converter.ByteArrayHttpMessageConverter;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.http.converter.FormHttpMessageConverter;
 import org.springframework.http.converter.HttpMessageConverter;
 import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.xml.MappingJackson2XmlHttpMessageConverter;
 import org.springframework.web.client.DefaultResponseErrorHandler;
 
 import java.nio.charset.Charset;

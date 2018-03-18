@@ -1,6 +1,6 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
-import com.zxj.cloud_service_proxy_core.util.invoke.config.ProxyCoreConfig;
+import com.zxj.cloud_service_proxy_core.config.ProxyCoreConfig;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -14,12 +14,12 @@ public class SerializeUtil {
 
     public static byte[] serialize(Object obj) throws IOException {
         if (obj == null) return null;
-        return ProxyCoreConfig.getProxyCoreConfig().getEncoder().encoder(obj);
+        return ProxyCoreConfig.getSingleton().getEncoder().encoder(obj);
     }
 
     public static Object deserialize(byte[] by) throws IOException {
         if (by == null) return null;
-        return ProxyCoreConfig.getProxyCoreConfig().getDecoder().decoder(by);
+        return ProxyCoreConfig.getSingleton().getDecoder().decoder(by);
     }
 
     public static InputStream byte2Input(byte[] buf) {
