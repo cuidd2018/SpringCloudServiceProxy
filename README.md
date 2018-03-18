@@ -62,54 +62,38 @@ public class ProviderConfig {
 @Controller
 public class ServiceInvokeCoreController {
 
-   private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
-   
-       @Resource
-       private ApplicationContext applicationContext;
-   
-       private static LocalServiceAccessUtil.Logger controllerLogger = new LocalServiceAccessUtil.Logger() {
-           @Override
-           public void info(String info) {
-               logger.info(info);
-           }
-   
-           @Override
-           public void error(String error) {
-              logger.error(error);
-           }
-   
-           @Override
-           public void error(String info, Exception e) {
-               logger.error(info,e);
-           }
-       };
-   
-       private static ExecutorService executor = Executors.newFixedThreadPool(200);
-   
-       /**
-        * 使用RXJava的类似观察者模式的机制处理异步任务
-        * @return
-        */
-       @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-       public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
-           byte[] bytes = null;
-           try {
-               bytes = SerializeUtil.input2byte(inputStream);
-           } catch (IOException e) {
-               e.printStackTrace();
-           } finally {
-               //TODO clear stream
-               try {
-                   inputStream.close();
-               } catch (Exception e) {
-               }
-           }
-           if (bytes == null) {
-               throw new ServiceRuntimeException("input2byte fail! bytes=null!");
-           }
-           return LocalServiceAccessUtil.access(executor,applicationContext, bytes, controllerLogger);
-       }
+ private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
 
+    private static LocalServiceAccessUtil.Logger controllerLogger = new LocalServiceAccessUtil.Logger() {
+        @Override
+        public void info(String info) {
+            logger.info(info);
+        }
+
+        @Override
+        public void error(String error) {
+            logger.error(error);
+        }
+
+        @Override
+        public void error(String info, Exception e) {
+            logger.error(info, e);
+        }
+    };
+
+    @Resource
+    private ApplicationContext applicationContext;
+
+    /**
+     * 使用RXJava的类似观察者模式的机制处理异步任务
+     *
+     * @return
+     */
+    @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
+    public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
+        return LocalServiceAccessUtil.asyncAccess(applicationContext, inputStream, controllerLogger);
+    }
+    
 }
 
 </pre>
