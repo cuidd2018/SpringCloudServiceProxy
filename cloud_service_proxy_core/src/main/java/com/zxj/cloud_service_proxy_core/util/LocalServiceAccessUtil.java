@@ -1,6 +1,7 @@
 package com.zxj.cloud_service_proxy_core.util;
 
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
+import com.zxj.cloud_service_proxy_core.util.invoke.ExceptionCheckOutUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
@@ -8,6 +9,7 @@ import org.springframework.context.ApplicationContext;
 import rx.Single;
 import rx.schedulers.Schedulers;
 
+import java.io.IOException;
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -26,9 +28,24 @@ public class LocalServiceAccessUtil {
                 result = LocalServiceAccessUtil.access(applicationContext, finalBytes, logger);
                 singleSubscriber.onSuccess(result);
             }catch (Exception e){
-                logger.info("invokeError"+e.toString());
+                logger.error("全局错误",e);
+                StringBuffer jsonStrBuffer=new StringBuffer();
+                try {
+                    byte[] bytes= ExceptionCheckOutUtil.checkOut(e,jsonStrBuffer);
+                    singleSubscriber.onSuccess(bytes);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             } catch (Throwable throwable) {
                 logger.info("invokeError"+throwable.toString());
+                logger.error("全局错误",new Exception(throwable));
+                StringBuffer jsonStrBuffer=new StringBuffer();
+                try {
+                    byte[] bytes= ExceptionCheckOutUtil.checkOut(new Exception(throwable),jsonStrBuffer);
+                    singleSubscriber.onSuccess(bytes);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
             }
         }).subscribeOn(Schedulers.from(executor));
         return observable;
@@ -75,5 +92,9 @@ public class LocalServiceAccessUtil {
 
     public interface Logger {
         void info(String info);
+
+        void error(String error);
+
+        void error(String info,Exception e);
     }
 }

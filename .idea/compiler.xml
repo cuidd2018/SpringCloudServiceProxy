@@ -15,7 +15,7 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
-      <module name="cloud_service_proxy_core" target="1.7" />
+      <module name="cloud_service_proxy_core" target="1.8" />
       <module name="demo" target="1.8" />
       <module name="demo_consumers" target="1.8" />
       <module name="demo_discovery" target="1.8" />
