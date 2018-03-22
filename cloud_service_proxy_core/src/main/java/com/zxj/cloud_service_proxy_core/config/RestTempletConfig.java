@@ -1,4 +1,4 @@
-package com.zxj.cloud_service_proxy_core.util.invoke.config;
+package com.zxj.cloud_service_proxy_core.config;
 
 import java.io.Serializable;
 import java.util.concurrent.TimeUnit;
