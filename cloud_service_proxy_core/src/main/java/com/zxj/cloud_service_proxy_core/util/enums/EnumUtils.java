@@ -135,10 +135,14 @@ public class EnumUtils {
 	 * @param <E>
 	 * @return
 	 */
-	public static  <T,E extends Enum<? extends Constant<T>>> E enumValueOf(T value, Class<E> eClass){
+	public static  <T,E extends Enum<? extends Constant<T>>> E enumValueOf(T value, Class<E> eClass) throws ServiceException {
 		if(value==null)return null;
 		Map<T, E> map= valueOfEnum(eClass);
 		E e=map.get(value);
-		return e;
+		if(e!=null){
+			return e;
+		}else{
+			throw new ServiceException("类型转换失败！该value值在枚举中不存在！value=",value,",class=",eClass);
+		}
 	}
 }
