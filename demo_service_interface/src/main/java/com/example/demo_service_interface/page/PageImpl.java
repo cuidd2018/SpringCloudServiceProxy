@@ -46,7 +46,7 @@ public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
         return create(content,pageable,total);
     }
 
-    private static int countTotalPages(int pageSize, int total) {
+    public static int countTotalPages(int pageSize, int total) {
         if (pageSize == 0) {
             return 1;
         }
