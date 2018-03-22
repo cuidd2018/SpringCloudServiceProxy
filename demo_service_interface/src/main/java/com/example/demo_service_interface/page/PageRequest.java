@@ -28,7 +28,7 @@ public class PageRequest extends PageBean<Object> {
         return pageRequest;
     }
 
-    private static Integer countOffset(Integer page, Integer size) {
+    public static Integer countOffset(Integer page, Integer size) {
         if (page == null || size == null) return null;
         return (page - 1) * size;
     }

@@ -45,7 +45,6 @@ public class EnumUtils {
 				return true;
 			}
 		}
-
 		return false;
 	}
 
@@ -135,16 +134,11 @@ public class EnumUtils {
 	 * @param <T>
 	 * @param <E>
 	 * @return
-	 * @throws ServiceException
 	 */
-	public static  <T,E extends Enum<? extends Constant<T>>> E enumValueOf(T value, Class<E> eClass) throws ServiceException {
-		if(value==null)throw new ServiceException("value can not be null!");
+	public static  <T,E extends Enum<? extends Constant<T>>> E enumValueOf(T value, Class<E> eClass){
+		if(value==null)return null;
 		Map<T, E> map= valueOfEnum(eClass);
 		E e=map.get(value);
-		if(e!=null){
-			return e;
-		}else{
-			throw new ServiceException("类型转换失败！Integer value:",value,",class:",eClass);
-		}
+		return e;
 	}
 }
