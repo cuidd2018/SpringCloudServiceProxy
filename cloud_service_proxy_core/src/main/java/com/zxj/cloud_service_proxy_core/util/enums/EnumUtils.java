@@ -145,4 +145,16 @@ public class EnumUtils {
 			throw new ServiceException("类型转换失败！该value值在枚举中不存在！value=",value,",class=",eClass);
 		}
 	}
+
+	public static <T,E extends Enum<? extends Constant<T>>> T getValue(E enumObject){
+		if(enumObject==null)return null;
+		Constant<T> enumConstant= (Constant<T>) enumObject;
+		return enumConstant.getValue();
+	}
+
+	public static <T,E extends Enum<? extends Constant<T>>> T getName(E enumObject){
+		if(enumObject==null)return null;
+		Constant<T> enumConstant= (Constant<T>) enumObject;
+		return enumConstant.getValue();
+	}
 }
