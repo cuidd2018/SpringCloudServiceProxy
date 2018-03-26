@@ -20,4 +20,19 @@ public interface Constant<T> extends Serializable{
      * @return
      */
     T getValue();
+
+
+    /**
+     * 枚举类:推荐只在枚举内部使用，禁止外部调用
+     * @param name
+     * @return
+     */
+    Constant<T> setName(String name);
+
+    /**
+     * 枚举类:推荐只在枚举内部使用，禁止外部调用
+     * @param value
+     * @return
+     */
+    Constant<T> setValue(T value);
 }

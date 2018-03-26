@@ -1,6 +1,7 @@
 package com.example.demo_consumers;
 
 import com.alibaba.fastjson.JSON;
+import com.example.demo_service_interface.enums.ThrowExceptionType;
 import com.example.demo_service_interface.page.Page;
 import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
@@ -64,7 +65,8 @@ public class DemoConsumersApplication {
 						@RequestParam(value = "size",defaultValue = "20")Integer size
 						) throws ServiceException {
 		PageRequest pageRequest=PageRequest.create(page,size);
-		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,exception==1?true:false);
+		ThrowExceptionType throwExceptionType=ThrowExceptionType.valueOf(exception);
+		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType);
 		return JSON.toJSONString(demoVOPage);
 	}
 

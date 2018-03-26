@@ -1,6 +1,5 @@
 package com.zxj.cloud_service_proxy_core.enums;
-
-
+import com.zxj.cloud_service_proxy_core.constant.Constant;
 import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 
 /**
@@ -10,25 +9,33 @@ import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 public enum ServiceProxyErrorCode implements IntEnumConstant {
     ERROR(-1, "错误:");
 
-    Integer code = null;
-    String info = null;
+    Integer value = null;
+    String name = null;
 
     ServiceProxyErrorCode(Integer code, String info) {
-        this.code = code;
-        this.info = info;
+        this.value = code;
+        this.name = info;
     }
 
     @Override
     public String getName() {
-        return info;
+        return name;
     }
 
     @Override
     public Integer getValue() {
-        return code;
+        return value;
     }
 
-    public void setInfo(String info) {
-        this.info = info;
+    @Override
+    public Constant<Integer> setName(String name) {
+        this.name=name;
+        return this;
+    }
+
+    @Override
+    public Constant<Integer> setValue(Integer value) {
+        this.value=value;
+        return this;
     }
 }

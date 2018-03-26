@@ -7,6 +7,9 @@ import java.io.Serializable;
  * 复杂对象必须实现 java.io.Serializable 序列化接口
  */
 public class DemoVO implements Serializable {
+
+    private String _key;
+
     private String name;
 
     private TestVO testVO;
@@ -25,5 +28,13 @@ public class DemoVO implements Serializable {
 
     public String getName() {
         return name;
+    }
+
+    public void set_key(String _key) {
+        this._key = _key;
+    }
+
+    public String get_key() {
+        return _key;
     }
 }

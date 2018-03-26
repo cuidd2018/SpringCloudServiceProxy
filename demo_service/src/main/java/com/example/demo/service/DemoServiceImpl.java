@@ -1,6 +1,7 @@
 package com.example.demo.service;
 
 import com.example.demo.util.FileUtil;
+import com.example.demo_service_interface.enums.ThrowExceptionType;
 import com.example.demo_service_interface.page.Page;
 import com.example.demo_service_interface.page.PageImpl;
 import com.example.demo_service_interface.page.PageRequest;
@@ -28,13 +29,15 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     }
 
     @Override
-    public Page<DemoVO> invokeObject(PageRequest pageRequest, boolean isThrowException) throws ServiceException {
+    public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType) throws ServiceException {
         DemoVO arg= new DemoVO();
         arg.setName("demo");
         List<DemoVO> demoVOS=new ArrayList<>();
         demoVOS.add(arg);
         Page<DemoVO> pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
-        if(isThrowException)throw new ServiceException("错误");
+        if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
+            throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());
+        }
         return pageable;
     }
 

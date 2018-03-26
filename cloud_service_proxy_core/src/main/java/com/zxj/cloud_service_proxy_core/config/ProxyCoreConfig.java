@@ -37,7 +37,7 @@ public class ProxyCoreConfig {
         ExecutorService buildExecutorService();
     }
 
-    ProxyCoreConfig(ProxyCoreConfigBuilder proxyCoreConfigBuilder) {
+    public ProxyCoreConfig(ProxyCoreConfigBuilder proxyCoreConfigBuilder) {
         this.proxyCoreConfigBuilder = proxyCoreConfigBuilder;
     }
 
