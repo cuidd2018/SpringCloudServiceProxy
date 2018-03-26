@@ -8,8 +8,7 @@ import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
  * Created by zhuxiujie
  */
 public enum ServiceProxyErrorCode implements IntEnumConstant {
-    ERROR(-1, "错误:"),
-    ERROR2(2, "手机不存在");
+    ERROR(-1, "错误:");
 
     Integer code = null;
     String info = null;
