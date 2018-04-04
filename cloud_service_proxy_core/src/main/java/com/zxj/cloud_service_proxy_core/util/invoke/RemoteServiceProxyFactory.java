@@ -4,7 +4,7 @@ import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
-import com.zxj.cloud_service_proxy_core.util.BeanUtils;
+import com.zxj.fast_io_core.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.*;
