@@ -11,6 +11,12 @@
 	<name>cloud_service_proxy_core</name>
 	<description>Demo project for Spring Boot</description>
 
+	<repositories>
+		<repository>
+			<id>jitpack.io</id>
+			<url>https://jitpack.io</url>
+		</repository>
+	</repositories>
 
 	<properties>
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -48,6 +54,11 @@
             <artifactId>rxjava</artifactId>
             <version>1.2.0</version>
         </dependency>
+		<dependency>
+			<groupId>com.github.zhuxiujia</groupId>
+			<artifactId>FastIO</artifactId>
+			<version>1.0.0</version>
+		</dependency>
     </dependencies>
 
 	<build>
