@@ -58,7 +58,6 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             throw new ServiceException("restTemplate can not be null!");
         try {
             logger.info("request service:" + serviceName + "." + methodName);
-            logger.info("bytesLength:" + bytes.length);
             HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, httpHeaders);
             String remoteServiceName = getRemoteServiceName(serviceName);
             String remoteUrl = "http://" + remoteServiceName + "/" + remoteServiceName;

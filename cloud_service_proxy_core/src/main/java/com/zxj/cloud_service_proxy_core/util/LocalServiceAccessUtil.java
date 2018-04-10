@@ -104,7 +104,6 @@ public class LocalServiceAccessUtil {
         if (bytes == null) {
             throw new ServiceRuntimeException("bytes can not be null!");
         }
-        logger.info("bytesLength:" + bytes.length);
         ServiceDTO serviceDTO = (ServiceDTO) SerializeUtil.deserialize(bytes);
         if (serviceDTO == null) {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
