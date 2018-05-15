@@ -1,6 +1,7 @@
 <img src="logo.png"></br>
 #SpringCloudServiceProxy
 SpringCloudServiceProxy-一个实现动态代理服务调用层工具，基于spring cloud，</br>
+<img src="detail.png"></br>
 ## 市面各框架对比：
 -SpringCloud，SpringCloud全家桶提供了诸多功能，发现Feign只支持Json格式的传输，Feign侵入严重，@ResponseBody注解无法解决多个复杂JSON对象的传递。</br>
 -Dubbo框架，采用dubbo协议，dubbo协议采用单一长连接和NIO异步通讯，适合于小数据量大并发的服务调用，不适合传送大数据量的服务，比如传文件，传视频等，除非请求量很低。 </br>
