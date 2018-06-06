@@ -57,7 +57,7 @@
 		<dependency>
 			<groupId>com.github.zhuxiujia</groupId>
 			<artifactId>FastIO</artifactId>
-			<version>v1.0.4</version>
+			<version>v1.0.5</version>
 		</dependency>
     </dependencies>
 
