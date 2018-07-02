@@ -7,6 +7,7 @@ import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import org.springframework.context.ApplicationContext;
+import reactor.core.publisher.Mono;
 import rx.Single;
 import rx.schedulers.Schedulers;
 
@@ -89,6 +90,79 @@ public class LocalServiceAccessUtil {
         }).subscribeOn(Schedulers.from(ProxyCoreConfig.getSingleton().getExecutorService()));
         return observable;
     }
+
+
+
+    /**
+     * 异步访问
+     * 使用RxJava 实现的异步访问
+     *
+     * @param applicationContext
+     * @param inputStream
+     * @param logger
+     * @return
+     * @throws Throwable
+     */
+    public static Mono<byte[]> asyncMonoAccess(ApplicationContext applicationContext, InputStream inputStream, final Logger logger) throws Throwable {
+        byte[] bytes = null;
+        try {
+            bytes = SerializeUtil.input2byte(inputStream);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            //TODO clear stream
+            try {
+                inputStream.close();
+            } catch (Exception e) {
+            }
+        }
+        if (bytes == null) {
+            throw new ServiceRuntimeException("input2byte fail! bytes=null!");
+        }
+        return asyncMonoAccess(applicationContext, bytes, logger);
+    }
+
+    /**
+     * 异步访问
+     * 使用RxJava 实现的异步访问
+     *
+     * @param applicationContext
+     * @param finalBytes
+     * @param logger
+     * @return
+     * @throws Throwable
+     */
+    public static Mono<byte[]> asyncMonoAccess(ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
+        Mono<byte[]> mono = Mono.create(tringMonoSink -> {
+            byte[] result = null;
+            try {
+                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, logger);
+                tringMonoSink.success(result);
+            } catch (Exception e) {
+                logger.error("全局错误", e);
+                StringBuffer jsonStrBuffer = new StringBuffer();
+                try {
+                    byte[] bytes = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
+                    tringMonoSink.success(bytes);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            } catch (Throwable throwable) {
+                logger.info("invokeError" + throwable.toString());
+                logger.error("全局错误", new Exception(throwable));
+                StringBuffer jsonStrBuffer = new StringBuffer();
+                try {
+                    byte[] bytes = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
+                    tringMonoSink.success(bytes);
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
+            }
+        });
+        mono = mono.subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(ProxyCoreConfig.getSingleton().getExecutorService()));
+        return mono;
+    }
+
 
 
     /**

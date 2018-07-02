@@ -5,9 +5,8 @@ import com.example.demo_service_interface.config.RemoteMicroServiceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.RequestMapping;
-import rx.Single;
+import org.springframework.web.bind.annotation.*;
+import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import java.io.InputStream;
@@ -15,7 +14,7 @@ import java.io.InputStream;
 /**
  * 调用服务层核心控制器，请勿修改此处代码！！！
  */
-@Controller
+@RestController
 public class ServiceInvokeCoreController {
 
     private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);
@@ -42,12 +41,14 @@ public class ServiceInvokeCoreController {
     private ApplicationContext applicationContext;
 
     /**
-     * 使用RXJava的类似观察者模式的机制处理异步任务
-     *
+     * 使用Mono的类似观察者模式的机制处理异步任务
+     * @param inputStream
      * @return
+     * @throws Throwable
      */
+    @ResponseBody
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
-        return LocalServiceAccessUtil.asyncAccess(applicationContext, inputStream, controllerLogger);
+    Mono<byte[]> invoke(InputStream inputStream) throws Throwable {
+        return LocalServiceAccessUtil.asyncMonoAccess(applicationContext,inputStream,controllerLogger);
     }
 }
