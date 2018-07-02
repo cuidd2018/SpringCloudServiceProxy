@@ -91,15 +91,17 @@ public class ServiceInvokeCoreController {
     @Resource
     private ApplicationContext applicationContext;
 
-    /**
-     * 使用RXJava的类似观察者模式的机制处理异步任务
-     *
-     * @return
-     */
-    @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    public Single<byte[]> responseWithObservable(InputStream inputStream) throws Throwable {
-        return LocalServiceAccessUtil.asyncAccess(applicationContext, inputStream, controllerLogger);
-    }
+        /**
+         * 使用Mono的类似观察者模式的机制处理异步任务
+         * @param inputStream
+         * @return
+         * @throws Throwable
+         */
+        @ResponseBody
+        @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
+        Mono<byte[]> invoke(InputStream inputStream) throws Throwable {
+            return LocalServiceAccessUtil.asyncMonoAccess(applicationContext,inputStream,controllerLogger);
+        }
     
 }
 

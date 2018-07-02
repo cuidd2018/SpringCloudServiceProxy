@@ -32,7 +32,7 @@ public class LocalServiceAccessUtil {
      * @return
      * @throws Throwable
      */
-    public static Single<byte[]> asyncAccess(ApplicationContext applicationContext, InputStream inputStream, final Logger logger) throws Throwable {
+    public static Single<byte[]> asyncRxAccess(ApplicationContext applicationContext, InputStream inputStream, final Logger logger) throws Throwable {
         byte[] bytes = null;
         try {
             bytes = SerializeUtil.input2byte(inputStream);
@@ -48,7 +48,7 @@ public class LocalServiceAccessUtil {
         if (bytes == null) {
             throw new ServiceRuntimeException("input2byte fail! bytes=null!");
         }
-        return asyncAccess(applicationContext, bytes, logger);
+        return asyncRxAccess(applicationContext, bytes, logger);
     }
 
     /**
@@ -61,7 +61,7 @@ public class LocalServiceAccessUtil {
      * @return
      * @throws Throwable
      */
-    public static Single<byte[]> asyncAccess(ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
+    public static Single<byte[]> asyncRxAccess(ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
         Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
             byte[] result = null;
             try {
