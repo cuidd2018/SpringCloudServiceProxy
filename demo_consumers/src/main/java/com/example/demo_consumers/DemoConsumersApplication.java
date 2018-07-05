@@ -60,9 +60,9 @@ public class DemoConsumersApplication {
 	 */
 	@ResponseBody
 	@RequestMapping("/invokeObject")
-	public String hello(@RequestParam(value = "exception",defaultValue = "0")int exception,
-						@RequestParam(value = "page",defaultValue = "1")Integer page,
-						@RequestParam(value = "size",defaultValue = "20")Integer size
+	public String hello(@RequestParam(value = "exception",defaultValue = "0",required = false)int exception,
+						@RequestParam(value = "page",defaultValue = "1",required = false)Integer page,
+						@RequestParam(value = "size",defaultValue = "20",required = false)Integer size
 						) throws ServiceException {
 		PageRequest pageRequest=PageRequest.create(page,size);
 		ThrowExceptionType throwExceptionType=ThrowExceptionType.valueOf(exception);
