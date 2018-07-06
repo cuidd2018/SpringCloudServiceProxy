@@ -1,17 +1,11 @@
 package com.example.demo_consumers.config;
-
-
 import com.example.demo_service_interface.service.DemoService;
-import com.zxj.cloud_service_proxy_core.util.invoke.DefaultRestTempleteProvider;
 import com.example.demo_service_interface.config.RemoteMicroServiceName;
 import com.zxj.cloud_service_proxy_core.util.invoke.RemoteServiceProxyFactory;
-import com.zxj.cloud_service_proxy_core.config.RestTempletConfig;
-import org.springframework.cloud.client.loadbalancer.LoadBalanced;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.web.client.RestTemplate;
-
-import javax.annotation.Resource;
 
 /**
  * 远程服务代理Bean 配置
@@ -23,20 +17,13 @@ import javax.annotation.Resource;
 @Configuration
 public class ProviderConfig {
 
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return DefaultRestTempleteProvider.restTemplate(new RestTempletConfig());
-    }
-
-
-    @Resource
-    private RestTemplate restTemplate;
+    @Autowired
+    private LoadBalancerClient loadBalancerClient; //注入发现客户端
 
 
     @Bean
     public DemoService demoService() {
-        DemoService demoService = RemoteServiceProxyFactory.newInstance(restTemplate, RemoteMicroServiceName.SERVICE_EVEYY_THING, DemoService.class);
+        DemoService demoService = RemoteServiceProxyFactory.newInstance(loadBalancerClient, RemoteMicroServiceName.SERVICE_EVEYY_THING, DemoService.class);
         return demoService;
     }
 }

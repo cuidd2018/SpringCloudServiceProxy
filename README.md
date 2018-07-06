@@ -12,7 +12,7 @@ SpringCloudServiceProxy-一个实现动态代理服务调用层工具，基于sp
 ### 提供相比Feign性能更好的服务调用
 Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂JavaBean完美（不代表最终性能，此处只是案例，具体看客户电脑配置性能）命令 ab.exe -n 50000 -c 2000 http://localhost:18080/invokeObject</br>
 ### 单体迁移到分布式系统 免重构 代码0无侵入
-使用动态代理提供每个Service对象的伪实例，内方法实现则使用Ribbon负载均衡的RestTemplete</br>
+使用动态代理提供每个Service对象的伪实例，内方法实现则使用Ribbon负载均衡的  Spring WebFlux WebClient 反应式请求网络 </br>
 ### 相比Dubbo完美支持服务-服务-消费者-之间的 大文件传输
 而且服务的参数和返回值 支持 几乎所有复杂对象包括文件（依赖 FST 快速高效序列化,http协议流传输（Stream流）），调用远程服务像调用本地服务一样方便</br>
 
@@ -46,27 +46,20 @@ Maven项目依赖，首先加入pom
 @Configuration
 public class ProviderConfig {
 
-    @Bean
-    @LoadBalanced
-    RestTemplate restTemplate() {
-        return DefaultRestTempleteProvider.restTemplate(new RestTempletConfig());
-    }
-
-
-    @Resource
-    private RestTemplate restTemplate;
-
-
-    @Bean
-    public *Service demoService() {
-        *Service *Service = RemoteServiceProxyFactory.newInstance(restTemplate, "*Service", *Service.class);
-        return demoService;
-    }
+        @Autowired
+        private LoadBalancerClient loadBalancerClient; //注入发现客户端
+    
+    
+        @Bean
+        public DemoService demoService() {
+            DemoService demoService = RemoteServiceProxyFactory.newInstance(loadBalancerClient, RemoteMicroServiceName.SERVICE_EVEYY_THING, DemoService.class);
+            return demoService;
+        }
 }
 </pre>
 微服务端（或者说Service端）加入Controller控制器(单个微服务项目中，只需存在一个控制器即可访问单个微服务项目中的所有Service)
 <pre>
-@Controller
+@RestController
 public class ServiceInvokeCoreController {
 
  private static Logger logger = LoggerFactory.getLogger(ServiceInvokeCoreController.class);

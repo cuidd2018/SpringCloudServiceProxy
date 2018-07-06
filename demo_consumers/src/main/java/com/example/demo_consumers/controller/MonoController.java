@@ -8,10 +8,7 @@ import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 import reactor.core.scheduler.Schedulers;
 
@@ -24,16 +21,15 @@ public class MonoController {
 
     @Resource
     private DemoService demoService;
-
-    private static  final ExecutorService defaultExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     /**
      * 测试远程调用
      * @return
      */
     @ResponseBody
-    @RequestMapping("/mono")
+    @GetMapping("/mono")
     public Mono<String> index(){
-        return ServiceProxyMono.createMono(() -> demoService.sayHello()).subscribeOn(Schedulers.fromExecutor(defaultExecutor));
+        return ServiceProxyMono.createMono(() -> demoService.sayHello())
+                ;
     }
 
     /**

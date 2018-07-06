@@ -7,8 +7,12 @@ import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import com.zxj.fast_io_core.util.BeanUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.springframework.http.*;
-import org.springframework.web.client.RestTemplate;
+import org.springframework.cloud.client.ServiceInstance;
+import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
+import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.web.reactive.function.BodyInserters;
+import org.springframework.web.reactive.function.client.WebClient;
+import reactor.core.publisher.Mono;
 
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
@@ -24,23 +28,16 @@ import java.util.Map;
  */
 public class RemoteServiceProxyFactory implements InvocationHandler {
 
-    public static final Map<String, String> feignMethodMap = new HashMap<>();
-    private static final Class<? extends byte[]> byteArrayClassType = byte[].class;
+    public static final Map<String, String> remoteServiceMethodMap = new HashMap<>();
     private static Logger logger = LoggerFactory.getLogger(RemoteServiceProxyFactory.class);
-    private static final HttpHeaders httpHeaders = getHeaders();
-    private RestTemplate restTemplate = null;
+    private LoadBalancerClient loadBalancerClient = null;
+    private static final Map<String,WebClient> webClientMap=new HashMap<>();
 
-    private static final HttpHeaders getHeaders() {
-        HttpHeaders httpHeaders = new HttpHeaders();
-        httpHeaders.setContentType(MediaType.APPLICATION_OCTET_STREAM);
-        return httpHeaders;
-    }
-
-    public static <T> T newInstance(RestTemplate restTemplate, String remoteServiceMethod, Class<T> tClass) {
+    public static <T> T newInstance(LoadBalancerClient loadBalancerClient, String remoteServiceMethod, Class<T> tClass) {
         Class[] interfaces = new Class[]{tClass};
-        feignMethodMap.put(tClass.getName(), remoteServiceMethod);
+        remoteServiceMethodMap.put(tClass.getName(), remoteServiceMethod);
         return (T) Proxy.newProxyInstance(RemoteServiceProxyFactory.class.getClassLoader(), interfaces,
-                new RemoteServiceProxyFactory().setRestTemplate(restTemplate));
+                new RemoteServiceProxyFactory().setLoadBalancerClient(loadBalancerClient));
     }
 
     @Override
@@ -54,15 +51,17 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         serviceDTO.setParams(args);
         serviceDTO.setParamsTypes(paramsTypes);
         byte[] bytes = SerializeUtil.serialize(serviceDTO);
-        if (restTemplate == null)
-            throw new ServiceException("restTemplate can not be null!");
+        if (loadBalancerClient == null)
+            throw new ServiceException("WebClient can not be null!");
         try {
             logger.info("request service:" + serviceName + "." + methodName);
-            HttpEntity<byte[]> httpEntity = new HttpEntity<>(bytes, httpHeaders);
-            String remoteServiceName = getRemoteServiceName(serviceName);
-            String remoteUrl = "http://" + remoteServiceName + "/" + remoteServiceName;
-            ResponseEntity<? extends byte[]> response = restTemplate.exchange(remoteUrl, HttpMethod.PUT, httpEntity, byteArrayClassType);
-            byte[] bytesResult = response.getBody();
+            String remoteServiceMethod = getRemoteServiceMethod(serviceName);
+            ServiceInstance serviceInstance = loadBalancerClient.choose(remoteServiceMethod);
+            String remoteUrl = "http://"+serviceInstance.getHost()+":"+serviceInstance.getPort() + "/" + remoteServiceMethod;
+            WebClient webClient=getFromMap(remoteUrl);
+            Mono<byte[]> monoBytes=webClient.post().body(BodyInserters.fromObject(bytes)).retrieve().bodyToMono(byte[].class);
+            byte[] bytesResult=monoBytes.block();
+
             if (bytesResult == null)
                 return null;
             Object result = SerializeUtil.deserialize(bytesResult);
@@ -82,13 +81,22 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         }
     }
 
-    private String getRemoteServiceName(String service) {
-        String method = feignMethodMap.get(service);
+    private WebClient getFromMap(String remoteUrl) {
+        WebClient webClient= webClientMap.get(remoteUrl);
+        if(webClient==null){
+            webClient=WebClient.create(remoteUrl);
+            webClientMap.put(remoteUrl,webClient);
+        }
+        return webClient;
+    }
+
+    private String getRemoteServiceMethod(String service) {
+        String method = remoteServiceMethodMap.get(service);
         return method;
     }
 
-    public RemoteServiceProxyFactory setRestTemplate(RestTemplate restTemplate) {
-        this.restTemplate = restTemplate;
+    public RemoteServiceProxyFactory setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {
+        this.loadBalancerClient = loadBalancerClient;
         return this;
     }
 }

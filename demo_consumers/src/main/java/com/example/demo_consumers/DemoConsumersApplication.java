@@ -15,11 +15,13 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.reactive.config.EnableWebFlux;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 
 @SpringBootApplication
+@EnableWebFlux
 @EnableEurekaClient
 @RestController
 public class DemoConsumersApplication {

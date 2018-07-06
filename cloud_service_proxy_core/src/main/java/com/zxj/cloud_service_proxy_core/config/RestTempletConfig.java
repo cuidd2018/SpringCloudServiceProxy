@@ -8,6 +8,7 @@ import java.util.concurrent.TimeUnit;
  * @since 2018/2/19
  */
 
+@Deprecated
 public class RestTempletConfig implements Serializable {
 
     private TimeUnit timeUnit=TimeUnit.SECONDS;

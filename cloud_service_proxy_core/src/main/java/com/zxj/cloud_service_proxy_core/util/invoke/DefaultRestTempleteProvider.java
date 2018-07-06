@@ -29,6 +29,7 @@ public class DefaultRestTempleteProvider {
      * @param restTempletConfig
      * @return
      */
+    @Deprecated
     public static RestTemplate restTemplate(RestTempletConfig restTempletConfig) {
 
         ConnectionPool connectionPool = new ConnectionPool(restTempletConfig.getMaxIdleConnections(),restTempletConfig.getKeepAliveDuration(),restTempletConfig.getTimeUnit());

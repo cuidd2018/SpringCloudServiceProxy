@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
+import javax.servlet.http.HttpServletResponse;
 import java.io.InputStream;
 
 /**
@@ -48,7 +49,8 @@ public class ServiceInvokeCoreController {
      */
     @ResponseBody
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    Mono<byte[]> invoke(InputStream inputStream) throws Throwable {
+    Mono<byte[]> invoke(InputStream inputStream,HttpServletResponse response) throws Throwable {
+        response.setStatus(200);
         return LocalServiceAccessUtil.asyncMonoAccess(applicationContext,inputStream,controllerLogger);
     }
 }
