@@ -57,6 +57,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             logger.info("request service:" + serviceName + "." + methodName);
             String remoteServiceMethod = getRemoteServiceMethod(serviceName);
             ServiceInstance serviceInstance = loadBalancerClient.choose(remoteServiceMethod);
+            if(serviceInstance ==null)throw new ServiceRuntimeException("no service instance ailviliable!");
             String remoteUrl = "http://"+serviceInstance.getHost()+":"+serviceInstance.getPort() + "/" + remoteServiceMethod;
             WebClient webClient=getFromMap(remoteUrl);
             Mono<byte[]> monoBytes=webClient.post().body(BodyInserters.fromObject(bytes)).retrieve().bodyToMono(byte[].class);
