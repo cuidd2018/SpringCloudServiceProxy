@@ -7,9 +7,11 @@ import com.example.demo_service_interface.vo.DemoVO;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 
 public interface DemoService {
+
     String sayHello();
 
     Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType) throws ServiceException;
 
     String uploadFile(byte[] bytes,String name);
+
 }

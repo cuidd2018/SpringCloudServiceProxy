@@ -19,12 +19,13 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
     @Override
     public String sayHello() {
-        try {
-            //TODO 这里设置时间延迟，仅为测试用！可设置为0
-            Thread.sleep(200);
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+
+        //TODO 这里设置时间延迟，仅为测试用！可设置为0
+//        try {
+//            Thread.sleep(200);
+//        } catch (InterruptedException e) {
+//            e.printStackTrace();
+//        }
         return "<<<<<<<<<<<<<< now access micro service success,  hello word!<<<<<<<<<<<<<<";
     }
 
