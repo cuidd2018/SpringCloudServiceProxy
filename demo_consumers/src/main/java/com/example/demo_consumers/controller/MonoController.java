@@ -25,7 +25,7 @@ public class MonoController {
     @Resource
     private DemoService demoService;
 
-    private static  final ExecutorService defaultExecutor = Executors.newFixedThreadPool(2000);
+    private static  final ExecutorService defaultExecutor = Executors.newFixedThreadPool(Runtime.getRuntime().availableProcessors());
     /**
      * 测试远程调用
      * @return
