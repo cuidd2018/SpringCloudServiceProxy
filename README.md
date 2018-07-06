@@ -9,13 +9,15 @@ SpringCloudServiceProxy-一个实现动态代理服务调用层工具，基于sp
 ===此框架优势===</br>
 ### 基于更成熟更全面的Spring Cloud全家桶 微服务解决方案
 忠于原厂的改装，提升便捷和性能的同时 享受Spring Cloud全家桶带来的各种便利 config zuul Sleuth Bus等等...
-### 提供相比Feign性能更好的服务调用
-Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂JavaBean完美（不代表最终性能，此处只是案例，具体看客户电脑配置性能）命令 ab.exe -n 50000 -c 2000 http://localhost:18080/invokeObject</br>
 ### 单体迁移到分布式系统 免重构 代码0无侵入
 使用动态代理提供每个Service对象的伪实例，内方法实现则使用Ribbon负载均衡的  Spring WebFlux WebClient 反应式请求网络 </br>
 ### 相比Dubbo完美支持服务-服务-消费者-之间的 大文件传输
 而且服务的参数和返回值 支持 几乎所有复杂对象包括文件（依赖 FST 快速高效序列化,http协议流传输（Stream流）），调用远程服务像调用本地服务一样方便</br>
 
+
+##实际性能测试
+
+Apache ab压力测试工具实测：2000并发，50000个请求，调用复杂JavaBean完美（不代表最终性能，此处只是案例，具体看客户电脑配置性能）命令 ab.exe -n 50000 -c 2000 http://localhost:18080/invokeObject   提供相比Feign性能更好的服务调用</br>
 
 ## 框架实现原理
 （依赖 FST 快速高效序列化,http协议流传输（Stream流）byte[] 字节传输，调用远程服务像调用本地服务一样方便，减少网络带宽消耗</br>
