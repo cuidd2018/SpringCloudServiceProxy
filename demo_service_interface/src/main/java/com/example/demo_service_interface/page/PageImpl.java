@@ -9,7 +9,7 @@ import java.util.List;
  * @author zhuxiujie
  * @since 2016年8月12日 下午2:43:27
  */
-public class PageImpl<T> extends PageBean<T> implements Page<T>, Pageable {
+public class PageImpl<T> extends PageBean<T> {
 
     private static final long serialVersionUID = 642544266229652024L;
 

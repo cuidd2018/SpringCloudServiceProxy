@@ -31,11 +31,11 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
     @Override
     public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType) throws ServiceException {
-        DemoVO arg= new DemoVO();
+        var arg= new DemoVO();
         arg.setName("demo");
-        List<DemoVO> demoVOS=new ArrayList<>();
+        var demoVOS=new ArrayList<DemoVO>();
         demoVOS.add(arg);
-        Page<DemoVO> pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
+        var pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
         if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
             throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());
         }

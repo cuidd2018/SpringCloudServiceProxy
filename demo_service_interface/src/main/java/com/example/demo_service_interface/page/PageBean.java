@@ -2,7 +2,7 @@ package com.example.demo_service_interface.page;
 
 import java.util.List;
 
-public  class PageBean<T> implements Page<T>{
+public  class PageBean<T> extends Page<T>{
 
     private static final long serialVersionUID = 6599732285896151358L;
 

@@ -8,29 +8,29 @@ import java.util.List;
  * @since 2016年8月12日 下午2:34:02
  * @param <T>
  */
-public interface Page<T> extends Pageable{
+public abstract class Page<T> extends Pageable{
 	/**
 	 * 页数
 	 * @return
 	 */
-	Integer getTotalPages();
+	public abstract 	Integer getTotalPages();
 
 	/**
 	 * 总记录数
 	 * @return
 	 */
-	Integer getTotal();
+	public abstract	Integer getTotal();
 
 	/**
 	 * 页码
 	 * @return
 	 */
-	Integer getPageNum();
+	public abstract	Integer getPageNum();
 
 	/**
 	 * 实体数据
 	 * @return
 	 */
-	List<T> getContent();
+	public abstract	List<T> getContent();
 
 }

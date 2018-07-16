@@ -8,11 +8,11 @@ import java.io.Serializable;
  * @author zhuxiujie
  * @since 2016年8月12日 下午1:34:05
  */
-public interface Pageable extends Serializable{
+public abstract class Pageable implements Serializable{
 
-	Integer getPageNum();
+	public abstract Integer getPageNum();
 
-	Integer getPageSize();
+	public abstract Integer getPageSize();
 
-	Integer getOffset();
+	public abstract Integer getOffset();
 }
