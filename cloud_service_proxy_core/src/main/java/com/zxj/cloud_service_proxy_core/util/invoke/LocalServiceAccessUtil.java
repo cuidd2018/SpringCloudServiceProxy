@@ -1,14 +1,16 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
+import java.io.IOException;
+
+import org.springframework.context.ApplicationContext;
+
+import com.alibaba.fastjson.JSON;
 import com.zxj.cloud_service_proxy_core.config.ProxyCoreConfig;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import com.zxj.fast_io_core.util.ExtendBeanBuildUtil;
-import org.springframework.context.ApplicationContext;
-import reactor.core.publisher.Mono;
 
-import java.io.IOException;
-import java.util.Map;
+import reactor.core.publisher.Mono;
 
 /**
  * @author zhuxiujie
@@ -37,11 +39,7 @@ public class LocalServiceAccessUtil {
             ServiceDTO serviceDTO=null;
             try {
                 serviceDTO=LocalServiceAccessUtil.deserialize(arg);
-                Object[] params=serviceDTO.getParams();
-                Class[] paramTypes=serviceDTO.getParamsTypes();
-                for (int i=0;i<params.length;i++){
-                    params[i]=SerializeUtil.mapToObject((Map<String, Object>) params[i],paramTypes[i]);
-                }
+                serviceDTO.setSuccess(1);
                 result = LocalServiceAccessUtil.access(applicationContext, serviceDTO, logger,startTime);
                 tringMonoSink.success(result);
             } catch (Exception e) {
@@ -49,6 +47,7 @@ public class LocalServiceAccessUtil {
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
                     Object ex = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
+                    serviceDTO.setSuccess(0);
                     tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -59,6 +58,7 @@ public class LocalServiceAccessUtil {
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
                     Object ex = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
+                    serviceDTO.setSuccess(0);
                     tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
@@ -84,22 +84,34 @@ public class LocalServiceAccessUtil {
         if (serviceDTO == null) {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
         }
-        Object[] params = serviceDTO.getParams();
+        String[] params = serviceDTO.getParams();
         Class[] paramTypes = serviceDTO.getParamsTypes();
         String method = serviceDTO.getMethod();
         String service = serviceDTO.getService();
 
+        Object[] objects = createObjectArg(params,paramTypes);
+
         logger.info("method:" + method);
         logger.info("service:" + service);
 
-        Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
+        Object serviceResult = LocalServiceProxyUtil.invoke(objects, method, service, paramTypes, applicationContext);
         return buildByteResult(serviceDTO,serviceResult,startTime,logger);
+    }
+
+    private static Object[] createObjectArg(String[] params,Class[] paramTypes ) {
+		if (params == null || paramTypes == null || params.length == 0 || paramTypes.length == 0)
+			return null;
+		Object[] objects = new Object[paramTypes.length];
+		for (int i = 0; i < params.length; i++) {
+			objects[i] = JSON.parseObject(params[i], paramTypes[i]);
+		}
+		return objects;
     }
 
     private static String buildByteResult(ServiceDTO serviceDTO, Object serviceResult, long startTime, Logger logger) throws IOException {
         ServiceDTO serviceResultDTO=new ServiceDTO();
         serviceResultDTO=ExtendBeanBuildUtil.buildChild(serviceDTO,ServiceDTO.class);
-        serviceResultDTO.setResult(serviceResult);
+        serviceResultDTO.setResult(JSON.toJSONString(serviceResult));
         String result = null;
         if (serviceResult != null) result = SerializeUtil.serialize(serviceResultDTO);
         long endTime = System.currentTimeMillis();

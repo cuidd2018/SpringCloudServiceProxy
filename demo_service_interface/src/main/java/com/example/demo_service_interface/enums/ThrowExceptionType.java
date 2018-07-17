@@ -6,7 +6,7 @@ import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 
 public enum  ThrowExceptionType implements IntEnumConstant {
-    THROW_EXCEPTION(1,"抛出异常"),
+    THROW_EXCEPTION(1,"抛出一个自定义的异常"),
     NOT_THROW(0,"不抛异常");
 
 

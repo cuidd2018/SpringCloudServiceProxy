@@ -12,17 +12,18 @@ public class ServiceDTO implements Serializable {
 
     private static final long serialVersionUID = 3650809103104022467L;
 
-    private Object[] params;//服务参数
+    private Integer success;
+    private String[] params;//服务参数
     private String method;//方法
     private String service;//服务名称
     private Class[] paramsTypes;//参数类型
-    private Object result;//结果类型
+    private String result;//结果类型
 
-    public Object[] getParams() {
+    public String[] getParams() {
         return params;
     }
 
-    public void setParams(Object[] params) {
+    public void setParams(String[] params) {
         this.params = params;
     }
 
@@ -50,11 +51,19 @@ public class ServiceDTO implements Serializable {
         return paramsTypes;
     }
 
-    public void setResult(Object result) {
+    public void setResult(String result) {
         this.result = result;
     }
 
-    public Object getResult() {
+    public String getResult() {
         return result;
+    }
+
+    public void setSuccess(Integer success) {
+        this.success = success;
+    }
+
+    public Integer getSuccess() {
+        return success;
     }
 }

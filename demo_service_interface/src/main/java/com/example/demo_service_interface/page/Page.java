@@ -8,29 +8,35 @@ import java.util.List;
  * @since 2016年8月12日 下午2:34:02
  * @param <T>
  */
-public abstract class Page<T> extends Pageable{
-	/**
-	 * 页数
-	 * @return
-	 */
-	public abstract 	Integer getTotalPages();
-
-	/**
-	 * 总记录数
-	 * @return
-	 */
-	public abstract	Integer getTotal();
-
-	/**
-	 * 页码
-	 * @return
-	 */
-	public abstract	Integer getPageNum();
-
-	/**
-	 * 实体数据
-	 * @return
-	 */
-	public abstract	List<T> getContent();
-
+public  class Page<T> extends Pageable {
+	
+	private Integer	totalPages;
+	
+	private Integer	total;
+	
+	private List<T>	content;
+	
+	public Integer getTotalPages() {
+		return totalPages;
+	}
+	
+	public void setTotalPages(Integer totalPages) {
+		this.totalPages = totalPages;
+	}
+	
+	public Integer getTotal() {
+		return total;
+	}
+	
+	public void setTotal(Integer total) {
+		this.total = total;
+	}
+	
+	public List<T> getContent() {
+		return content;
+	}
+	
+	public void setContent(List<T> content) {
+		this.content = content;
+	}
 }

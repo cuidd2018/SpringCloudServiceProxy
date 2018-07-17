@@ -1,5 +1,7 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
+import com.alibaba.fastjson.JSON;
+import com.zxj.cloud_service_proxy_core.exception.BaseExceptionBean;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
@@ -50,7 +52,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         ServiceDTO serviceDTO = new ServiceDTO();
         serviceDTO.setMethod(methodName);
         serviceDTO.setService(serviceName);
-        serviceDTO.setParams(args);
+        serviceDTO.setParams(toJsonArray(args));
         serviceDTO.setParamsTypes(paramsTypes);
         String jsons = SerializeUtil.serialize(serviceDTO);
         if (loadBalancerClient == null)
@@ -69,8 +71,16 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
 
             if (bytesResult == null)
                 return null;
-            ServiceDTO serviceResultDTO = (ServiceDTO) SerializeUtil.deserialize(bytesResult,ServiceDTO.class);
-            Object result=serviceResultDTO.getResult();
+            serviceDTO = (ServiceDTO) SerializeUtil.deserialize(bytesResult,ServiceDTO.class);
+            String jsonResult=serviceDTO.getResult();
+            Object result=null;
+
+            if(serviceDTO.getSuccess()==1) {
+                result = JSON.parseObject(jsonResult, method.getReturnType());
+            }else {
+                result = JSON.parseObject(jsonResult, BaseExceptionBean.class);
+            }
+
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
                 if (result instanceof ServiceException) {
@@ -85,6 +95,15 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             logger.error("远程代理服务" + serviceName + "调用失败", e);
             throw e;
         }
+    }
+
+    private String[] toJsonArray(Object[] args) {
+        if(args==null||args.length==0)return null;
+        String[] strings=new String[args.length];
+        for (int i=0;i<args.length;i++){
+            strings[i]=JSON.toJSONString(args[i]);
+        }
+        return strings;
     }
 
     private WebClient getFromMap(String remoteUrl) {

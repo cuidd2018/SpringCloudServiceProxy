@@ -8,11 +8,35 @@ import java.io.Serializable;
  * @author zhuxiujie
  * @since 2016年8月12日 下午1:34:05
  */
-public abstract class Pageable implements Serializable{
+public  class Pageable implements Serializable{
 
-	public abstract Integer getPageNum();
+	private Integer pageSize;
 
-	public abstract Integer getPageSize();
+	private Integer offset;
 
-	public abstract Integer getOffset();
+	private Integer pageNum;
+
+	public Integer getPageSize() {
+		return pageSize;
+	}
+
+	public void setPageSize(Integer pageSize) {
+		this.pageSize = pageSize;
+	}
+
+	public Integer getOffset() {
+		return offset;
+	}
+
+	public void setOffset(Integer offset) {
+		this.offset = offset;
+	}
+
+	public Integer getPageNum() {
+		return pageNum;
+	}
+
+	public void setPageNum(Integer pageNum) {
+		this.pageNum = pageNum;
+	}
 }
