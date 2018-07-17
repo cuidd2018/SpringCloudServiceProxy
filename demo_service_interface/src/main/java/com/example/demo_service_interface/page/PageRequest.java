@@ -10,7 +10,7 @@ public class PageRequest extends PageBean<Object> {
 
     private static final long serialVersionUID = 1232825578694716871L;
 
-    protected PageRequest(){
+    public PageRequest(){
     }
 
     public static PageRequest create(Integer page, Integer size) throws ServiceRuntimeException {

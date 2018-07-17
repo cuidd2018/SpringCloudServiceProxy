@@ -10,6 +10,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
 import org.springframework.http.client.reactive.ClientHttpConnector;
+import org.springframework.util.LinkedMultiValueMap;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -50,7 +52,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         serviceDTO.setService(serviceName);
         serviceDTO.setParams(args);
         serviceDTO.setParamsTypes(paramsTypes);
-        byte[] bytes = SerializeUtil.serialize(serviceDTO);
+        String jsons = SerializeUtil.serialize(serviceDTO);
         if (loadBalancerClient == null)
             throw new ServiceException("WebClient can not be null!");
         try {
@@ -60,8 +62,10 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             if(serviceInstance ==null)throw new ServiceRuntimeException("no service instance ailviliable!");
             String remoteUrl = "http://"+serviceInstance.getHost()+":"+serviceInstance.getPort() + "/" + remoteServiceMethod;
             WebClient webClient=getFromMap(remoteUrl);
-            Mono<byte[]> monoBytes=webClient.post().body(BodyInserters.fromObject(bytes)).retrieve().bodyToMono(byte[].class);
-            byte[] bytesResult=monoBytes.block();
+            MultiValueMap<String, String> formData = new LinkedMultiValueMap<>();
+            formData.add("arg",jsons);
+            Mono<String> monoBytes=webClient.post().body(BodyInserters.fromObject(formData)).retrieve().bodyToMono(String.class);
+            String bytesResult=monoBytes.block();
 
             if (bytesResult == null)
                 return null;

@@ -9,5 +9,5 @@ import java.io.IOException;
  */
 
 public interface Encoder {
-    byte[] encoder(Object object) throws IOException;
+    String encoder(Object object) throws IOException;
 }

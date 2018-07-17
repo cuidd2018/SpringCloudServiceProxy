@@ -1,6 +1,6 @@
 package com.example.demo.controller;
 
-import com.zxj.cloud_service_proxy_core.util.LocalServiceAccessUtil;
+import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceAccessUtil;
 import com.example.demo_service_interface.config.RemoteMicroServiceName;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -10,7 +10,6 @@ import reactor.core.publisher.Mono;
 
 import javax.annotation.Resource;
 import javax.servlet.http.HttpServletResponse;
-import java.io.InputStream;
 
 /**
  * 调用服务层核心控制器，请勿修改此处代码！！！
@@ -43,14 +42,14 @@ public class ServiceInvokeCoreController {
 
     /**
      * 使用Mono的类似观察者模式的机制处理异步任务
-     * @param inputStream
+     * @param arg
      * @return
      * @throws Throwable
      */
     @ResponseBody
     @RequestMapping("/" + RemoteMicroServiceName.SERVICE_EVEYY_THING)
-    Mono<byte[]> invoke(InputStream inputStream,HttpServletResponse response) throws Throwable {
+    Mono<String> invoke(@RequestParam("arg") String arg,HttpServletResponse response) throws Throwable {
         response.setStatus(200);
-        return LocalServiceAccessUtil.asyncMonoAccess(applicationContext,inputStream,controllerLogger);
+        return LocalServiceAccessUtil.asyncMonoAccess(applicationContext,arg,controllerLogger);
     }
 }

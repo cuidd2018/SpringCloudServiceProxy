@@ -41,7 +41,7 @@ public class InvkeCountTest {
 //            }
 //        });
 
-        byte[] bytes ;
+        String bytes ;
         ServiceDTO serviceDTO=new ServiceDTO();
         serviceDTO.setMethod("sayHello");
         serviceDTO.setService("com.example.demo_service_interface.service.DemoService");

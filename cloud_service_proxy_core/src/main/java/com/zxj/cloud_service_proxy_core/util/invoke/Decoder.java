@@ -10,5 +10,5 @@ import java.io.IOException;
 
 public interface Decoder {
 
-    Object decoder(byte[] bytes,Class clazz) throws IOException;
+    Object decoder(String row,Class clazz) throws IOException;
 }
