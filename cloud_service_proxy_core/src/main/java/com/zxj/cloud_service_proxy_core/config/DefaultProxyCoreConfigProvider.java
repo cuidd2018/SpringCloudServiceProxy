@@ -30,7 +30,9 @@ public class DefaultProxyCoreConfigProvider {
 
                 @Override
                 public ExecutorService buildExecutorService() {
-                    ExecutorService defaultExecutor = Executors.newFixedThreadPool(200);
+                    //cpu core,2*core +1
+                    int cpuCores=Runtime.getRuntime().availableProcessors()*2+1;
+                    ExecutorService defaultExecutor = Executors.newFixedThreadPool(cpuCores);
                     return defaultExecutor;
                 }
             });
