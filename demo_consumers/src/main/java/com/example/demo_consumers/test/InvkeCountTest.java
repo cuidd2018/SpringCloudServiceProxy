@@ -61,8 +61,8 @@ public class InvkeCountTest {
      Mono<byte[]> bytemono=    WebClient.create("http://localhost:8082/everything").post().body(BodyInserters.fromObject(serviceDTO)).retrieve().bodyToMono(byte[].class);
 
 
-        Object result = SerializeUtil.deserialize(bytemono.block());
-       System.out.println(JSON.toJSONString(result));
+//        Object result = SerializeUtil.deserialize(bytemono.block());
+//       System.out.println(JSON.toJSONString(result));
 
 
     }

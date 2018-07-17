@@ -6,6 +6,7 @@ import com.zxj.cloud_service_proxy_core.util.invoke.ExceptionCheckOutUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.LocalServiceProxyUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
+import com.zxj.fast_io_core.util.ExtendBeanBuildUtil;
 import org.springframework.context.ApplicationContext;
 import reactor.core.publisher.Mono;
 import rx.Single;
@@ -64,15 +65,18 @@ public class LocalServiceAccessUtil {
     public static Single<byte[]> asyncRxAccess(ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
         Single<byte[]> observable = Single.create((Single.OnSubscribe<byte[]>) singleSubscriber -> {
             byte[] result = null;
+            long startTime = System.currentTimeMillis();
+            ServiceDTO serviceDTO=null;
             try {
-                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, logger);
+                serviceDTO=LocalServiceAccessUtil.deserialize( finalBytes);
+                result = LocalServiceAccessUtil.access(applicationContext, serviceDTO, logger,startTime);
                 singleSubscriber.onSuccess(result);
             } catch (Exception e) {
                 logger.error("全局错误", e);
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
-                    byte[] bytes = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
-                    singleSubscriber.onSuccess(bytes);
+                    Object ex = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
+                    singleSubscriber.onSuccess(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -81,8 +85,8 @@ public class LocalServiceAccessUtil {
                 logger.error("全局错误", new Exception(throwable));
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
-                    byte[] bytes = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
-                    singleSubscriber.onSuccess(bytes);
+                    Object ex = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
+                    singleSubscriber.onSuccess(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -135,15 +139,18 @@ public class LocalServiceAccessUtil {
     public static Mono<byte[]> asyncMonoAccess(ApplicationContext applicationContext, byte[] finalBytes, final Logger logger) throws Throwable {
         Mono<byte[]> mono = Mono.create(tringMonoSink -> {
             byte[] result = null;
+            long startTime = System.currentTimeMillis();
+            ServiceDTO serviceDTO=null;
             try {
-                result = LocalServiceAccessUtil.access(applicationContext, finalBytes, logger);
+                serviceDTO=LocalServiceAccessUtil.deserialize(finalBytes);
+                result = LocalServiceAccessUtil.access(applicationContext, serviceDTO, logger,startTime);
                 tringMonoSink.success(result);
             } catch (Exception e) {
                 logger.error("全局错误", e);
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
-                    byte[] bytes = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
-                    tringMonoSink.success(bytes);
+                    Object ex = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
+                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -152,8 +159,8 @@ public class LocalServiceAccessUtil {
                 logger.error("全局错误", new Exception(throwable));
                 StringBuffer jsonStrBuffer = new StringBuffer();
                 try {
-                    byte[] bytes = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
-                    tringMonoSink.success(bytes);
+                    Object ex = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
+                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -169,16 +176,12 @@ public class LocalServiceAccessUtil {
      * 同步访问
      *
      * @param applicationContext
-     * @param bytes
+     * @param serviceDTO
      * @param logger
      * @return
      * @throws Throwable
      */
-    public static byte[] access(ApplicationContext applicationContext, byte[] bytes, Logger logger) throws Throwable {
-        if (bytes == null) {
-            throw new ServiceRuntimeException("bytes can not be null!");
-        }
-        ServiceDTO serviceDTO = (ServiceDTO) SerializeUtil.deserialize(bytes);
+    public static byte[] access(ApplicationContext applicationContext, ServiceDTO serviceDTO, Logger logger, long startTime) throws Throwable {
         if (serviceDTO == null) {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
         }
@@ -187,17 +190,34 @@ public class LocalServiceAccessUtil {
         String method = serviceDTO.getMethod();
         String service = serviceDTO.getService();
 
-        long startTime = System.currentTimeMillis();
         logger.info("method:" + method);
         logger.info("service:" + service);
 
         Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
+        return buildByteResult(serviceDTO,serviceResult,startTime,logger);
+    }
+
+    private static byte[] buildByteResult(ServiceDTO serviceDTO, Object serviceResult, long startTime, Logger logger) throws IOException {
+        ServiceDTO serviceResultDTO=new ServiceDTO();
+        serviceResultDTO=ExtendBeanBuildUtil.buildChild(serviceDTO,ServiceDTO.class);
+        serviceResultDTO.setResult(serviceResult);
         byte[] result = null;
-        if (serviceResult != null) result = SerializeUtil.serialize(serviceResult);
+        if (serviceResult != null) result = SerializeUtil.serialize(serviceResultDTO);
         long endTime = System.currentTimeMillis();
-        String invokeInfo = createInvokeInfo(service, method, startTime, endTime);
+        String invokeInfo = createInvokeInfo(serviceResultDTO.getService(), serviceDTO.getMethod(), startTime, endTime);
         logger.info(invokeInfo);
         return result;
+    }
+
+    public static ServiceDTO deserialize(byte[] bytes) throws Throwable {
+        if (bytes == null) {
+            throw new ServiceRuntimeException("bytes can not be null!");
+        }
+        ServiceDTO serviceDTO = (ServiceDTO)SerializeUtil.deserialize(bytes,ServiceDTO.class);
+        if (serviceDTO == null) {
+            throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
+        }
+       return serviceDTO;
     }
 
     /**

@@ -65,7 +65,8 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
 
             if (bytesResult == null)
                 return null;
-            Object result = SerializeUtil.deserialize(bytesResult);
+            ServiceDTO serviceResultDTO = (ServiceDTO) SerializeUtil.deserialize(bytesResult,ServiceDTO.class);
+            Object result=serviceResultDTO.getResult();
             if (result instanceof BaseExceptionInterface) {
                 ServiceException s;
                 if (result instanceof ServiceException) {

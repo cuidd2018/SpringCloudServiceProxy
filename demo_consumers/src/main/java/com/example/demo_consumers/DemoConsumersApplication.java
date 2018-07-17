@@ -19,6 +19,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.List;
 
 @SpringBootApplication
 @EnableWebFlux
@@ -54,14 +55,26 @@ public class DemoConsumersApplication {
 		return demoService.sayHello();
 	}
 
+
 	/**
+	 * 测试远程调用
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/list")
+	public List<String> list(){
+		return demoService.list();
+	}
+
+	/**
+	 * 返回 数据库分页
 	 * 测试远程调用使用 复杂参数对象
 	 * @param exception 1 抛出异常测试，0 不抛出
 	 * @return
 	 * @throws ServiceException
 	 */
 	@ResponseBody
-	@RequestMapping("/invokeObject")
+	@RequestMapping("/page")
 	public String hello(@RequestParam(value = "exception",defaultValue = "0",required = false)int exception,
 						@RequestParam(value = "page",defaultValue = "1",required = false)Integer page,
 						@RequestParam(value = "size",defaultValue = "20",required = false)Integer size

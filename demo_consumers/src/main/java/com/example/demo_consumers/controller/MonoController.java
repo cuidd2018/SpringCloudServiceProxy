@@ -39,7 +39,7 @@ public class MonoController {
      * @throws ServiceException
      */
     @ResponseBody
-    @RequestMapping("/mono/invokeObject")
+    @RequestMapping("/mono/page")
     public Mono hello(@RequestParam(value = "exception",defaultValue = "0")Integer exception,
                       @RequestParam(value = "page",defaultValue = "1")Integer page,
                       @RequestParam(value = "size",defaultValue = "20")Integer size

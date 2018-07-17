@@ -103,4 +103,4 @@ public class ServiceInvokeCoreController {
 # demo 运行步骤
 
 step1: 运行 DemoDiscoveryApplication，DemoConsumersApplication，DemoServiceApplication</br>
-step2: 浏览器访问 http://localhost:18080/invokeObject 即可 展示 传递复杂对象 的案例。</br>
+step2: 浏览器访问 http://localhost:18080/page 即可 展示 传递复杂对象 的案例。</br>

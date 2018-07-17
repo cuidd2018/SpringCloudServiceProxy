@@ -48,4 +48,12 @@ public class DemoServiceImpl  implements DemoService,Serializable{
         FileUtil.byte2File(file,"/mnt/file/",name);
         return "上传成功，保存："+"/mnt/file/"+name;
     }
+
+    @Override
+    public List<String> list() {
+        var list=new ArrayList<String>();
+        list.add("a");
+        list.add("b");
+        return list;
+    }
 }

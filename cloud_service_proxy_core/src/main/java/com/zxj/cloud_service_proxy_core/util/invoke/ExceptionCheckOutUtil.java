@@ -19,18 +19,20 @@ public class ExceptionCheckOutUtil {
      * @return
      * @throws IOException
      */
-    public static byte[] checkOut(Exception ex,StringBuffer stringBuffer) throws IOException {
-        byte[] bytes=null;
+    public static Object checkOut(Exception ex,StringBuffer stringBuffer) throws IOException {
+         Object result=null;
         if (ex instanceof BaseExceptionInterface) {
             Integer errCode = ((BaseExceptionInterface) ex).getErrCode();
             String errMsg = ((BaseExceptionInterface) ex).getErrMsg();
             if(stringBuffer!=null)stringBuffer.append("errCode="+errCode+",errMsg="+errMsg);
-            bytes= SerializeUtil.serialize(ex);
+            result=ex;
         } else {
             if(stringBuffer!=null)stringBuffer.append(ex.toString());
             BaseExceptionInterface baseExceptionInterface=ex instanceof RuntimeException? new ServiceException(ex):new ServiceRuntimeException(ex);
-            bytes= SerializeUtil.serialize(baseExceptionInterface);
+            result=baseExceptionInterface;
         }
-        return bytes;
+        return result;
     }
+
+
 }

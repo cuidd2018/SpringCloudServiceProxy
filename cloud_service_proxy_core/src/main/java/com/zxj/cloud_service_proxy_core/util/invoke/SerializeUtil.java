@@ -17,9 +17,9 @@ public class SerializeUtil {
         return ProxyCoreConfig.getSingleton().getEncoder().encoder(obj);
     }
 
-    public static Object deserialize(byte[] by) throws IOException {
+    public static Object deserialize(byte[] by,Class clazz) throws IOException {
         if (by == null) return null;
-        return ProxyCoreConfig.getSingleton().getDecoder().decoder(by);
+        return ProxyCoreConfig.getSingleton().getDecoder().decoder(by,clazz);
     }
 
     public static InputStream byte2Input(byte[] buf) {
