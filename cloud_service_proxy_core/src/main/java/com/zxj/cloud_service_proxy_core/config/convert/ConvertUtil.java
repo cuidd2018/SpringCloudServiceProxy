@@ -2,6 +2,7 @@ package com.zxj.cloud_service_proxy_core.config.convert;
 
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
 import org.nustaq.serialization.FSTConfiguration;
@@ -17,7 +18,7 @@ public class ConvertUtil {
 
 
     public static Decoder getDecoder() {
-        if(decoder==null)decoder= (row, clazz) -> JSON.parseObject(row,clazz);
+        if(decoder==null)decoder= (row, clazz) -> JSON.parseObject(row,clazz,Feature.SupportArrayToBean);
         return decoder;
     }
 
