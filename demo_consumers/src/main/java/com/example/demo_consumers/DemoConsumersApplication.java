@@ -6,6 +6,7 @@ import com.example.demo_service_interface.page.Page;
 import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -19,7 +20,10 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 import javax.annotation.Resource;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @SpringBootApplication
 @EnableWebFlux
@@ -81,7 +85,16 @@ public class DemoConsumersApplication {
 						) throws ServiceException {
 		PageRequest pageRequest=PageRequest.create(page,size);
 		ThrowExceptionType throwExceptionType=ThrowExceptionType.valueOf(exception);
-		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType);
+
+
+		List<ServiceProxyErrorCode> serviceProxyErrorCodeList=new ArrayList<>();
+		serviceProxyErrorCodeList.add(ServiceProxyErrorCode.ERROR);
+		Map<String,ServiceProxyErrorCode> stringServiceProxyErrorCodeMap=new HashMap<>();
+		stringServiceProxyErrorCodeMap.put("error",ServiceProxyErrorCode.ERROR);
+		ServiceProxyErrorCode[] arr=new  ServiceProxyErrorCode[]{ServiceProxyErrorCode.ERROR};
+
+
+		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap,arr);
 		return JSON.toJSONString(demoVOPage);
 	}
 

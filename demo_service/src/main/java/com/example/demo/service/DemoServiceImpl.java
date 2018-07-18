@@ -7,12 +7,14 @@ import com.example.demo_service_interface.page.PageImpl;
 import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 @Service("demoService")
 public class DemoServiceImpl  implements DemoService,Serializable{
@@ -30,7 +32,10 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     }
 
     @Override
-    public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType) throws ServiceException {
+    public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
+                                     List<ServiceProxyErrorCode> serviceProxyErrorCodes,
+                                     Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap,
+                                     ServiceProxyErrorCode[] serviceProxyErrorCodeArrays) throws ServiceException {
         var arg= new DemoVO();
         arg.setName("demo");
         var demoVOS=new ArrayList<DemoVO>();

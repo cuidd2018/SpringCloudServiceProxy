@@ -45,7 +45,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
     }
 
     public ServiceRuntimeException(Object... infos) {
-        this(getErrorCode(infos[0]), getInfos(infos));
+        this(getErrorCode(infos!=null&&infos.length!=0?infos[0]:null), getInfos(infos));
     }
 
     public ServiceRuntimeException(Throwable e) {

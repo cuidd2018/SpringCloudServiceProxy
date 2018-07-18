@@ -2,6 +2,8 @@ package com.zxj.cloud_service_proxy_core.util.invoke;
 
 import java.io.IOException;
 
+import com.alibaba.fastjson.parser.Feature;
+import com.zxj.cloud_service_proxy_core.config.convert.ConvertUtil;
 import org.springframework.context.ApplicationContext;
 
 import com.alibaba.fastjson.JSON;
@@ -103,8 +105,12 @@ public class LocalServiceAccessUtil {
 			return null;
 		Object[] objects = new Object[paramTypes.length];
 		for (int i = 0; i < params.length; i++) {
-			objects[i] = JSON.parseObject(params[i], paramTypes[i]);
-		}
+            try {
+                objects[i] = ConvertUtil.getDecoder().decoder(params[i], paramTypes[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 		return objects;
     }
 

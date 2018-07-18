@@ -88,6 +88,9 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
                     throw new ServiceRuntimeException(s.getErrCode(), s.getErrMsg());
                 } else if (result instanceof ServiceRuntimeException) {
                     throw (ServiceRuntimeException) result;
+                } else if (result instanceof BaseExceptionBean){
+                    ServiceRuntimeException serviceRuntimeException=new ServiceRuntimeException(((BaseExceptionBean) result).getErrCode(),((BaseExceptionBean) result).getErrMsg());
+                    throw serviceRuntimeException;
                 }
             }
             return result;

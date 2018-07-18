@@ -6,11 +6,13 @@ import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
  * 汇集所有的服务异常，可增加，不要修改！
  * Created by zhuxiujie
  */
-public enum ServiceProxyErrorCode implements IntEnumConstant {
-    ERROR(-1, "错误:");
+public class ServiceProxyErrorCode implements IntEnumConstant {
+   public static ServiceProxyErrorCode ERROR = new ServiceProxyErrorCode(-1, "错误:");
 
     Integer value = null;
     String name = null;
+
+    ServiceProxyErrorCode(){}
 
     ServiceProxyErrorCode(Integer code, String info) {
         this.value = code;
@@ -27,13 +29,13 @@ public enum ServiceProxyErrorCode implements IntEnumConstant {
         return value;
     }
 
-    @Override
+    @Deprecated
     public Constant<Integer> setName(String name) {
         this.name=name;
         return this;
     }
 
-    @Override
+    @Deprecated
     public Constant<Integer> setValue(Integer value) {
         this.value=value;
         return this;

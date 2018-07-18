@@ -31,25 +31,4 @@ public class MonoController {
         return ServiceProxyMono.createMono(() -> demoService.sayHello())
                 ;
     }
-
-    /**
-     * 测试远程调用使用 复杂参数对象
-     * @param exception 1 抛出异常测试，0 不抛出
-     * @return
-     * @throws ServiceException
-     */
-    @ResponseBody
-    @RequestMapping("/mono/page")
-    public Mono hello(@RequestParam(value = "exception",defaultValue = "0")Integer exception,
-                      @RequestParam(value = "page",defaultValue = "1")Integer page,
-                      @RequestParam(value = "size",defaultValue = "20")Integer size
-    ) throws ServiceException {
-        return ServiceProxyMono.createMono(() -> {
-              PageRequest pageRequest = PageRequest.create(page, size);
-              ThrowExceptionType throwExceptionType = ThrowExceptionType.valueOf(exception);
-              Page<DemoVO> demoVOPage = demoService.invokeObject(pageRequest, throwExceptionType);
-              String json = JSON.toJSONString(demoVOPage);
-              return json;
-          });
-    }
 }

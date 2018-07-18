@@ -4,15 +4,22 @@ import com.example.demo_service_interface.enums.ThrowExceptionType;
 import com.example.demo_service_interface.page.Page;
 import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 
 import java.util.List;
+import java.util.Map;
 
 public interface DemoService {
 
     String sayHello();
 
-    Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType) throws ServiceException;
+    Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
+                              List<ServiceProxyErrorCode> serviceProxyErrorCodes,
+                              Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap,
+                              ServiceProxyErrorCode[] serviceProxyErrorCodeArrays
+
+    ) throws ServiceException;
 
     String uploadFile(byte[] bytes,String name);
 
