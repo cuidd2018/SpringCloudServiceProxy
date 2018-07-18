@@ -1,11 +1,11 @@
-package com.zxj.cloud_service_proxy_core.config.convert;
+package com.zxj.cloud_service_proxy_core.util.convert;
 
 
 import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.parser.Feature;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
-import org.nustaq.serialization.FSTConfiguration;
 
 import java.io.IOException;
 
@@ -14,8 +14,6 @@ public class ConvertUtil {
 
     private static Decoder decoder;
     private static Encoder encoder;
-    private static FSTConfiguration fstConfiguration = FSTConfiguration.createDefaultConfiguration();
-
 
     public static Decoder getDecoder() {
         if(decoder==null)decoder= (row, clazz) -> JSON.parseObject(row,clazz,Feature.SupportArrayToBean);
@@ -29,11 +27,11 @@ public class ConvertUtil {
 
     public static void main(String[] args) throws IOException {
 
-//        ServiceDTO serviceDTO=new ServiceDTO();
-//        serviceDTO.setService("adsfsadfas");
-//        byte[] bytes= getEncoder().encoder(serviceDTO);
-//        ServiceDTO b= (ServiceDTO) getDecoder().decoder(bytes,ServiceDTO.class);
-//
-//        System.out.println(b.getService());
+        ServiceProxyErrorCode serviceDTO=ServiceProxyErrorCode.ERROR;
+
+       String json=  getEncoder().encoder(serviceDTO);
+        ServiceProxyErrorCode b= (ServiceProxyErrorCode) getDecoder().decoder(json,ServiceProxyErrorCode.class);
+
+        System.out.println(b.getValue());
     }
 }

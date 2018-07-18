@@ -1,10 +1,15 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
 import com.alibaba.fastjson.JSON;
+import com.alibaba.fastjson.parser.Feature;
+import com.zxj.cloud_service_proxy_core.constant.Constant;
+import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionBean;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
+import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import com.zxj.fast_io_core.util.BeanUtils;
 import org.slf4j.Logger;
@@ -18,10 +23,13 @@ import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
 
+import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -104,7 +112,11 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         if(args==null||args.length==0)return null;
         String[] strings=new String[args.length];
         for (int i=0;i<args.length;i++){
-            strings[i]=JSON.toJSONString(args[i]);
+            try {
+                strings[i] = ConvertUtil.getEncoder().encoder(args[i]);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
         return strings;
     }
@@ -126,5 +138,15 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
     public RemoteServiceProxyFactory setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {
         this.loadBalancerClient = loadBalancerClient;
         return this;
+    }
+
+    public static void main(String[] args){
+        List<ServiceDTO> serviceProxyErrorCodeList = new ArrayList<>();
+        ServiceDTO serviceDTO = new ServiceDTO();
+        serviceDTO.setService("dsaf");
+        serviceProxyErrorCodeList.add(serviceDTO);
+        String js = JSON.toJSONString(serviceProxyErrorCodeList);
+        List<ServiceDTO> stringServiceProxyErrorCodeMap2 = JSON.parseArray(js, ServiceDTO.class);
+        System.out.println(stringServiceProxyErrorCodeMap2);
     }
 }

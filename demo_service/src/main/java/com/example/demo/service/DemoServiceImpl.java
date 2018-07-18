@@ -34,13 +34,16 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     @Override
     public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
                                      List<ServiceProxyErrorCode> serviceProxyErrorCodes,
-                                     Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap,
-                                     ServiceProxyErrorCode[] serviceProxyErrorCodeArrays) throws ServiceException {
+                                     Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap) throws ServiceException {
         var arg= new DemoVO();
         arg.setName("demo");
         var demoVOS=new ArrayList<DemoVO>();
         demoVOS.add(arg);
         var pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
+
+        serviceProxyErrorCodes.get(0).getName();
+        serviceProxyErrorCodeMap.get("error").getName();
+
         if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
             throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());
         }

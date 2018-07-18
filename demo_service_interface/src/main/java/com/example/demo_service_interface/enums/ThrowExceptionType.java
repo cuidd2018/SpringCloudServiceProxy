@@ -31,16 +31,14 @@ public class ThrowExceptionType implements IntEnumConstant {
 
     @Deprecated
     @Override
-    public Constant<Integer> setName(String name) {
+    public void setName(String name) {
         this.name=name;
-        return this;
     }
 
     @Deprecated
     @Override
-    public Constant<Integer> setValue(Integer value) {
+    public void setValue(Integer value) {
         this.value=value;
-        return this;
     }
 
     public static ThrowExceptionType valueOf(int exception) throws ServiceException {

@@ -16,8 +16,7 @@ public interface DemoService {
 
     Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
                               List<ServiceProxyErrorCode> serviceProxyErrorCodes,
-                              Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap,
-                              ServiceProxyErrorCode[] serviceProxyErrorCodeArrays
+                              Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap
 
     ) throws ServiceException;
 

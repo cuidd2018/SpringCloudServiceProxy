@@ -86,15 +86,12 @@ public class DemoConsumersApplication {
 		PageRequest pageRequest=PageRequest.create(page,size);
 		ThrowExceptionType throwExceptionType=ThrowExceptionType.valueOf(exception);
 
-
 		List<ServiceProxyErrorCode> serviceProxyErrorCodeList=new ArrayList<>();
 		serviceProxyErrorCodeList.add(ServiceProxyErrorCode.ERROR);
 		Map<String,ServiceProxyErrorCode> stringServiceProxyErrorCodeMap=new HashMap<>();
 		stringServiceProxyErrorCodeMap.put("error",ServiceProxyErrorCode.ERROR);
-		ServiceProxyErrorCode[] arr=new  ServiceProxyErrorCode[]{ServiceProxyErrorCode.ERROR};
 
-
-		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap,arr);
+		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap);
 		return JSON.toJSONString(demoVOPage);
 	}
 

@@ -12,7 +12,7 @@ public class ServiceProxyErrorCode implements IntEnumConstant {
     Integer value = null;
     String name = null;
 
-    ServiceProxyErrorCode(){}
+    ServiceProxyErrorCode(){ }
 
     ServiceProxyErrorCode(Integer code, String info) {
         this.value = code;
@@ -30,14 +30,12 @@ public class ServiceProxyErrorCode implements IntEnumConstant {
     }
 
     @Deprecated
-    public Constant<Integer> setName(String name) {
+    public void setName(String name) {
         this.name=name;
-        return this;
     }
 
     @Deprecated
-    public Constant<Integer> setValue(Integer value) {
+    public void setValue(Integer value) {
         this.value=value;
-        return this;
     }
 }

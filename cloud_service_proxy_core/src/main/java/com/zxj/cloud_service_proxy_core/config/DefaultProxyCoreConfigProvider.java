@@ -1,6 +1,6 @@
 package com.zxj.cloud_service_proxy_core.config;
 
-import com.zxj.cloud_service_proxy_core.config.convert.ConvertUtil;
+import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
 import java.util.concurrent.ExecutorService;
