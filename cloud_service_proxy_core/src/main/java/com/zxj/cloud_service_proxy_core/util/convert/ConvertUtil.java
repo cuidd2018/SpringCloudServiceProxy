@@ -1,15 +1,25 @@
 package com.zxj.cloud_service_proxy_core.util.convert;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.zxj.cloud_service_proxy_core.constant.Constant;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
+import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
+import org.springframework.util.StringUtils;
+
+import java.util.List;
 
 public class ConvertUtil {
 
-    private  static Gson gson=new Gson();
+    private  static Gson gson=createGson();
+
+    private static Gson createGson() {
+        return new GsonBuilder().create();
+    }
 
     private static Decoder decoder;
     private static Encoder encoder;
@@ -48,8 +58,13 @@ public class ConvertUtil {
 //
 //        b=gson.fromJson(json, type1);
 //        System.out.println(JSON.toJSONString(b));
-        ServiceProxyErrorCode serviceProxyErrorCode=  EnumUtils.toEnum(-1,ServiceProxyErrorCode.class);
-        System.out.println(getEncoder().encoder(serviceProxyErrorCode));
+
+      List<ConstantVO<Integer>> constantVOS= EnumUtils.toConstantVOList(ServiceProxyErrorCode.class);
+        String js=getEncoder().encoder(constantVOS);
+       System.out.println(js);
+
+       List<ServiceProxyErrorCode> serviceProxyErrorCodeList1= (List<ServiceProxyErrorCode>) getDecoder().decoder(js,constantVOS.getClass());
+       System.out.println(serviceProxyErrorCodeList1.size());
     }
 
 
