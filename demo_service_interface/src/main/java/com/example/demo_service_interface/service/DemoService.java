@@ -6,6 +6,7 @@ import com.zxj.cloud_service_proxy_core.bean.page.Page;
 import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
 
 import java.util.List;
 import java.util.Map;
@@ -14,7 +15,7 @@ public interface DemoService {
 
     String sayHello();
 
-    Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
+    Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,ConstantVO constantVO,
                               List<ServiceProxyErrorCode> serviceProxyErrorCodes,
                               Map<String,List<ServiceProxyErrorCode>> serviceProxyErrorCodeMap//嵌套Map复杂类型
 

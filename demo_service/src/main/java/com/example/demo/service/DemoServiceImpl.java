@@ -10,6 +10,7 @@ import com.zxj.cloud_service_proxy_core.bean.page.PageImpl;
 import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
@@ -34,7 +35,7 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     }
 
     @Override
-    public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
+    public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,ConstantVO constantVO,
                                      List<ServiceProxyErrorCode> serviceProxyErrorCodes,
                                      Map<String,List<ServiceProxyErrorCode>> serviceProxyErrorCodeMap) throws ServiceException {
         var testVO=new TestVO();
@@ -54,6 +55,8 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
         serviceProxyErrorCodes.get(0).getName();
         serviceProxyErrorCodeMap.get("error").get(0).getName();
+
+        Object value= constantVO.getValue();
 
         if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
             throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());

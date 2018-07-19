@@ -10,7 +10,6 @@ import java.util.Map;
  */
 public class DemoVO implements Serializable {
 
-    private String _key;
 
     private String name;
 
@@ -34,14 +33,6 @@ public class DemoVO implements Serializable {
 
     public String getName() {
         return name;
-    }
-
-    public void set_key(String _key) {
-        this._key = _key;
-    }
-
-    public String get_key() {
-        return _key;
     }
 
     public void setTestVOMap(Map<String, TestVO> testVOMap) {

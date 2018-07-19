@@ -8,6 +8,7 @@ import com.zxj.cloud_service_proxy_core.bean.page.Page;
 import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
@@ -91,7 +92,7 @@ public class DemoConsumersApplication {
 		Map<String,List<ServiceProxyErrorCode>> stringServiceProxyErrorCodeMap=new HashMap<>();
 		stringServiceProxyErrorCodeMap.put("error",serviceProxyErrorCodeList);
 
-		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap);
+		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,EnumUtils.constantVO(throwExceptionType),serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap);
 
 		System.out.println(JSON.toJSONString(demoVOPage.getContent().get(0).getTestVOMap().get("test")));
 
