@@ -1,6 +1,5 @@
 package com.example.demo_consumers;
 
-import com.alibaba.fastjson.JSON;
 import com.example.demo_service_interface.enums.ThrowExceptionType;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
@@ -8,6 +7,7 @@ import com.zxj.cloud_service_proxy_core.bean.page.Page;
 import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -94,7 +94,11 @@ public class DemoConsumersApplication {
 
 		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,EnumUtils.constantVO(throwExceptionType),serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap);
 
-		System.out.println(JSON.toJSONString(demoVOPage.getContent().get(0).getTestVOMap().get("test")));
+		try {
+			System.out.println(ConvertUtil.getEncoder().encoder(demoVOPage.getContent().get(0).getTestVOMap().get("test")));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 
 		return demoVOPage;
 	}
