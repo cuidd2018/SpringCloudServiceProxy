@@ -2,6 +2,7 @@ package com.zxj.cloud_service_proxy_core.util.enums;
 
 import com.zxj.cloud_service_proxy_core.constant.Constant;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -47,37 +48,9 @@ public class EnumScanUtil {
      * @return
      * @throws ServiceException
      */
-    public static <T,E extends Constant<T>>  List<E> scanEnumList(Class<E> clazz) throws ServiceException {
-        List<E> eList=new ArrayList<>();
-        List<Field> fields= scanFields(clazz);
-        for (Field field:fields){
-            if(field.getType().equals(clazz)){
-                field.setAccessible(true);
-                try {
-                    eList.add((E) field.get(clazz));
-                } catch (IllegalAccessException e) {
-                    throw new ServiceException(e);
-                }
-            }
-        }
-        return eList;
-    }
-
-    /**
-     * 扫描feild
-     * @param source
-     * @return
-     */
-    private static List<Field> scanFields(Class source) {
-        List<Field> fieldList = new ArrayList();
-        for(Class tempClass = source; tempClass != null; tempClass = tempClass.getSuperclass()) {
-            fieldList.addAll(Arrays.asList(tempClass.getDeclaredFields()));
-        }
-        Iterator var3 = fieldList.iterator();
-        while(var3.hasNext()) {
-            Field field = (Field)var3.next();
-            field.setAccessible(true);
-        }
-        return fieldList;
+    public static <T,E extends Constant<T>>  List<E> scanEnumList(Class<E> clazz) {
+        E[] enums = clazz.getEnumConstants();
+        List<E> list = Arrays.asList(enums);
+        return list;
     }
 }

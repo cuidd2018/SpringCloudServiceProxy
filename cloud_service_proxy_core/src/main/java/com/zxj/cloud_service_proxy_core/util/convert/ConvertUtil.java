@@ -1,6 +1,9 @@
 package com.zxj.cloud_service_proxy_core.util.convert;
 
 import com.google.gson.Gson;
+import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
+import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
 
@@ -23,7 +26,7 @@ public class ConvertUtil {
         return encoder;
     }
 
-//    public static void main(String[] args) throws IOException, ServiceException {
+   public static void main(String[] args) throws Exception {
 //
 //        Type type = new TypeToken<Map<String,ServiceDTO>>() {}.getType();
 //
@@ -45,9 +48,9 @@ public class ConvertUtil {
 //
 //        b=gson.fromJson(json, type1);
 //        System.out.println(JSON.toJSONString(b));
-//        ServiceProxyErrorCode serviceProxyErrorCode=  EnumUtils.toEnum(-1,ServiceProxyErrorCode.class);
-//        System.out.println(JSON.toJSONString(serviceProxyErrorCode));
-//    }
+        ServiceProxyErrorCode serviceProxyErrorCode=  EnumUtils.toEnum(-1,ServiceProxyErrorCode.class);
+        System.out.println(getEncoder().encoder(serviceProxyErrorCode));
+    }
 
 
 }
