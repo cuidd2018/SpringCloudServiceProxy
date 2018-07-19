@@ -91,7 +91,7 @@ public class LocalServiceAccessUtil {
         Class serviceClass=LocalServiceProxyUtil.getClassFromService(service);
         String method = serviceDTO.getMethod();
 
-        Class[] paramTypes = getClassTypes(serviceClass,method,serviceDTO.getParamsTypes());
+        Class[] paramTypes = getClassTypes(serviceDTO.getParamsTypes());
 
         Object[] params = createObjectArg(serviceDTO.getParams(),methodParamTypeFilter(serviceClass.getMethod(method,paramTypes)),logger);
 
@@ -106,7 +106,8 @@ public class LocalServiceAccessUtil {
         return buildByteResult(serviceDTO,serviceResult,startTime,logger);
     }
 
-    private static Class[] getClassTypes(Class serviceClass,String methodString,String[] paramTypeString) throws NoSuchMethodException, ClassNotFoundException {
+    private static Class[] getClassTypes(String[] paramTypeString) throws  ClassNotFoundException {
+        if(paramTypeString==null||paramTypeString.length==0)return null;
         Class[] classes=new Class[paramTypeString.length];
         for (int i=0;i<paramTypeString.length;i++){
             Class cla=Class.forName(paramTypeString[i]);
@@ -116,7 +117,6 @@ public class LocalServiceAccessUtil {
     }
 
     private static Type[] methodParamTypeFilter(Method method) {
-        Class[] paramTypeClass=method.getParameterTypes();
         AnnotatedType[] annotationTypes= method.getAnnotatedParameterTypes();
         Type[] types=new Type[annotationTypes.length];
         int i=0;
