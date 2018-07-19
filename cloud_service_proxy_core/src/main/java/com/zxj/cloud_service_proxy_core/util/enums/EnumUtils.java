@@ -23,8 +23,8 @@ public class EnumUtils {
      * @return
      */
     @SuppressWarnings("rawtypes")
-    public static <E extends Constant> E[] arrayOf(Class<E> clazz) throws ServiceException {
-        return (E[]) EnumContext.getArray(clazz);
+    public static  <T, E extends Constant<T>> E[]  arrayOf(Class<E> clazz) throws ServiceException {
+        return  EnumContext.getArray(clazz);
     }
 
 
@@ -49,7 +49,7 @@ public class EnumUtils {
      * @param clazz
      * @return
      */
-    public static <E extends Constant> List<ConstantVO> listOf(Class<E> clazz) throws ServiceException {
+    public static <T,E extends Constant<T>> List<E> listOf(Class<E> clazz) throws ServiceException {
        return EnumContext.getList(clazz);
     }
 

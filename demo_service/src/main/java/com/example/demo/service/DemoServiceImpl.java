@@ -38,20 +38,20 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,ConstantVO constantVO,
                                      List<ServiceProxyErrorCode> serviceProxyErrorCodes,
                                      Map<String,List<ServiceProxyErrorCode>> serviceProxyErrorCodeMap) throws ServiceException {
-        var testVO=new TestVO();
+        TestVO testVO=new TestVO();
         testVO.setTest("fffssssggg");
-        var arg= new DemoVO();
+        DemoVO arg= new DemoVO();
         arg.setName("demo");
         arg.setTestVO(testVO);
-        var demoVOS=new ArrayList<DemoVO>();
+        List demoVOS=new ArrayList<DemoVO>();
         demoVOS.add(arg);
-        var testVOS=new ArrayList<TestVO>();
+        List testVOS=new ArrayList<TestVO>();
         testVOS.add(testVO);
         arg.setTestVOs(testVOS);
-        var testVOMap=new HashMap<String,TestVO>();
+        Map testVOMap=new HashMap<String,TestVO>();
         testVOMap.put("test",testVO);
         arg.setTestVOMap(testVOMap);
-        var pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
+        Page pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
 
         serviceProxyErrorCodes.get(0).getName();
         serviceProxyErrorCodeMap.get("error").get(0).getName();
@@ -73,7 +73,7 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
     @Override
     public List<String> list() {
-        var list=new ArrayList<String>();
+        List list=new ArrayList<String>();
         list.add("a");
         list.add("b");
         return list;
