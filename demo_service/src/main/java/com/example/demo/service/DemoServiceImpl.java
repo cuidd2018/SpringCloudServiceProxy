@@ -2,17 +2,19 @@ package com.example.demo.service;
 
 import com.example.demo.util.FileUtil;
 import com.example.demo_service_interface.enums.ThrowExceptionType;
-import com.example.demo_service_interface.page.Page;
-import com.example.demo_service_interface.page.PageImpl;
-import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.example.demo_service_interface.vo.TestVO;
+import com.zxj.cloud_service_proxy_core.bean.page.Page;
+import com.zxj.cloud_service_proxy_core.bean.page.PageImpl;
+import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.stereotype.Service;
 
 import java.io.Serializable;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -34,15 +36,24 @@ public class DemoServiceImpl  implements DemoService,Serializable{
     @Override
     public Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,
                                      List<ServiceProxyErrorCode> serviceProxyErrorCodes,
-                                     Map<String,ServiceProxyErrorCode> serviceProxyErrorCodeMap) throws ServiceException {
+                                     Map<String,List<ServiceProxyErrorCode>> serviceProxyErrorCodeMap) throws ServiceException {
+        var testVO=new TestVO();
+        testVO.setTest("fffssssggg");
         var arg= new DemoVO();
         arg.setName("demo");
+        arg.setTestVO(testVO);
         var demoVOS=new ArrayList<DemoVO>();
         demoVOS.add(arg);
+        var testVOS=new ArrayList<TestVO>();
+        testVOS.add(testVO);
+        arg.setTestVOs(testVOS);
+        var testVOMap=new HashMap<String,TestVO>();
+        testVOMap.put("test",testVO);
+        arg.setTestVOMap(testVOMap);
         var pageable=PageImpl.create(demoVOS,pageRequest,demoVOS.size());
 
         serviceProxyErrorCodes.get(0).getName();
-        serviceProxyErrorCodeMap.get("error").getName();
+        serviceProxyErrorCodeMap.get("error").get(0).getName();
 
         if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
             throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());

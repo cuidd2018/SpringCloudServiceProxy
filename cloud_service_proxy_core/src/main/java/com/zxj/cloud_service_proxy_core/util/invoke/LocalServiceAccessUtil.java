@@ -1,10 +1,11 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
 import java.io.IOException;
-import java.util.List;
+import java.lang.reflect.AnnotatedType;
+import java.lang.reflect.Method;
+import java.lang.reflect.Type;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSONObject;
 import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import org.springframework.context.ApplicationContext;
 
@@ -15,6 +16,7 @@ import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import com.zxj.fast_io_core.util.ExtendBeanBuildUtil;
 
 import reactor.core.publisher.Mono;
+import sun.reflect.annotation.AnnotationType;
 
 /**
  * @author zhuxiujie
@@ -88,28 +90,62 @@ public class LocalServiceAccessUtil {
         if (serviceDTO == null) {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
         }
-        String[] params = serviceDTO.getParams();
-        Class[] paramTypes = serviceDTO.getParamsTypes();
-        String method = serviceDTO.getMethod();
         String service = serviceDTO.getService();
+        Class serviceClass=LocalServiceProxyUtil.getClassFromService(service);
+        String method = serviceDTO.getMethod();
 
-        Object[] objects = createObjectArg(params,paramTypes);
+        Class[] paramTypes = getClassTypes(serviceClass,method,serviceDTO.getParamsTypes());
+
+        Object[] params = createObjectArg(serviceDTO.getParams(),methodParamTypeFilter(serviceClass.getMethod(method,paramTypes)),logger);
+
+
+
+        //Object[] objects = createObjectArg(params,paramTypes,logger);
 
         logger.info("method:" + method);
         logger.info("service:" + service);
 
-        Object serviceResult = LocalServiceProxyUtil.invoke(objects, method, service, paramTypes, applicationContext);
+        Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
         return buildByteResult(serviceDTO,serviceResult,startTime,logger);
     }
 
-    private static Object[] createObjectArg(String[] params,Class[] paramTypes ) {
+    private static Class[] getClassTypes(Class serviceClass,String methodString,String[] paramTypeString) throws NoSuchMethodException, ClassNotFoundException {
+        Class[] classes=new Class[paramTypeString.length];
+        for (int i=0;i<paramTypeString.length;i++){
+            Class cla=Class.forName(paramTypeString[i]);
+            classes[i]=cla;
+        }
+      return classes;
+    }
+
+    private static Type[] methodParamTypeFilter(Method method) {
+
+
+        Class[] paramTypeClass=method.getParameterTypes();
+
+        AnnotatedType[] annotationTypes= method.getAnnotatedParameterTypes();
+
+        Type[] types=new Type[annotationTypes.length];
+        int i=0;
+           for (AnnotatedType annotationType:annotationTypes){
+             types[i]=  annotationType.getType();
+             i++;
+           }
+
+
+        return  types;
+    }
+
+
+    private static Object[] createObjectArg(String[] params,Type[] paramTypes ,Logger logger) {
 		if (params == null || paramTypes == null || params.length == 0 || paramTypes.length == 0)
 			return null;
 		Object[] objects = new Object[paramTypes.length];
 		for (int i = 0; i < params.length; i++) {
             try {
-                objects[i] = ConvertUtil.getDecoder().decoder(params[i], paramTypes[i]);
-            } catch (IOException e) {
+                objects[i]= ConvertUtil.getDecoder().decoder(params[i], paramTypes[i]);
+            } catch (Exception e) {
+                logger.error("全局错误", e);
                 e.printStackTrace();
             }
         }

@@ -1,4 +1,4 @@
-package com.example.demo_service_interface.page;
+package com.zxj.cloud_service_proxy_core.bean.page;
 
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 
@@ -6,12 +6,9 @@ import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
  * @author zhuxiujie
  * @since 2016年8月12日 下午1:36:28
  */
-public class PageRequest extends PageBean<Object> {
+public class PageRequest<T> extends Page<T> {
 
     private static final long serialVersionUID = 1232825578694716871L;
-
-    public PageRequest(){
-    }
 
     public static PageRequest create(Integer page, Integer size) throws ServiceRuntimeException {
         if (size != null && size == -1) {

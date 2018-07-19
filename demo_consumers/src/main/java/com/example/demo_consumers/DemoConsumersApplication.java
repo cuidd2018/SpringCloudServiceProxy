@@ -2,10 +2,10 @@ package com.example.demo_consumers;
 
 import com.alibaba.fastjson.JSON;
 import com.example.demo_service_interface.enums.ThrowExceptionType;
-import com.example.demo_service_interface.page.Page;
-import com.example.demo_service_interface.page.PageRequest;
 import com.example.demo_service_interface.service.DemoService;
 import com.example.demo_service_interface.vo.DemoVO;
+import com.zxj.cloud_service_proxy_core.bean.page.Page;
+import com.zxj.cloud_service_proxy_core.bean.page.PageRequest;
 import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import org.springframework.boot.SpringApplication;
@@ -79,7 +79,7 @@ public class DemoConsumersApplication {
 	 */
 	@ResponseBody
 	@RequestMapping("/page")
-	public String hello(@RequestParam(value = "exception",defaultValue = "0",required = false)int exception,
+	public Page<DemoVO> hello(@RequestParam(value = "exception",defaultValue = "0",required = false)int exception,
 						@RequestParam(value = "page",defaultValue = "1",required = false)Integer page,
 						@RequestParam(value = "size",defaultValue = "20",required = false)Integer size
 						) throws ServiceException {
@@ -88,11 +88,14 @@ public class DemoConsumersApplication {
 
 		List<ServiceProxyErrorCode> serviceProxyErrorCodeList=new ArrayList<>();
 		serviceProxyErrorCodeList.add(ServiceProxyErrorCode.ERROR);
-		Map<String,ServiceProxyErrorCode> stringServiceProxyErrorCodeMap=new HashMap<>();
-		stringServiceProxyErrorCodeMap.put("error",ServiceProxyErrorCode.ERROR);
+		Map<String,List<ServiceProxyErrorCode>> stringServiceProxyErrorCodeMap=new HashMap<>();
+		stringServiceProxyErrorCodeMap.put("error",serviceProxyErrorCodeList);
 
 		Page<DemoVO> demoVOPage= demoService.invokeObject(pageRequest,throwExceptionType,serviceProxyErrorCodeList,stringServiceProxyErrorCodeMap);
-		return JSON.toJSONString(demoVOPage);
+
+		System.out.println(JSON.toJSONString(demoVOPage.getContent().get(0).getTestVOMap().get("test")));
+
+		return demoVOPage;
 	}
 
 	/**

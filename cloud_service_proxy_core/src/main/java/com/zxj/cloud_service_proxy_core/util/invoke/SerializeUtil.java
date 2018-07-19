@@ -7,6 +7,7 @@ import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.lang.reflect.Type;
 import java.util.Map;
 
 /**
@@ -19,7 +20,7 @@ public class SerializeUtil {
         return ProxyCoreConfig.getSingleton().getEncoder().encoder(obj);
     }
 
-    public static Object deserialize(String by,Class clazz) throws IOException {
+    public static Object deserialize(String by,Type clazz) throws IOException {
         if (by == null) return null;
         return ProxyCoreConfig.getSingleton().getDecoder().decoder(by,clazz);
     }

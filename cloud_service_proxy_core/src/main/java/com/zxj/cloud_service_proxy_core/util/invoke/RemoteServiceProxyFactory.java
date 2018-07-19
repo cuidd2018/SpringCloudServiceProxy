@@ -61,7 +61,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         serviceDTO.setMethod(methodName);
         serviceDTO.setService(serviceName);
         serviceDTO.setParams(toJsonArray(args));
-        serviceDTO.setParamsTypes(paramsTypes);
+        serviceDTO.setParamsTypes(toParamTypeJson(paramsTypes));
         String jsons = SerializeUtil.serialize(serviceDTO);
         if (loadBalancerClient == null)
             throw new ServiceException("WebClient can not be null!");
@@ -84,7 +84,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             Object result=null;
 
             if(serviceDTO.getSuccess()==1) {
-                result = JSON.parseObject(jsonResult, method.getReturnType());
+                result = JSON.parseObject(jsonResult, method.getGenericReturnType());
             }else {
                 result = JSON.parseObject(jsonResult, BaseExceptionBean.class);
             }
@@ -106,6 +106,19 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             logger.error("远程代理服务" + serviceName + "调用失败", e);
             throw e;
         }
+    }
+
+    private String[] toParamTypeJson(Class[] args) {
+        if(args==null||args.length==0)return null;
+        String[] strings=new String[args.length];
+        for (int i=0;i<args.length;i++){
+            try {
+                strings[i] = args[i].getName();
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+        return strings;
     }
 
     private String[] toJsonArray(Object[] args) {

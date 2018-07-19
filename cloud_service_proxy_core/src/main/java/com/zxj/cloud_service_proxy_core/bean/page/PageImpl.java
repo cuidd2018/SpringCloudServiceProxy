@@ -1,4 +1,4 @@
-package com.example.demo_service_interface.page;
+package com.zxj.cloud_service_proxy_core.bean.page;
 
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * @author zhuxiujie
  * @since 2016年8月12日 下午2:43:27
  */
-public class PageImpl<T> extends PageBean<T> {
+public class PageImpl<T> extends Page<T> {
 
     private static final long serialVersionUID = 642544266229652024L;
 

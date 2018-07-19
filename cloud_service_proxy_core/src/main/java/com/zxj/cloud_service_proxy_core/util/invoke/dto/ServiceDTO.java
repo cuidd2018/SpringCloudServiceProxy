@@ -16,7 +16,7 @@ public class ServiceDTO implements Serializable {
     private String[] params;//服务参数
     private String method;//方法
     private String service;//服务名称
-    private Class[] paramsTypes;//参数类型
+    private String[] paramsTypes;//参数类型
     private String result;//结果类型
 
     public String[] getParams() {
@@ -43,11 +43,11 @@ public class ServiceDTO implements Serializable {
         this.service = service;
     }
 
-    public void setParamsTypes(Class[] paramsTypes) {
+    public void setParamsTypes(String[] paramsTypes) {
         this.paramsTypes = paramsTypes;
     }
 
-    public Class[] getParamsTypes() {
+    public String[] getParamsTypes() {
         return paramsTypes;
     }
 

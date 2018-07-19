@@ -1,6 +1,7 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
 import java.io.IOException;
+import java.lang.reflect.Type;
 
 /**
  * 序列化 编码
@@ -10,5 +11,5 @@ import java.io.IOException;
 
 public interface Decoder {
 
-    Object decoder(String row,Class clazz) throws IOException;
+    Object decoder(String row,Type clazz) throws IOException;
 }

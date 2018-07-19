@@ -1,4 +1,4 @@
-package com.example.demo_service_interface.page;
+package com.zxj.cloud_service_proxy_core.bean.page;
 
 import java.util.List;
 
