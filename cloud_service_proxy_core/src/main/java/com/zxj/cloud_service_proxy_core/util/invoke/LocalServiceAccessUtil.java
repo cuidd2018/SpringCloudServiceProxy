@@ -4,19 +4,16 @@ import java.io.IOException;
 import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
-import java.util.Map;
 
 import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import org.springframework.context.ApplicationContext;
 
-import com.alibaba.fastjson.JSON;
 import com.zxj.cloud_service_proxy_core.config.ProxyCoreConfig;
 import com.zxj.cloud_service_proxy_core.exception.ServiceRuntimeException;
 import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
 import com.zxj.fast_io_core.util.ExtendBeanBuildUtil;
 
 import reactor.core.publisher.Mono;
-import sun.reflect.annotation.AnnotationType;
 
 /**
  * @author zhuxiujie
@@ -119,20 +116,14 @@ public class LocalServiceAccessUtil {
     }
 
     private static Type[] methodParamTypeFilter(Method method) {
-
-
         Class[] paramTypeClass=method.getParameterTypes();
-
         AnnotatedType[] annotationTypes= method.getAnnotatedParameterTypes();
-
         Type[] types=new Type[annotationTypes.length];
         int i=0;
            for (AnnotatedType annotationType:annotationTypes){
              types[i]=  annotationType.getType();
              i++;
            }
-
-
         return  types;
     }
 
@@ -143,7 +134,7 @@ public class LocalServiceAccessUtil {
 		Object[] objects = new Object[paramTypes.length];
 		for (int i = 0; i < params.length; i++) {
             try {
-                objects[i]= ConvertUtil.getDecoder().decoder(params[i], paramTypes[i]);
+                objects[i]= ProxyCoreConfig.getSingleton().getDecoder().decoder(params[i], paramTypes[i]);
             } catch (Exception e) {
                 logger.error("全局错误", e);
                 e.printStackTrace();
@@ -155,7 +146,7 @@ public class LocalServiceAccessUtil {
     private static String buildByteResult(ServiceDTO serviceDTO, Object serviceResult, long startTime, Logger logger) throws IOException {
         ServiceDTO serviceResultDTO=new ServiceDTO();
         serviceResultDTO=ExtendBeanBuildUtil.buildChild(serviceDTO,ServiceDTO.class);
-        serviceResultDTO.setResult(JSON.toJSONString(serviceResult));
+        serviceResultDTO.setResult(ProxyCoreConfig.getSingleton().getEncoder().encoder(serviceResult));
         String result = null;
         if (serviceResult != null) result = SerializeUtil.serialize(serviceResultDTO);
         long endTime = System.currentTimeMillis();

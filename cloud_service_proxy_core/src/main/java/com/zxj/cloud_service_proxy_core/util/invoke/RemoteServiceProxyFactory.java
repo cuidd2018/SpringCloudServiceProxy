@@ -1,10 +1,6 @@
 package com.zxj.cloud_service_proxy_core.util.invoke;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.parser.Feature;
-import com.zxj.cloud_service_proxy_core.constant.Constant;
-import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
-import com.zxj.cloud_service_proxy_core.enums.ServiceProxyErrorCode;
+import com.zxj.cloud_service_proxy_core.config.ProxyCoreConfig;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionBean;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
@@ -16,7 +12,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalancerClient;
-import org.springframework.http.client.reactive.ClientHttpConnector;
 import org.springframework.util.LinkedMultiValueMap;
 import org.springframework.util.MultiValueMap;
 import org.springframework.web.reactive.function.BodyInserters;
@@ -84,9 +79,9 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
             Object result=null;
 
             if(serviceDTO.getSuccess()==1) {
-                result = JSON.parseObject(jsonResult, method.getGenericReturnType());
+                result = ProxyCoreConfig.getSingleton().getDecoder().decoder(jsonResult, method.getGenericReturnType());
             }else {
-                result = JSON.parseObject(jsonResult, BaseExceptionBean.class);
+                result = ProxyCoreConfig.getSingleton().getDecoder().decoder(jsonResult, BaseExceptionBean.class);
             }
 
             if (result instanceof BaseExceptionInterface) {
@@ -126,7 +121,7 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
         String[] strings=new String[args.length];
         for (int i=0;i<args.length;i++){
             try {
-                strings[i] = ConvertUtil.getEncoder().encoder(args[i]);
+                strings[i] = ProxyCoreConfig.getSingleton().getEncoder().encoder(args[i]);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -151,15 +146,5 @@ public class RemoteServiceProxyFactory implements InvocationHandler {
     public RemoteServiceProxyFactory setLoadBalancerClient(LoadBalancerClient loadBalancerClient) {
         this.loadBalancerClient = loadBalancerClient;
         return this;
-    }
-
-    public static void main(String[] args){
-        List<ServiceDTO> serviceProxyErrorCodeList = new ArrayList<>();
-        ServiceDTO serviceDTO = new ServiceDTO();
-        serviceDTO.setService("dsaf");
-        serviceProxyErrorCodeList.add(serviceDTO);
-        String js = JSON.toJSONString(serviceProxyErrorCodeList);
-        List<ServiceDTO> stringServiceProxyErrorCodeMap2 = JSON.parseArray(js, ServiceDTO.class);
-        System.out.println(stringServiceProxyErrorCodeMap2);
     }
 }
