@@ -5,7 +5,6 @@ import java.lang.reflect.AnnotatedType;
 import java.lang.reflect.Method;
 import java.lang.reflect.Type;
 
-import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import org.springframework.context.ApplicationContext;
 
 import com.zxj.cloud_service_proxy_core.config.ProxyCoreConfig;
@@ -34,16 +33,16 @@ public class LocalServiceAccessUtil {
      */
     public static Mono<String> asyncMonoAccess(ApplicationContext applicationContext, String arg, final Logger logger) throws Throwable {
         if (arg == null) {
-            throw new ServiceRuntimeException("fail! arg=null!");
+            throw new ServiceRuntimeException("lost arg! arg=null!");
         }
         Mono<String> mono = Mono.create(tringMonoSink -> {
             String result = null;
             long startTime = System.currentTimeMillis();
-            ServiceDTO serviceDTO=null;
+            ServiceDTO serviceDTO = null;
             try {
-                serviceDTO=LocalServiceAccessUtil.deserialize(arg);
+                serviceDTO = LocalServiceAccessUtil.deserialize(arg);
                 serviceDTO.setSuccess(1);
-                result = LocalServiceAccessUtil.access(applicationContext, serviceDTO, logger,startTime);
+                result = LocalServiceAccessUtil.access(applicationContext, serviceDTO, logger, startTime);
                 tringMonoSink.success(result);
             } catch (Exception e) {
                 logger.error("全局错误", e);
@@ -51,7 +50,7 @@ public class LocalServiceAccessUtil {
                 try {
                     Object ex = ExceptionCheckOutUtil.checkOut(e, jsonStrBuffer);
                     serviceDTO.setSuccess(0);
-                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
+                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO, ex, startTime, logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -62,7 +61,7 @@ public class LocalServiceAccessUtil {
                 try {
                     Object ex = ExceptionCheckOutUtil.checkOut(new Exception(throwable), jsonStrBuffer);
                     serviceDTO.setSuccess(0);
-                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO,ex,startTime,logger));
+                    tringMonoSink.success(LocalServiceAccessUtil.buildByteResult(serviceDTO, ex, startTime, logger));
                 } catch (IOException e1) {
                     e1.printStackTrace();
                 }
@@ -71,7 +70,6 @@ public class LocalServiceAccessUtil {
         mono = mono.subscribeOn(reactor.core.scheduler.Schedulers.fromExecutor(ProxyCoreConfig.getSingleton().getExecutorService()));
         return mono;
     }
-
 
 
     /**
@@ -88,13 +86,12 @@ public class LocalServiceAccessUtil {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
         }
         String service = serviceDTO.getService();
-        Class serviceClass=LocalServiceProxyUtil.getClassFromService(service);
+        Class serviceClass = LocalServiceProxyUtil.getClassFromService(service);
         String method = serviceDTO.getMethod();
 
         Class[] paramTypes = getClassTypes(serviceDTO.getParamsTypes());
 
-        Object[] params = createObjectArg(serviceDTO.getParams(),methodParamTypeFilter(serviceClass.getMethod(method,paramTypes)),logger);
-
+        Object[] params = createObjectArg(serviceDTO.getParams(), methodParamTypeFilter(serviceClass.getMethod(method, paramTypes)), logger);
 
 
         //Object[] objects = createObjectArg(params,paramTypes,logger);
@@ -103,49 +100,78 @@ public class LocalServiceAccessUtil {
         logger.info("service:" + service);
 
         Object serviceResult = LocalServiceProxyUtil.invoke(params, method, service, paramTypes, applicationContext);
-        return buildByteResult(serviceDTO,serviceResult,startTime,logger);
+        return buildByteResult(serviceDTO, serviceResult, startTime, logger);
     }
 
-    private static Class[] getClassTypes(String[] paramTypeString) throws  ClassNotFoundException {
-        if(paramTypeString==null||paramTypeString.length==0)return null;
-        Class[] classes=new Class[paramTypeString.length];
-        for (int i=0;i<paramTypeString.length;i++){
-            Class cla=Class.forName(paramTypeString[i]);
-            classes[i]=cla;
+    private static Class[] getClassTypes(String[] paramTypeString) throws ClassNotFoundException {
+        if (paramTypeString == null || paramTypeString.length == 0) return null;
+        Class[] classes = new Class[paramTypeString.length];
+        for (int i = 0; i < paramTypeString.length; i++) {
+            Class cla = filterClass(paramTypeString[i]);
+            classes[i] = cla;
         }
-      return classes;
+        return classes;
+    }
+
+    /**
+     * find class from className
+     *
+     * @param className
+     * @return
+     * @throws ClassNotFoundException
+     */
+    private static Class filterClass(String className) throws ClassNotFoundException {
+        if (className.equals("int")) {
+            return int.class;
+        } else if (className.equals("boolean")) {
+            return boolean.class;
+        } else if (className.equals("byte")) {
+            return byte.class;
+        } else if (className.equals("char")) {
+            return char.class;
+        } else if (className.equals("short")) {
+            return short.class;
+        } else if (className.equals("float")) {
+            return float.class;
+        } else if (className.equals("long")) {
+            return long.class;
+        } else if (className.equals("double")) {
+            return double.class;
+        } else {
+            return Class.forName(className);
+        }
     }
 
     private static Type[] methodParamTypeFilter(Method method) {
-        AnnotatedType[] annotationTypes= method.getAnnotatedParameterTypes();
-        Type[] types=new Type[annotationTypes.length];
-        int i=0;
-           for (AnnotatedType annotationType:annotationTypes){
-             types[i]=  annotationType.getType();
-             i++;
-           }
-        return  types;
+        AnnotatedType[] annotationTypes = method.getAnnotatedParameterTypes();
+        Type[] types = new Type[annotationTypes.length];
+        int i = 0;
+        for (AnnotatedType annotationType : annotationTypes) {
+            types[i] = annotationType.getType();
+            i++;
+        }
+        return types;
     }
 
 
-    private static Object[] createObjectArg(String[] params,Type[] paramTypes ,Logger logger) {
-		if (params == null || paramTypes == null || params.length == 0 || paramTypes.length == 0)
-			return null;
-		Object[] objects = new Object[paramTypes.length];
-		for (int i = 0; i < params.length; i++) {
+    private static Object[] createObjectArg(String[] params, Type[] paramTypes, Logger logger) {
+        if (params == null || paramTypes == null || params.length == 0 || paramTypes.length == 0)
+            return null;
+        Object[] objects = new Object[paramTypes.length];
+        for (int i = 0; i < params.length; i++) {
             try {
-                objects[i]= ProxyCoreConfig.getSingleton().getDecoder().decoder(params[i], paramTypes[i]);
+                objects[i] = ProxyCoreConfig.getSingleton().getDecoder().decoder(params[i], paramTypes[i]);
             } catch (Exception e) {
                 logger.error("全局错误", e);
                 e.printStackTrace();
             }
         }
-		return objects;
+        return objects;
     }
 
     private static String buildByteResult(ServiceDTO serviceDTO, Object serviceResult, long startTime, Logger logger) throws IOException {
-        ServiceDTO serviceResultDTO=new ServiceDTO();
-        serviceResultDTO=ExtendBeanBuildUtil.buildChild(serviceDTO,ServiceDTO.class);
+        ServiceDTO serviceResultDTO = new ServiceDTO();
+        serviceResultDTO = ExtendBeanBuildUtil.buildChild(serviceDTO, ServiceDTO.class);
         serviceResultDTO.setResult(ProxyCoreConfig.getSingleton().getEncoder().encoder(serviceResult));
         String result = null;
         if (serviceResult != null) result = SerializeUtil.serialize(serviceResultDTO);
@@ -159,11 +185,11 @@ public class LocalServiceAccessUtil {
         if (row == null) {
             throw new ServiceRuntimeException("rowString can not be null!");
         }
-        ServiceDTO serviceDTO = (ServiceDTO)SerializeUtil.deserialize(row,ServiceDTO.class);
+        ServiceDTO serviceDTO = (ServiceDTO) SerializeUtil.deserialize(row, ServiceDTO.class);
         if (serviceDTO == null) {
             throw new ServiceRuntimeException("deserialize fail! serviceDTO=null!");
         }
-       return serviceDTO;
+        return serviceDTO;
     }
 
     /**
