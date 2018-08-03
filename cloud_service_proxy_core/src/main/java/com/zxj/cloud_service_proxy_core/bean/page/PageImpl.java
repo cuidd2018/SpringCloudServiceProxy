@@ -22,12 +22,12 @@ public class PageImpl<T> extends Page<T> {
      * @return
      */
     public static <T> PageImpl<T> create(List<T> content, Pageable pageable, Integer total) {
-        PageImpl<T> pageImpl=new PageImpl<>();
+        PageImpl<T> pageImpl = new PageImpl<>();
         pageImpl.setContent(content);
-        pageImpl.setTotal(total==null?0:total);
-        pageImpl.setPageSize(pageable.getPageSize());
-        pageImpl.setOffset(pageable.getOffset());
-        pageImpl.setPageNum(pageable.getPageNum());
+        pageImpl.setTotal(total == null ? 0 : total);
+        pageImpl.setPageSize(pageable != null ? pageable.getPageSize() : 0);
+        pageImpl.setOffset(pageable != null ? pageable.getOffset() : 0);
+        pageImpl.setPageNum(pageable != null ? pageable.getPageNum() : 0);
         pageImpl.setTotalPages(countTotalPages(pageable.getPageSize(), pageImpl.getTotal()));
         return pageImpl;
     }
@@ -46,7 +46,8 @@ public class PageImpl<T> extends Page<T> {
         return create(content,pageable,total);
     }
 
-    public static int countTotalPages(int pageSize, int total) {
+    public static Integer countTotalPages(Integer pageSize, Integer total) {
+        if(pageSize==null||total==null)return 0;
         if (pageSize == 0) {
             return 1;
         }
