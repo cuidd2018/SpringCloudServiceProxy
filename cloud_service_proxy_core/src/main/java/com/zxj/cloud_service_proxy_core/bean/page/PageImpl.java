@@ -25,10 +25,12 @@ public class PageImpl<T> extends Page<T> {
         PageImpl<T> pageImpl = new PageImpl<>();
         pageImpl.setContent(content);
         pageImpl.setTotal(total == null ? 0 : total);
-        pageImpl.setPageSize(pageable != null ? pageable.getPageSize() : 0);
-        pageImpl.setOffset(pageable != null ? pageable.getOffset() : 0);
-        pageImpl.setPageNum(pageable != null ? pageable.getPageNum() : 0);
-        pageImpl.setTotalPages(countTotalPages(pageable.getPageSize(), pageImpl.getTotal()));
+        if(pageable !=null) {
+            pageImpl.setPageSize(pageable.getPageSize());
+            pageImpl.setOffset(pageable.getOffset());
+            pageImpl.setPageNum(pageable.getPageNum());
+            pageImpl.setTotalPages(countTotalPages(pageable.getPageSize(), pageImpl.getTotal()));
+        }
         return pageImpl;
     }
 
