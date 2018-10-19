@@ -8,4 +8,6 @@ public interface BaseExceptionInterface {
     public Integer getErrCode();
 
     public String getErrMsg();
+
+    public Integer getRuntime();
 }

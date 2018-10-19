@@ -18,6 +18,17 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
 
     private String errMsg;
 
+    private Integer runtime = 0;
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
+    @Override
+    public Integer getRuntime() {
+        return runtime;
+    }
+
     public ServiceException(IntEnumConstant serviceErrorCode) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName());
     }
@@ -103,6 +114,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         super(String.format("errCode: %d, errMsg: %s", errCode, errMsg));
         this.setErrCode(errCode);
         this.setErrMsg(errMsg);
+        this.setRuntime(0);
     }
 
     @Override

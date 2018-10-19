@@ -9,12 +9,23 @@ public class BaseExceptionBean implements BaseExceptionInterface {
 
     private String errMsg;
 
+    private Integer runtime;
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
     public void setErrCode(Integer errCode) {
         this.errCode = errCode;
     }
 
     public void setErrMsg(String errMsg) {
         this.errMsg = errMsg;
+    }
+
+    @Override
+    public Integer getRuntime() {
+        return runtime;
     }
 
     @Override

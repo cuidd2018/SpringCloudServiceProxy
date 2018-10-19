@@ -17,6 +17,17 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
 
     private String errMsg;
 
+    private Integer runtime = 1;
+
+    public void setRuntime(Integer runtime) {
+        this.runtime = runtime;
+    }
+
+    @Override
+    public Integer getRuntime() {
+        return runtime;
+    }
+
     public ServiceRuntimeException(IntEnumConstant serviceErrorCode) {
         this(serviceErrorCode.getValue(), serviceErrorCode.getName());
     }
@@ -42,6 +53,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         super(String.format("errCode: %d, errMsg: %s", errCode, errMsg));
         this.setErrCode(errCode);
         this.setErrMsg(errMsg);
+        this.setRuntime(1);
     }
 
     public ServiceRuntimeException(Object... infos) {

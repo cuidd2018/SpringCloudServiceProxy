@@ -2,7 +2,7 @@ package com.example.demo_consumers.test;
 
 
 import com.zxj.cloud_service_proxy_core.util.invoke.SerializeUtil;
-import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceDTO;
+import com.zxj.cloud_service_proxy_core.util.invoke.dto.ServiceReqDTO;
 import org.springframework.web.reactive.function.BodyInserters;
 import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Mono;
@@ -41,11 +41,10 @@ public class InvkeCountTest {
 //        });
 
         String bytes ;
-        ServiceDTO serviceDTO=new ServiceDTO();
+        ServiceReqDTO serviceDTO=new ServiceReqDTO();
         serviceDTO.setMethod("sayHello");
         serviceDTO.setService("com.example.demo_service_interface.service.DemoService");
-        serviceDTO.setParams(null);
-        serviceDTO.setParamsTypes(null);
+        serviceDTO.setArgs(null);
         try {
              bytes = SerializeUtil.serialize(serviceDTO);
 

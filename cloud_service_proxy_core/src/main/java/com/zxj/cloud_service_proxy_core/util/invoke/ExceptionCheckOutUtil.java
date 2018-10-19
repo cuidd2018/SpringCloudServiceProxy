@@ -24,10 +24,12 @@ public class ExceptionCheckOutUtil {
     public static Object checkOut(Exception ex,StringBuffer stringBuffer) throws IOException {
          Object result=null;
         if (ex instanceof BaseExceptionInterface) {
+            Integer runtime = ((BaseExceptionInterface) ex).getRuntime();
             Integer errCode = ((BaseExceptionInterface) ex).getErrCode();
             String errMsg = ((BaseExceptionInterface) ex).getErrMsg();
             if(stringBuffer!=null)stringBuffer.append("errCode="+errCode+",errMsg="+errMsg);
             result=new BaseExceptionBean();
+            ((BaseExceptionBean) result).setRuntime(runtime);
             ((BaseExceptionBean) result).setErrCode(errCode);
             ((BaseExceptionBean) result).setErrMsg(errMsg);
         } else {
@@ -35,6 +37,7 @@ public class ExceptionCheckOutUtil {
             BaseExceptionInterface baseExceptionInterface=new BaseExceptionBean();
             ((BaseExceptionBean) baseExceptionInterface).setErrCode(ServiceProxyErrorCode.ERROR.getValue());
             ((BaseExceptionBean) baseExceptionInterface).setErrMsg(stringBuffer.toString());
+            ((BaseExceptionBean) baseExceptionInterface).setRuntime(0);
             result=baseExceptionInterface;
         }
         return result;
