@@ -1,6 +1,7 @@
 package com.zxj.cloud_service_proxy_core.enums;
 
 import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
+import com.zxj.cloud_service_proxy_core.util.enums.EnableScanEnumTable;
 
 /**
  * 汇集所有的服务异常，可增加，不要修改！
@@ -11,7 +12,7 @@ public class ServiceProxyErrorCode implements IntEnumConstant {
     public static class ServiceProxyErrorCodeTable {
         public ServiceProxyErrorCode ERROR = new ServiceProxyErrorCode(-1, "错误:");
     }
-
+    @EnableScanEnumTable
     public static ServiceProxyErrorCodeTable table = new ServiceProxyErrorCodeTable();
 
 

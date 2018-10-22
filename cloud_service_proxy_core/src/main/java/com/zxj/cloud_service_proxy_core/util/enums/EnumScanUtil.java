@@ -1,10 +1,8 @@
 package com.zxj.cloud_service_proxy_core.util.enums;
 
 import com.zxj.cloud_service_proxy_core.constant.Constant;
-import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
 import com.zxj.cloud_service_proxy_core.vo.ConstantVO;
-import com.zxj.fast_io_core.util.BeanUtils;
 import org.apache.commons.collections.map.HashedMap;
 
 import java.lang.reflect.Field;
@@ -81,14 +79,14 @@ public class EnumScanUtil {
      * @throws ServiceException
      */
     public static <T, E extends Constant<T>> List<E> scanEnumList(Class<E> clazz) {
-        List<E> list=new ArrayList<>();
+        List<E> list = new ArrayList<>();
         Field[] fields = clazz.getFields();
         try {
-            for (Field tableFeild :fields){
-                if (tableFeild.getName().contains("table")){
+            for (Field tableFeild : fields) {
+                if (tableFeild.getAnnotation(EnableScanEnumTable.class) != null) {
                     Object table = tableFeild.get(clazz);
                     Field[] tableFields = table.getClass().getFields();
-                    for (Field tableField:tableFields){
+                    for (Field tableField : tableFields) {
                         Object enumObject = tableField.get(table);
                         list.add((E) enumObject);
                     }

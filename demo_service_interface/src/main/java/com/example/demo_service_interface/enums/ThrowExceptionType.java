@@ -2,6 +2,7 @@ package com.example.demo_service_interface.enums;
 
 import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 import com.zxj.cloud_service_proxy_core.exception.ServiceException;
+import com.zxj.cloud_service_proxy_core.util.enums.EnableScanEnumTable;
 import com.zxj.cloud_service_proxy_core.util.enums.EnumUtils;
 
 public class ThrowExceptionType implements IntEnumConstant {
@@ -11,6 +12,7 @@ public class ThrowExceptionType implements IntEnumConstant {
         public ThrowExceptionType NOT_THROW = new ThrowExceptionType(0, "不抛异常");
     }
 
+    @EnableScanEnumTable
     public static ThrowExceptionTypeTable table = new ThrowExceptionTypeTable();
 
     private String name;
