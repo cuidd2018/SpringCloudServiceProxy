@@ -37,8 +37,8 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
     }
 
     public ServiceRuntimeException(String errMsg) {
-        this(ServiceProxyErrorCode.ERROR.getValue(), errMsg);
-        this.setErrCode(ServiceProxyErrorCode.ERROR.getValue());
+        this(ServiceProxyErrorCode.table.ERROR.getValue(), errMsg);
+        this.setErrCode(ServiceProxyErrorCode.table.ERROR.getValue());
     }
 
     public ServiceRuntimeException(BaseExceptionInterface e) {
@@ -96,7 +96,7 @@ public class ServiceRuntimeException extends RuntimeException implements BaseExc
         } else if (e != null && e instanceof IntEnumConstant) {
             return ((IntEnumConstant) e).getValue();
         } else {
-            return ServiceProxyErrorCode.ERROR.getValue();
+            return ServiceProxyErrorCode.table.ERROR.getValue();
         }
     }
 

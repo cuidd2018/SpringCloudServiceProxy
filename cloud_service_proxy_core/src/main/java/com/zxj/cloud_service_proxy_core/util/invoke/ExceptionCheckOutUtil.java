@@ -35,7 +35,7 @@ public class ExceptionCheckOutUtil {
         } else {
             if(stringBuffer!=null)stringBuffer.append(ex.toString());
             BaseExceptionInterface baseExceptionInterface=new BaseExceptionBean();
-            ((BaseExceptionBean) baseExceptionInterface).setErrCode(ServiceProxyErrorCode.ERROR.getValue());
+            ((BaseExceptionBean) baseExceptionInterface).setErrCode(ServiceProxyErrorCode.table.ERROR.getValue());
             ((BaseExceptionBean) baseExceptionInterface).setErrMsg(stringBuffer.toString());
             ((BaseExceptionBean) baseExceptionInterface).setRuntime(0);
             result=baseExceptionInterface;

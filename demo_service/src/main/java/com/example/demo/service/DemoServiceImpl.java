@@ -23,7 +23,7 @@ import java.util.Map;
 public class DemoServiceImpl  implements DemoService,Serializable{
 
     @Override
-    public String sayHello() {
+    public String sayHello( List<ThrowExceptionType> list){
 
         //TODO 这里设置时间延迟，仅为测试用！可设置为0
 //        try {
@@ -31,7 +31,7 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 //        } catch (InterruptedException e) {
 //            e.printStackTrace();
 //        }
-        return "<<<<<<<<<<<<<< now access micro service success,  hello word!<<<<<<<<<<<<<<";
+        return "<<<<<<<<<<<<<< now access micro service success,  hello word!<<<<<<<<<<<<<<"+list.get(0).getName()+list.get(0).getValue();
     }
 
     @Override
@@ -58,8 +58,8 @@ public class DemoServiceImpl  implements DemoService,Serializable{
 
         Object value= constantVO.getValue();
 
-        if(throwExceptionType.getValue().intValue()==ThrowExceptionType.THROW_EXCEPTION.getValue().intValue()){
-            throw new ServiceException(ThrowExceptionType.THROW_EXCEPTION.getName());
+        if(throwExceptionType.getValue().intValue()==ThrowExceptionType.table.THROW_EXCEPTION.getValue().intValue()){
+            throw new ServiceException(ThrowExceptionType.table.THROW_EXCEPTION.getName());
         }
         return pageable;
     }

@@ -42,7 +42,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
     }
 
     public ServiceException(String info) {
-        this(ServiceProxyErrorCode.ERROR.getValue(), info);
+        this(ServiceProxyErrorCode.table.ERROR.getValue(), info);
     }
 
     public ServiceException(Object... infos) {
@@ -91,7 +91,7 @@ public class ServiceException extends Exception implements BaseExceptionInterfac
         } else if (e != null && e instanceof IntEnumConstant) {
             return ((IntEnumConstant) e).getValue();
         } else {
-            return ServiceProxyErrorCode.ERROR.getValue();
+            return ServiceProxyErrorCode.table.ERROR.getValue();
         }
     }
 

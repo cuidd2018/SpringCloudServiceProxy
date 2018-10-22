@@ -13,7 +13,7 @@ import java.util.Map;
 
 public interface DemoService {
 
-    String sayHello();
+    String sayHello( List<ThrowExceptionType> arg);
 
     Page<DemoVO> invokeObject(PageRequest pageRequest, ThrowExceptionType throwExceptionType ,ConstantVO constantVO,
                               List<ServiceProxyErrorCode> serviceProxyErrorCodes,

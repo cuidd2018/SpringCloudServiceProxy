@@ -47,7 +47,9 @@ public class DemoConsumersApplication {
 	@ResponseBody
 	@RequestMapping("/")
 	public String index(){
-		return demoService.sayHello();
+		List<ThrowExceptionType> list=new ArrayList<>();
+		list.add(ThrowExceptionType.table.THROW_EXCEPTION);
+		return demoService.sayHello(list);
 	}
 
 	/**
@@ -57,7 +59,9 @@ public class DemoConsumersApplication {
 	@ResponseBody
 	@RequestMapping("/hello")
 	public String helloTest(){
-		return demoService.sayHello();
+		List<ThrowExceptionType> list=new ArrayList<>();
+		list.add(ThrowExceptionType.table.THROW_EXCEPTION);
+		return demoService.sayHello(list);
 	}
 
 
@@ -88,7 +92,7 @@ public class DemoConsumersApplication {
 		ThrowExceptionType throwExceptionType=ThrowExceptionType.valueOf(exception);
 
 		List<ServiceProxyErrorCode> serviceProxyErrorCodeList=new ArrayList<>();
-		serviceProxyErrorCodeList.add(ServiceProxyErrorCode.ERROR);
+		serviceProxyErrorCodeList.add(ServiceProxyErrorCode.table.ERROR);
 		Map<String,List<ServiceProxyErrorCode>> stringServiceProxyErrorCodeMap=new HashMap<>();
 		stringServiceProxyErrorCodeMap.put("error",serviceProxyErrorCodeList);
 
