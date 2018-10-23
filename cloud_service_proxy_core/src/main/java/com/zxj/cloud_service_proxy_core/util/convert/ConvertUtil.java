@@ -11,6 +11,7 @@ public class ConvertUtil {
 
     private static Gson createGson() {
         GsonBuilder gb = new GsonBuilder();
+        gb.setDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS'Z'");//RFC3339
         Gson gson = gb.create();
         return gson;
     }
@@ -28,5 +29,4 @@ public class ConvertUtil {
         if (encoder == null) encoder = object -> gson.toJson(object);
         return encoder;
     }
-
 }
