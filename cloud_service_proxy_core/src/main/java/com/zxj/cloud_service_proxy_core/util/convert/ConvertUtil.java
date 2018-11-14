@@ -1,17 +1,13 @@
 package com.zxj.cloud_service_proxy_core.util.convert;
 
 import com.alibaba.fastjson.JSON;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.zxj.cloud_service_proxy_core.constant.IntEnumConstant;
 import com.zxj.cloud_service_proxy_core.util.enums.EnableScanEnumTable;
 import com.zxj.cloud_service_proxy_core.util.invoke.Decoder;
 import com.zxj.cloud_service_proxy_core.util.invoke.Encoder;
 
-import java.io.IOException;
-import java.lang.reflect.Type;
-import java.util.Date;
 public class ConvertUtil {
-   // private static ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
+    // private static ObjectMapper objectMapper = new ObjectMapper(new MessagePackFactory());
 
     private static Decoder decoder;
     private static Encoder encoder;
@@ -20,17 +16,13 @@ public class ConvertUtil {
     public static Decoder getDecoder() {
         if (decoder == null) {
             //decoder= (row, clazz) -> gson.fromJson(row, clazz);
-            MTypeReference cc = new MType<String>();
+            //MTypeReference cc = new MType<String>();
             decoder = (row, clazz) -> {
-                try {
-                    //byte[] b = Base64.getDecoder().decode(row);
-                    //cc.set_type(clazz);
-                   // Object o = objectMapper.readValue(b, cc);
-                    Object o = JSON.parseObject(row,clazz,null);
-                    return o;
-                } catch (Exception e) {
-                    throw new IOException(e.getCause());
-                }
+                //byte[] b = Base64.getDecoder().decode(row);
+                //cc.set_type(clazz);
+                // Object o = objectMapper.readValue(b, cc);
+                Object o = JSON.parseObject(row, clazz, null);
+                return o;
             };
         }
         return decoder;
@@ -40,8 +32,8 @@ public class ConvertUtil {
         if (encoder == null) {
             //encoder= object -> gson.toJson(object);
             encoder = object -> {
-               // byte[] b = objectMapper.writeValueAsBytes(object);
-               // return Base64.getEncoder().encodeToString(b);
+                // byte[] b = objectMapper.writeValueAsBytes(object);
+                // return Base64.getEncoder().encodeToString(b);
                 return JSON.toJSONString(object);
             };
         }
@@ -121,24 +113,24 @@ public class ConvertUtil {
 }
 
 
-abstract class MTypeReference<T> extends TypeReference {
-    protected Type _type;
-
-    public MTypeReference() {
-
-    }
-
-    public MTypeReference set_type(Type _type) {
-        this._type = _type;
-        return this;
-    }
-
-    public Type getType() {
-        return this._type;
-    }
-
-}
-
-
-class MType<T> extends MTypeReference<T> {
-}
+//abstract class MTypeReference<T> extends TypeReference {
+//    protected Type _type;
+//
+//    public MTypeReference() {
+//
+//    }
+//
+//    public MTypeReference set_type(Type _type) {
+//        this._type = _type;
+//        return this;
+//    }
+//
+//    public Type getType() {
+//        return this._type;
+//    }
+//
+//}
+//
+//
+//class MType<T> extends MTypeReference<T> {
+//}
