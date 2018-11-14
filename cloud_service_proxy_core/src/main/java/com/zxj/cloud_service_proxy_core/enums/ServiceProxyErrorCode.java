@@ -19,6 +19,9 @@ public class ServiceProxyErrorCode implements IntEnumConstant {
     Integer value = null;
     String name = null;
 
+    ServiceProxyErrorCode(){
+
+    }
 
     ServiceProxyErrorCode(Integer code, String info) {
         this.value = code;

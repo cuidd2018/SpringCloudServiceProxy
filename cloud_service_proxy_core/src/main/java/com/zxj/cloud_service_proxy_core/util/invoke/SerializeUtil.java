@@ -20,7 +20,7 @@ public class SerializeUtil {
         return ProxyCoreConfig.getSingleton().getEncoder().encoder(obj);
     }
 
-    public static Object deserialize(String by,Type clazz) throws IOException {
+    public static Object deserialize(String by,Class<?> clazz) throws IOException {
         if (by == null) return null;
         return ProxyCoreConfig.getSingleton().getDecoder().decoder(by,clazz);
     }

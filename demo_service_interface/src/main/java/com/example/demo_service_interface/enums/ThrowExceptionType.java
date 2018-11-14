@@ -18,8 +18,10 @@ public class ThrowExceptionType implements IntEnumConstant {
     private String name;
     private int value;
 
+    public ThrowExceptionType() {
+    }
 
-    ThrowExceptionType(int value, String name) {
+    public  ThrowExceptionType(int value, String name) {
         this.name = name;
         this.value = value;
     }

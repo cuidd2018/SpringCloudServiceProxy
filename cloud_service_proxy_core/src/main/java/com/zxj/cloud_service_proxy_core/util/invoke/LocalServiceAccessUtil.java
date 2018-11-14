@@ -116,37 +116,10 @@ public class LocalServiceAccessUtil {
         return new Class[0];
     }
 
-    /**
-     * find class from className
-     *
-     * @param className
-     * @return
-     * @throws ClassNotFoundException
-     */
-    private static Class filterClass(String className) throws ClassNotFoundException {
-        if (className.equals("int")) {
-            return int.class;
-        } else if (className.equals("boolean")) {
-            return boolean.class;
-        } else if (className.equals("byte")) {
-            return byte.class;
-        } else if (className.equals("char")) {
-            return char.class;
-        } else if (className.equals("short")) {
-            return short.class;
-        } else if (className.equals("float")) {
-            return float.class;
-        } else if (className.equals("long")) {
-            return long.class;
-        } else if (className.equals("double")) {
-            return double.class;
-        } else {
-            return Class.forName(className);
-        }
-    }
 
     private static Type[] methodParamTypeFilter(Method method) {
         AnnotatedType[] annotationTypes = method.getAnnotatedParameterTypes();
+        Class<?>[] cs= method.getParameterTypes();
         Type[] types = new Type[annotationTypes.length];
         int i = 0;
         for (AnnotatedType annotationType : annotationTypes) {

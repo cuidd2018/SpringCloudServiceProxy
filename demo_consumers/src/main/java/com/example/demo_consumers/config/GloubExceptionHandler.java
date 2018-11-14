@@ -1,5 +1,6 @@
 package com.example.demo_consumers.config;
 
+import com.alibaba.fastjson.JSON;
 import com.zxj.cloud_service_proxy_core.exception.BaseExceptionInterface;
 import com.zxj.cloud_service_proxy_core.util.convert.ConvertUtil;
 import org.slf4j.Logger;
@@ -31,7 +32,7 @@ public class GloubExceptionHandler {
                 Map<String,Object> map=new HashMap<>();
                 map.put("errorCode",errCode);
                 map.put("errMsg",errMsg);
-                jsonStrBuffer.append(ConvertUtil.getEncoder().encoder(map));
+                jsonStrBuffer.append(JSON.toJSONString(map));
             } else {
                 jsonStrBuffer.append(ex.toString());
             }

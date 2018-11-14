@@ -6,7 +6,7 @@
 	<groupId>com.example</groupId>
 	<artifactId>demo_consumers</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<packaging>pom</packaging>
+	<packaging>jar</packaging>
 
 	<name>demo_consumers</name>
 	<description>Demo project for Spring Boot</description>
