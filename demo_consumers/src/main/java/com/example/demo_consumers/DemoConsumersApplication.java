@@ -21,10 +21,7 @@ import org.springframework.web.reactive.config.EnableWebFlux;
 
 import javax.annotation.Resource;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 @SpringBootApplication
 @EnableWebFlux
@@ -48,7 +45,7 @@ public class DemoConsumersApplication {
 	@RequestMapping("/")
 	public String index(){
 		List<ThrowExceptionType> list=new ArrayList<>();
-		list.add(ThrowExceptionType.table.THROW_EXCEPTION);
+		list.add(ThrowExceptionType.table.NOT_THROW);
 		return demoService.sayHello(list);
 	}
 
@@ -60,10 +57,29 @@ public class DemoConsumersApplication {
 	@RequestMapping("/hello")
 	public String helloTest(){
 		List<ThrowExceptionType> list=new ArrayList<>();
-		list.add(ThrowExceptionType.table.THROW_EXCEPTION);
+		list.add(ThrowExceptionType.table.NOT_THROW);
 		return demoService.sayHello(list);
 	}
 
+	/**
+	 * 测试远程调用
+	 * @return
+	 */
+	@ResponseBody
+	@RequestMapping("/tps")
+	public String helloTpsTest(){
+
+		Date start=new Date();
+		int total=10000;
+		for (int i=0;i<total;i++){
+			List<ThrowExceptionType> list=new ArrayList<>();
+			list.add(ThrowExceptionType.table.NOT_THROW);
+			demoService.sayHello(list);
+			System.out.println("="+i);
+		}
+	  System.out.println("==="+total/((new Date().getTime()-start.getTime())/1000f));
+		return "done";
+	}
 
 	/**
 	 * 测试远程调用
